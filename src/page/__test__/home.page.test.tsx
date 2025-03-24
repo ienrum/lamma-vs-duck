@@ -5,6 +5,6 @@ import { describe, it, expect } from 'vitest';
 describe('HomePage', () => {
   it('should render', () => {
     render(<HomePage />);
-    expect(screen.getByText('HomePage')).toBeDefined();
+    expect(screen.getByText('Lamma vs Duck')).toBeDefined();
   });
 });
