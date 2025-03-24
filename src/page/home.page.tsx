@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const HomePage = () => {
   return (
@@ -8,7 +8,7 @@ const HomePage = () => {
       </CardHeader>
       <CardContent></CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

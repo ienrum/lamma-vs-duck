@@ -1,9 +1,9 @@
 ---
 name: 버그 리포트
 about: 버그를 보고하여 프로젝트 개선에 도움을 주세요
-title: "[BUG] "
+title: '[BUG] '
 labels: bug
-assignees: ""
+assignees: ''
 ---
 
 ## 버그 설명

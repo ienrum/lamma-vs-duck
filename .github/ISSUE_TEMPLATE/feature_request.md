@@ -1,9 +1,9 @@
 ---
 name: 기능 요청
 about: 프로젝트에 새로운 기능을 제안해주세요
-title: "[FEATURE] "
+title: '[FEATURE] '
 labels: enhancement
-assignees: ""
+assignees: ''
 ---
 
 ## 기능 설명
