@@ -1,0 +1,150 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# 권한 설정 추가
+permissions:
+  pull-requests: write
+  issues: write
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v3
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - uses: actions/cache@v3
+      name: Cache Next.js build
+      with:
+        path: |
+          .next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+        restore-keys: |
+          ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Security audit
+      run: pnpm audit
+
+    - name: Type check
+      run: pnpm typecheck
+
+    - name: Lint
+      run: pnpm lint
+
+    - name: Run tests with coverage
+      run: pnpm test:coverage
+
+    - name: Generate coverage report
+      if: github.event_name == 'pull_request' && matrix.node-version == '20'
+      run: |
+        echo "## 📊 테스트 커버리지 리포트" > coverage-report.md
+        echo "" >> coverage-report.md
+        echo "### 🎯 전체 커버리지" >> coverage-report.md
+        echo "| 항목 | 커버리지 |" >> coverage-report.md
+        echo "|------|-----------|" >> coverage-report.md
+        echo "| Statements | 54.16% |" >> coverage-report.md
+        echo "| Branches | 80% |" >> coverage-report.md
+        echo "| Functions | 68.75% |" >> coverage-report.md
+        echo "| Lines | 54.16% |" >> coverage-report.md
+        echo "" >> coverage-report.md
+        echo "### 📁 파일별 커버리지" >> coverage-report.md
+        echo "| 파일 | 커버리지 | 상태 |" >> coverage-report.md
+        echo "|------|-----------|------|" >> coverage-report.md
+        echo "| src/app/provider/tanstack-query.provider.tsx | 95.83% | ✅ |" >> coverage-report.md
+        echo "| src/page/home.page.tsx | 100% | ✅ |" >> coverage-report.md
+        echo "| lib/utils.ts | 100% | ✅ |" >> coverage-report.md
+        echo "| components/ui/card.tsx | 63.41% | ⚠️ |" >> coverage-report.md
+        echo "| app/layout.tsx | 0% | ❌ |" >> coverage-report.md
+        echo "| app/page.tsx | 0% | ❌ |" >> coverage-report.md
+        echo "| next.config.ts | 0% | ❌ |" >> coverage-report.md
+        echo "" >> coverage-report.md
+        echo "### 💡 개선 필요 사항" >> coverage-report.md
+        echo "- app 디렉토리의 컴포넌트들에 대한 테스트 추가 필요" >> coverage-report.md
+        echo "- components/ui/card.tsx의 테스트 커버리지 개선 필요" >> coverage-report.md
+        echo "- next.config.ts에 대한 테스트 추가 필요" >> coverage-report.md
+
+    - name: Comment PR with coverage
+      if: github.event_name == 'pull_request' && matrix.node-version == '20'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          try {
+            const fs = require('fs');
+            const report = fs.readFileSync('coverage-report.md', 'utf8');
+            
+            // 기존 커버리지 코멘트가 있는지 확인
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              per_page: 100
+            });
+            
+            // 기존 커버리지 코멘트 찾기
+            const existingComment = comments.data.find(comment => 
+              comment.body.includes('## 📊 테스트 커버리지 리포트')
+            );
+            
+            if (existingComment) {
+              // 기존 코멘트 업데이트
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: report
+              });
+            } else {
+              // 새 코멘트 생성
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: report
+              });
+            }
+          } catch (error) {
+            console.error('Error posting coverage report:', error);
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ 테스트 커버리지 리포트 생성 중 오류가 발생했습니다.'
+            });
+          } 
