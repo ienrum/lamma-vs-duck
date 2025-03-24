@@ -1,12 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import HomePage from '@/src/page/home.page';
 
 export default function Home() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Lamma vs Duck</CardTitle>
-      </CardHeader>
-      <CardContent></CardContent>
-    </Card>
-  );
+  return <HomePage />;
 }
