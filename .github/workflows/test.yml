@@ -10,6 +10,7 @@ on:
 permissions:
   pull-requests: write
   issues: write
+  contents: read
 
 jobs:
   test:
@@ -20,7 +21,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
