@@ -1,0 +1,1 @@
+export const TOPBAR_TITLE = 'Lamma vs Duck';

@@ -1,7 +1,6 @@
-import HomePage from "@/src/page/home/home.page";
 
-export default function Home() {
+export default function Page() {
   return (
-    <HomePage />
+    null
   );
 }
