@@ -1,9 +1,9 @@
 import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
-import { BackButton } from './BackButton';
-import { ProfileLink } from './ProfileLink';
-import { HelpButton } from './HelpButton';
-import { StatsLink } from './StatsLink';
+import { BackButton as BackButtonComponent } from './BackButton';
+import { ProfileLink as ProfileLinkComponent } from './ProfileLink';
+import { HelpButton as HelpButtonComponent } from './HelpButton';
+import { StatsLink as StatsLinkComponent } from './StatsLink';
 
 interface TopBarProps {
   children?: ReactNode;
@@ -22,34 +22,43 @@ export const TopBar = ({ children, className }: TopBarProps) => {
   );
 };
 
-TopBar.Left = ({ children, className }: TopBarProps) => {
+const Left = ({ children, className }: TopBarProps) => {
   return <div className={cn('flex items-center col-start-1', className)}>{children}</div>;
 };
 
-TopBar.Right = ({ children, className }: TopBarProps) => {
+const Right = ({ children, className }: TopBarProps) => {
   return <div className={cn('flex items-center justify-end gap-2 col-start-3', className)}>{children}</div>;
 };
 
-TopBar.Center = ({ children, className }: TopBarProps) => {
+const Center = ({ children, className }: TopBarProps) => {
   return <div className={cn('flex items-center justify-center col-start-2', className)}>{children}</div>;
 };
 
-TopBar.Title = ({ className, text }: TopBarProps & { text: string }) => {
+const Title = ({ className, text }: TopBarProps & { text: string }) => {
   return <div className={cn('flex items-center ', className)}>{text}</div>;
 };
 
-TopBar.BackButton = ({ className }: TopBarChildProps) => {
-  return <BackButton className={cn('flex items-center', className)} />;
+const BackButton = ({ className }: TopBarChildProps) => {
+  return <BackButtonComponent className={cn('flex items-center', className)} />;
 };
 
-TopBar.ProfileLink = ({ className }: TopBarChildProps) => {
-  return <ProfileLink className={cn('flex items-center', className)} />;
+const ProfileLink = ({ className }: TopBarChildProps) => {
+  return <ProfileLinkComponent className={cn('flex items-center', className)} />;
 };
 
-TopBar.HelpButton = ({ className }: TopBarChildProps) => {
-  return <HelpButton className={cn('flex items-center', className)} />;
+const HelpButton = ({ className }: TopBarChildProps) => {
+  return <HelpButtonComponent className={cn('flex items-center', className)} />;
 };
 
-TopBar.StatsLink = ({ className }: TopBarChildProps) => {
-  return <StatsLink className={cn('flex items-center', className)} />;
+const StatsLink = ({ className }: TopBarChildProps) => {
+  return <StatsLinkComponent className={cn('flex items-center', className)} />;
 };
+
+TopBar.Left = Left;
+TopBar.Right = Right;
+TopBar.Center = Center;
+TopBar.Title = Title;
+TopBar.BackButton = BackButton;
+TopBar.ProfileLink = ProfileLink;
+TopBar.HelpButton = HelpButton;
+TopBar.StatsLink = StatsLink;
