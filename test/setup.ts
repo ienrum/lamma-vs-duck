@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { beforeEach, vi } from 'vitest';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -10,4 +10,10 @@ vi.mock('next/navigation', () => ({
   }),
   usePathname: () => '',
   useSearchParams: () => new URLSearchParams(),
-})); 
+}));
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  // screen 에 출력된 모든 dom 초기화
+  document.body.innerHTML = '';
+});
