@@ -41,6 +41,8 @@ describe('Button', () => {
 
   it('버튼이 로딩상태일 때 로딩 아이콘이 보인다.', () => {
     render(<Button isLoading>Click me</Button>);
-    expect(screen.getByRole('button').querySelector('.loading')).toBeDefined();
+    const button = screen.getByRole('button');
+
+    expect(button.querySelector('svg')).toBeTruthy();
   });
 });
