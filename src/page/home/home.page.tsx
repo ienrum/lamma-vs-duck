@@ -2,7 +2,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/src/shared/ui/card';
 import { TOPBAR_TITLE } from './constants/page';
 import { Button } from '@/src/shared/ui/button';
-import DuckVsLammaCrossPad from '@/src/widgets/GmaePad/DuckVsLammaCrossPad';
+import { CrossPad } from '@/src/features/cross-pad/ui/CrossPad';
 
 const HomePage = () => {
   return (
@@ -17,7 +17,7 @@ const HomePage = () => {
           <Button color="warning">Click me</Button>
           <Button color="error">Click me</Button></CardContent>
       </Card>
-      <DuckVsLammaCrossPad />
+      <CrossPad />
     </div>
   );
 };

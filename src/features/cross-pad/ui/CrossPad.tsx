@@ -1,28 +1,32 @@
+'use client'
+
 import { Button } from "@/src/shared/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
+import { useCrossPadStore } from "@/src/entities/cross-pad/model/store";
+import { Direction } from "@/src/entities/cross-pad/model/types";
 
 interface CrossPadProps {
-  onUp?: () => void;
-  onDown?: () => void;
-  onLeft?: () => void;
-  onRight?: () => void;
   className?: string;
 }
 
 export const CrossPad = ({
-  onUp,
-  onDown,
-  onLeft,
-  onRight,
   className,
 }: CrossPadProps) => {
+  const { setDirection, setPressed } = useCrossPadStore();
+
+  const handleButtonClick = (direction: Direction) => () => {
+    setDirection(direction);
+    setPressed(true);
+    console.log("clicked", direction);
+  }
+
   return (
     <div className={cn("grid grid-cols-3 gap-2 w-36 h-36", className)}>
       <div className="col-start-2">
         <Button
           color="crossPad"
-          onClick={onUp}
+          onClick={handleButtonClick("up")}
           isSticker={false}
           containerClassName="w-10 h-10"
           data-testid="arrow-up"
@@ -33,7 +37,7 @@ export const CrossPad = ({
       <div className="col-start-1 row-start-2">
         <Button
           color="crossPad"
-          onClick={onLeft}
+          onClick={handleButtonClick("left")}
           isSticker={false}
           containerClassName="w-10 h-10"
           data-testid="arrow-left"
@@ -44,7 +48,7 @@ export const CrossPad = ({
       <div className="col-start-3 row-start-2">
         <Button
           color="crossPad"
-          onClick={onRight}
+          onClick={handleButtonClick("right")}
           isSticker={false}
           containerClassName="w-10 h-10"
           data-testid="arrow-right"
@@ -55,7 +59,7 @@ export const CrossPad = ({
       <div className="col-start-2 row-start-3">
         <Button
           color="crossPad"
-          onClick={onDown}
+          onClick={handleButtonClick("down")}
           isSticker={false}
           containerClassName="w-10 h-10"
           data-testid="arrow-down"
