@@ -16,7 +16,7 @@ export const HelpButton = ({ className }: { className?: string }) => {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <Dialog
             title={GAME_RULE_TITLE}
             trigger={<Button data-testid="dialog-trigger" variant="ghost" size="icon" className={cn('hover:bg-gray-100', className)}>
