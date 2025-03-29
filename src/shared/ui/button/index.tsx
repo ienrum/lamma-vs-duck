@@ -8,22 +8,28 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "default" | "sm" | "lg" | "icon";
   isLoading?: boolean;
   color?: keyof typeof colors;
+  containerClassName?: string;
+  isSticker?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "default", size = "default", isLoading, color = "primary", children, ...props }, ref) => {
+  ({ className, containerClassName, variant = "default", size = "default", isLoading, color = "primary", children, isSticker = true, ...props }, ref) => {
     return (
-      <div className="relative">
-        {/* 스티커 접힘 효과 */}
-        <div className="absolute left-1/2 -translate-x-1/2 -top-1 w-4 h-4 bg-black/10 rotate-12 z-10" />
+      <div className={cn("relative", containerClassName)}>
+        {isSticker && (
+          <>
+            {/* 스티커 접힘 효과 */}
+            <div className="absolute left-1/2 -translate-x-1/2 -top-1 w-4 h-4 bg-black/10 rotate-12 z-10" />
+          </>
+        )}
 
         <ShadcnButton
           ref={ref}
           style={{
             backgroundColor: colors[color].DEFAULT,
-            color: colors.text.DEFAULT,
-            borderColor: colors.border.DEFAULT,
-            boxShadow: colors.shadow.DEFAULT,
+            color: colors[color].text,
+            borderColor: colors[color].border,
+            boxShadow: colors[color].shadow,
           }}
           className={cn(
             "relative font-medium w-full",
