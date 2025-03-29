@@ -1,6 +1,6 @@
 'use client';
 
-import { CrossPad } from "@/src/shared/ui/cross-pad/ui/CrossPad";
+import { CrossPad } from "@/src/shared/ui/cross-pad";
 import { useCrossPad } from "../model/useCrossPad";
 import { Direction } from "@/src/entities/cross-pad/model/types";
 

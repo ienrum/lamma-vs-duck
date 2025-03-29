@@ -25,6 +25,7 @@ export const CrossPad = ({
           onClick={onUp}
           isSticker={false}
           containerClassName="w-10 h-10"
+          data-testid="arrow-up"
         >
           <ArrowUp />
         </Button>
@@ -35,6 +36,7 @@ export const CrossPad = ({
           onClick={onLeft}
           isSticker={false}
           containerClassName="w-10 h-10"
+          data-testid="arrow-left"
         >
           <ArrowLeft />
         </Button>
@@ -45,6 +47,7 @@ export const CrossPad = ({
           onClick={onRight}
           isSticker={false}
           containerClassName="w-10 h-10"
+          data-testid="arrow-right"
         >
           <ArrowRight />
         </Button>
@@ -55,6 +58,7 @@ export const CrossPad = ({
           onClick={onDown}
           isSticker={false}
           containerClassName="w-10 h-10"
+          data-testid="arrow-down"
         >
           <ArrowDown />
         </Button>
