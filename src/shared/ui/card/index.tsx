@@ -22,8 +22,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           ref={ref}
           style={{
             backgroundColor: colors[color].DEFAULT,
-            borderColor: colors.border.DEFAULT,
-            boxShadow: colors.shadow.DEFAULT,
+            borderColor: colors[color].border,
+            boxShadow: colors[color].shadow,
           }}
           className={cn(
             "hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]",
