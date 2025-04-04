@@ -12,7 +12,6 @@ const Cell = ({ cell, isAnimalCell }: { cell: string, isAnimalCell: boolean }) =
         </div >
       )}
       {!isAnimalCell && !isVoid && <div className="flex items-center justify-center text-sm rounded-sm bg-transparent w-2 h-2 p-3">
-        {/* {cell === boardCellEmoji[BoardCell.NothingSwitch] ? " " : cell} */}
         {"  "}
       </div >}
       {isVoid && <div className="flex items-center justify-center text-sm rounded-sm bg-transparent w-2 h-2 p-3">

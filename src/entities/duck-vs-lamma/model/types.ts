@@ -1,4 +1,3 @@
-import { Direction } from "../../cross-pad/model/types";
 import { BoardCell } from "./constants";
 import { BoardHistory } from "./board-history";
 

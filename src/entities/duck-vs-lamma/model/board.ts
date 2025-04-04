@@ -11,6 +11,8 @@ import { BoardState, BoardStateUpdate, BoardType } from "./types";
  */
 export class Board {
   private state: BoardState;
+  private startDate: Date;
+  private endDate?: Date;
 
   /**
    * 게임 보드 초기화
@@ -18,6 +20,7 @@ export class Board {
    * @param reservedAnimalMaps 예약된 동물 맵
    */
   constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>) {
+    this.startDate = new Date();
     const initialBoard = this.initializeBoard(board);
     const animalBoard = this.extractAnimalBoard(initialBoard);
     const animalCellBoardSize = animalBoard.length;
@@ -85,7 +88,7 @@ export class Board {
    * @param direction 이동 방향
    */
   public moveAnimalCells(direction: Direction): void {
-    if (this.gameOver()) {
+    if (this.isExceeded()) {
       return;
     }
 
@@ -112,6 +115,10 @@ export class Board {
       animalBoard: newAnimalBoard,
       board: normalizedBoard
     });
+
+    if (this.isWon()) {
+      this.endDate = new Date();
+    }
   }
 
   /**
@@ -218,7 +225,7 @@ export class Board {
   /**
    * 게임 종료 여부 확인
    */
-  private gameOver(): boolean {
+  private isExceeded(): boolean {
     const directions: Direction[] = ['up', 'down', 'left', 'right'];
     return directions.some((direction) => this.state.animalBoardHistory.isLastIndex(direction));
   }
@@ -237,6 +244,44 @@ export class Board {
    */
   public getMaxCount(direction: Direction): number {
     return this.state.animalBoardHistory.getMaxCount(direction);
+  }
+
+  /**
+   * 게임 시작 시간 반환
+   */
+  public getStartDate(): Date {
+    return this.startDate;
+  }
+
+  /**
+   * 게임 종료 시간 반환
+   */
+  public getEndDate(): Date | undefined {
+    return this.endDate;
+  }
+
+  /**
+   * 게임 종료여부
+   */
+  public isWon(): boolean {
+    const duckCellCount = this.state.animalBoard.reduce((acc, row) => {
+      return acc + row.filter((cell) => cell === BoardCell.Duck).length;
+    }, 0);
+
+    const lammaCellCount = this.state.animalBoard.reduce((acc, row) => {
+      return acc + row.filter((cell) => cell === BoardCell.Lamma).length;
+    }, 0);
+
+    return duckCellCount === lammaCellCount;
+  }
+
+  /**
+   * 라마 혹은 오리 셀 카운트 반환
+   */
+  public getAnimalCellCount(animal: BoardCell): number {
+    return this.state.animalBoard.reduce((acc, row) => {
+      return acc + row.filter((cell) => cell === animal).length;
+    }, 0);
   }
 
   /**
