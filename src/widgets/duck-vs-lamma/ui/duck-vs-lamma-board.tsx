@@ -6,9 +6,15 @@ import { ChevronLeft } from "lucide-react";
 import ReservedAnimalCells from "./reserved-animall-cells";
 import GameScoreBox from "./game-score-box";
 import GameBoard from "./game-board";
+import { useRouter } from "next/navigation";
 
 const DuckVsLammaBoard = () => {
   const { currentEmojiBoard, backwardGame, gameInfo, reservedAnimalMaps } = useGame();
+  const router = useRouter();
+
+  if (gameInfo.isWon()) {
+    router.push("/result");
+  }
 
   return (
     <>
