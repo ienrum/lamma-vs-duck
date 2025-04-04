@@ -10,11 +10,12 @@ interface CrossPadStore extends CrossPadState {
 const initialState: CrossPadState = {
   currentDirection: null,
   isPressed: false,
+  count: 0,
 };
 
-export const useCrossPadStore = create<CrossPadStore>((set) => ({
+export const useCrossPadStore = create<CrossPadStore>((set, get) => ({
   ...initialState,
   setDirection: (direction) => set({ currentDirection: direction }),
-  setPressed: (isPressed) => set({ isPressed }),
+  setPressed: (isPressed) => set({ isPressed, count: get().count + 1 }),
   reset: () => set(initialState),
 })); 
