@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/src/shared/ui/card';
 import { TOPBAR_TITLE } from './constants/page';
 import { Button } from '@/src/shared/ui/button';
 import { CrossPad } from '@/src/features/cross-pad/ui/CrossPad';
+import DuckVsLammaBoard from '@/src/widgets/duck-vs-lamma/ui/duck-vs-lamma-board';
 
 const HomePage = () => {
   return (
@@ -15,9 +16,13 @@ const HomePage = () => {
           <Button color="primary">Click me</Button>
           <Button color="secondary">Click me</Button>
           <Button color="warning">Click me</Button>
-          <Button color="error">Click me</Button></CardContent>
+          <Button color="error">Click me</Button>
+        </CardContent>
       </Card>
-      <CrossPad />
+      <div className='flex flex-col gap-4 justify-center items-center'>
+        <DuckVsLammaBoard />
+        <CrossPad />
+      </div>
     </div>
   );
 };
