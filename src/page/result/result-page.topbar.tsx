@@ -1,19 +1,20 @@
 import { TopBar } from "@/src/widgets/TopBar/ui/TopBar";
-import { TOPBAR_TITLE } from "./constants/topbar";
 
-const HomePageTopbar = () => {
+const ResultPageTopbar = () => {
   return (
     <TopBar>
+      <TopBar.Left>
+        <TopBar.BackButton />
+      </TopBar.Left>
       <TopBar.Center>
-        <TopBar.Title text={TOPBAR_TITLE} />
+        <TopBar.Title text={"결과"} />
       </TopBar.Center>
       <TopBar.Right>
         <TopBar.HelpButton />
-        <TopBar.StatsLink />
         <TopBar.ProfileLink />
       </TopBar.Right>
     </TopBar>
   );
 };
 
-export default HomePageTopbar;
+export default ResultPageTopbar;
