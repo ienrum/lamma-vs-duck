@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Direction } from "@/src/entities/cross-pad/model/types";
 import { boardCellEmoji, BoardCell } from "@/src/entities/duck-vs-lamma/model/constants";
+import formatTime from "@/src/shared/util/format-time";
 import { useEffect, useState } from "react";
 
 interface GameInfo {
@@ -9,13 +10,6 @@ interface GameInfo {
   playTime: () => number;
   lammaCount: () => number;
   duckCount: () => number;
-}
-
-const formatTime = (time: number) => {
-  const baseTime = time / 1000;
-  const seconds = Math.floor(baseTime) % 60;
-  const minutes = Math.floor(baseTime / 60);
-  return `${minutes}:${seconds}`;
 }
 
 const GameScoreBox = ({ gameInfo }: { gameInfo: GameInfo }) => {

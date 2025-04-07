@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 export const StatsLink = ({ className }: { className?: string }) => {
   return (
-    <Link href="/stats">
+    <Link href="/result">
       <Button variant="ghost" size="icon" className={cn('hover:bg-gray-100', className)}>
         <BarChart className="h-5 w-5" />
       </Button>

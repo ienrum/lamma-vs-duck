@@ -1,0 +1,1 @@
+export const PERCENTAGE_SENTENCE = "당신은 상위"
