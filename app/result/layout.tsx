@@ -2,10 +2,12 @@ import ResultPageTopbar from "@/src/page/result/result-page.topbar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col items-center justify-center">
+    <>
       <ResultPageTopbar />
-      {children}
-    </div>
+      <div className="flex flex-col gap-4 max-w-screen-lg mx-auto">
+        {children}
+      </div>
+    </>
   );
 };
 

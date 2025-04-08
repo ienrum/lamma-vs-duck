@@ -3,6 +3,7 @@ import { useCrossPadStore } from "@/src/entities/cross-pad/model/store";
 import { useEffect, useState } from "react";
 import { Direction } from "@/src/entities/cross-pad/model/types";
 import { BoardCell } from "@/src/entities/duck-vs-lamma/model/constants";
+
 export const useGame = () => {
   const { currentDirection, count } = useCrossPadStore();
 

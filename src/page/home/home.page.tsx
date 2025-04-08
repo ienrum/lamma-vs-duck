@@ -1,11 +1,13 @@
+'use client'
 
 import { Card, CardHeader, CardTitle, CardContent } from '@/src/shared/ui/card';
 import { TOPBAR_TITLE } from './constants/page';
 import { Button } from '@/src/shared/ui/button';
-import { CrossPad } from '@/src/features/cross-pad/ui/CrossPad';
-import DuckVsLammaBoard from '@/src/widgets/duck-vs-lamma/ui/duck-vs-lamma-board';
+import { useRouter } from 'next/navigation';
 
 const HomePage = () => {
+  const router = useRouter();
+
   return (
     <div className='flex flex-col gap-4 p-4'>
       <Card >
@@ -13,16 +15,9 @@ const HomePage = () => {
           <CardTitle>{TOPBAR_TITLE}</CardTitle>
         </CardHeader>
         <CardContent className='flex flex-col gap-4'>
-          <Button color="primary">Click me</Button>
-          <Button color="secondary">Click me</Button>
-          <Button color="warning">Click me</Button>
-          <Button color="error">Click me</Button>
+          <Button color="secondary" onClick={() => router.push('/lamma-vs-duck')}>시작 하기</Button>
         </CardContent>
       </Card>
-      <div className='flex flex-col gap-4 justify-center items-center'>
-        <DuckVsLammaBoard />
-        <CrossPad />
-      </div>
     </div>
   );
 };
