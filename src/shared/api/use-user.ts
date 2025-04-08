@@ -1,13 +1,12 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { mockUserResponse, UserResponse } from "../model/user";
+import { createClient } from "@/utils/supabase/client";
 
 const getUser = async () => {
-  const response = await new Promise<UserResponse>((resolve) => {
-    setTimeout(() => {
-      resolve(mockUserResponse);
-    }, 1000);
-  });
-  return response;
+  const supabase = createClient()
+
+  const { data } = await supabase.auth.getUser()
+
+  return data
 };
 
 export const useUser = () => {
@@ -16,5 +15,5 @@ export const useUser = () => {
     queryFn: () => getUser(),
   });
 
-  return { user: data };
+  return data
 };
