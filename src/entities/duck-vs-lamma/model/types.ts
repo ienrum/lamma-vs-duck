@@ -9,7 +9,6 @@ export interface BoardState {
   board: BoardType;
   animalBoard: BoardType;
   animalCellBoardSize: number;
-  switchBoard: BoardType;
   animalBoardHistory: BoardHistory;
 }
 
@@ -17,6 +16,5 @@ export interface BoardStateUpdate {
   board?: BoardType;
   animalBoard?: BoardType;
   animalCellBoardSize?: number;
-  switchBoard?: BoardType;
   animalBoardHistory?: BoardHistory;
 }

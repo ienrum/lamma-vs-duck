@@ -22,9 +22,8 @@ export class Board {
   constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>) {
     this.startDate = new Date();
     const initialBoard = this.initializeBoard(board);
-    const animalBoard = this.extractAnimalBoard(initialBoard);
+    const animalBoard = initialBoard
     const animalCellBoardSize = animalBoard.length;
-    const switchBoard = this.extractSwitchBoard(initialBoard);
 
     const reservedAnimalMapsHistory = new ReservedAnimalMaps(reservedAnimalMaps);
     const animalBoardHistory = new BoardHistory(this.copyBoard(animalBoard), reservedAnimalMapsHistory);
@@ -33,7 +32,6 @@ export class Board {
       board: initialBoard,
       animalBoard,
       animalCellBoardSize,
-      switchBoard,
       animalBoardHistory
     };
   }
@@ -54,24 +52,6 @@ export class Board {
     return board.map((row) =>
       row.map((cell) => cell as BoardCell)
     );
-  }
-
-  /**
-   * 보드에서 동물 셀만 추출
-   */
-  private extractAnimalBoard(board: BoardType): BoardType {
-    return board
-      .map((row) => row.filter((cell) => animalCells.includes(cell)))
-      .filter((row) => row.length > 0);
-  }
-
-  /**
-   * 보드에서 스위치 셀만 추출
-   */
-  private extractSwitchBoard(board: BoardType): BoardType {
-    return board
-      .map((row) => row.filter((cell) => switchCells.includes(cell)))
-      .filter((row) => row.length > 0);
   }
 
   /**
@@ -108,12 +88,11 @@ export class Board {
         return;
     }
 
-    const normalizedBoard = this.getNormalizeAnimalBoard(newAnimalBoard);
     this.state.animalBoardHistory.forwardGame(this.copyBoard(newAnimalBoard), direction);
 
     this.updateState({
       animalBoard: newAnimalBoard,
-      board: normalizedBoard
+      board: newAnimalBoard
     });
 
     if (this.isWon()) {
@@ -158,30 +137,6 @@ export class Board {
   }
 
   /**
-   * 동물 보드를 원래 보드 크기에 맞게 정규화
-   */
-  private getNormalizeAnimalBoard(animalBoard: BoardType): BoardType {
-    const rows = this.state.board.length;
-    const cols = this.state.board[0].length;
-
-    const normalizedBoard = Array.from(
-      { length: rows },
-      (_, i) => Array.from(
-        { length: cols },
-        (_, j) => this.state.board[i][j]
-      )
-    );
-
-    for (let i = 0; i < animalBoard.length; i++) {
-      for (let j = 0; j < animalBoard[i].length; j++) {
-        normalizedBoard[i * 2][j * 2] = animalBoard[i][j];
-      }
-    }
-
-    return normalizedBoard;
-  }
-
-  /**
    * 게임 상태를 뒤로 돌리는 메서드
    */
   public backwardGame(): void {
@@ -196,11 +151,9 @@ export class Board {
     }
 
     const lastSnapshot = this.state.animalBoardHistory.getHistory()[this.state.animalBoardHistory.getHistory().length - 1];
-    const normalizedBoard = this.getNormalizeAnimalBoard(lastSnapshot);
-
     this.updateState({
       animalBoard: lastSnapshot,
-      board: normalizedBoard
+      board: lastSnapshot
     });
   }
 
