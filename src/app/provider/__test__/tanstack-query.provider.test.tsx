@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { getQueryClient } from "../tanstack-query.provider";
+import { getQueryClient } from "@/src/app/utils/get-query-client";
 import { describe, expect, it } from "vitest";
 import Providers from "../tanstack-query.provider";
 import { useQuery } from "@tanstack/react-query";
