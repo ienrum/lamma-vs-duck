@@ -8,10 +8,14 @@ import Image from "next/image"
 import { useUser } from "@/src/shared/api/use-user"
 import { getQueryClient } from "@/src/app/utils/get-query-client"
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { useFocusStore } from "@/src/shared/model/focus.store"
+
+export const signInTooltipId = 'sign-in-tooltip'
 
 const ProfileButton = () => {
   const supabase = createClient()
   const queryClient = getQueryClient()
+  const { isFocused } = useFocusStore()
 
   const { user } = useUser()
 
@@ -44,7 +48,7 @@ const ProfileButton = () => {
   if (!user) {
     return (
       <TooltipProvider>
-        <Tooltip>
+        <Tooltip open={isFocused(signInTooltipId)}>
           <TooltipTrigger asChild>
             <Button variant="ghost" size="icon" className='hover:bg-gray-100' onClick={handleSignin}>
               <User className="h-5 w-5" />
@@ -60,7 +64,7 @@ const ProfileButton = () => {
 
   return (
     <TooltipProvider>
-      <Tooltip>
+      <Tooltip open={isFocused(signInTooltipId)}>
         <TooltipTrigger asChild>
           <Button variant="ghost" size="icon" className='hover:bg-gray-100' onClick={handleSignout}>
             <Image src={user.user_metadata.avatar_url} alt="profile" width={32} height={32} className="rounded-full" />
