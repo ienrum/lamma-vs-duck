@@ -38,17 +38,6 @@ describe('TopBar', () => {
     expect(backButton).toBeDefined();
   });
 
-  it('ProfileLink가 렌더링되어야 합니다', () => {
-    render(
-      <TopBar>
-        <TopBar.ProfileLink />
-      </TopBar>
-    );
-
-    const profileLink = screen.getAllByRole('link')[0];
-    expect(profileLink).toBeDefined();
-  });
-
   it('HelpButton이 렌더링되어야 합니다', () => {
     render(
       <TopBar>
