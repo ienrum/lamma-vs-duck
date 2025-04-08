@@ -3,7 +3,7 @@ import DuckVsLammaBoard from "@/src/widgets/duck-vs-lamma/ui/duck-vs-lamma-board
 
 const LammaVsDuckPage = () => {
   return (
-    <div className='flex flex-col gap-4 justify-center items-center'>
+    <div className='flex flex-col gap-2 justify-center items-center'>
       <DuckVsLammaBoard />
       <CrossPad />
     </div>

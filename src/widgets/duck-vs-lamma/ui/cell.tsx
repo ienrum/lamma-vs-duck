@@ -7,16 +7,10 @@ const Cell = ({ cell, isAnimalCell }: { cell: string, isAnimalCell: boolean }) =
   return (
     <>
       {isAnimalCell && (
-        <div className="flex items-center justify-center text-2xl rounded-sm bg-gray-200 w-10 h-10">
+        <div className="flex items-center justify-center text-2xl rounded-sm bg-gray-200 w-8 h-8">
           {cell}
         </div >
       )}
-      {!isAnimalCell && !isVoid && <div className="flex items-center justify-center text-sm rounded-sm bg-transparent w-2 h-2 p-3">
-        {"  "}
-      </div >}
-      {isVoid && <div className="flex items-center justify-center text-sm rounded-sm bg-transparent w-2 h-2 p-3">
-
-      </div >}
     </>
   );
 };

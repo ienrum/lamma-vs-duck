@@ -23,7 +23,7 @@ const DuckVsLammaBoard = () => {
     <>
       <GameScoreBox gameInfo={gameInfo} />
       <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("down")} direction="down" />
-      <div className="flex gap-4">
+      <div className="flex gap-2">
         <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("right")} direction="right" />
         <GameBoard currentEmojiBoard={currentEmojiBoard} />
         <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("left")} direction="left" />
