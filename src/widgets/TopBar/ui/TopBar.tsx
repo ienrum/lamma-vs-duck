@@ -43,7 +43,7 @@ const BackButton = ({ className }: TopBarChildProps) => {
 };
 
 const ProfileLink = ({ className }: TopBarChildProps) => {
-  return <ProfileLinkComponent className={cn('flex items-center', className)} />;
+  return <ProfileLinkComponent />;
 };
 
 const HelpButton = ({ className }: TopBarChildProps) => {
