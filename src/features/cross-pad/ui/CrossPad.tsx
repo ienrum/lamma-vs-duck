@@ -18,7 +18,6 @@ export const CrossPad = ({
   const handleButtonClick = (direction: Direction) => () => {
     setDirection(direction);
     setPressed(true);
-    console.log("clicked", direction);
   }
 
   return (

@@ -1,8 +1,6 @@
 'use client'
 
 import { useGame } from "../model/use-game.hook";
-import { Button } from "@/src/shared/ui/button";
-import { ChevronLeft } from "lucide-react";
 import ReservedAnimalCells from "./reserved-animall-cells";
 import GameScoreBox from "./game-score-box";
 import GameBoard from "./game-board";
@@ -10,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const DuckVsLammaBoard = () => {
-  const { currentEmojiBoard, backwardGame, gameInfo, reservedAnimalMaps } = useGame();
+  const { currentEmojiBoard, gameInfo, reservedAnimalMaps } = useGame();
   const router = useRouter();
 
   useEffect(() => {
@@ -22,6 +20,7 @@ const DuckVsLammaBoard = () => {
   return (
     <>
       <GameScoreBox gameInfo={gameInfo} />
+      <span className="w-full h-[1px] bg-gray-300 my-4" />
       <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("down")} direction="down" />
       <div className="flex gap-2">
         <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("right")} direction="right" />
@@ -29,9 +28,6 @@ const DuckVsLammaBoard = () => {
         <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("left")} direction="left" />
       </div>
       <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("up")} direction="up" />
-      <Button onClick={backwardGame}>
-        <ChevronLeft />
-      </Button>
     </>
   );
 };
