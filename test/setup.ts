@@ -11,6 +11,24 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '',
   useSearchParams: () => new URLSearchParams(),
 }));
+// 모킹 설정
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+}));
+
+vi.mock('@/src/shared/model/focus.store', () => ({
+  useFocusStore: () => ({
+    focus: vi.fn(),
+  }),
+}));
+
+vi.mock('@/src/shared/api/use-user', () => ({
+  useUser: () => ({
+    user: null,
+  }),
+}));
 
 class ResizeObserver {
   observe() { }
