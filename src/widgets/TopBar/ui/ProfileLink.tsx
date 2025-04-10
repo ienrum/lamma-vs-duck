@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import ProfileButton from './ProfileButton';
 import { getQueryClient } from '@/src/app/utils/get-query-client';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 export const ProfileLink = async () => {
   const queryClient = getQueryClient()
@@ -18,6 +19,8 @@ export const ProfileLink = async () => {
   })
 
   return (
-    <ProfileButton />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ProfileButton />
+    </HydrationBoundary>
   )
 }; 

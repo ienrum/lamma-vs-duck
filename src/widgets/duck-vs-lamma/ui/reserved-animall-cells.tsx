@@ -7,9 +7,9 @@ const ReservedAnimalCells = ({ reservedAnimalList, direction }: { reservedAnimal
   const isHorizontal = direction === "left" || direction === "right"
 
   return (
-    <div className={cn("flex bg-gray-300 rounded-md justify-evenly", isHorizontal ? "flex-col" : "")} >
+    <div className={cn("flex bg-gray-300 rounded-md", isHorizontal ? "flex-col" : "")} >
       {reservedAnimalList.map((cell, cellIndex) => (
-        <div key={cellIndex} className="flex flex-col items-center justify-evenly w-16 h-16 rounded-md">
+        <div key={cellIndex} className="flex flex-col items-center justify-evenly w-12 h-12 rounded-md">
           <Cell cell={cell} isAnimalCell={animalEmojiCells.includes(cell)} />
         </div>
       ))}

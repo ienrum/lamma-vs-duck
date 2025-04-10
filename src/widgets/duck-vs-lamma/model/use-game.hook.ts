@@ -1,52 +1,45 @@
-import { Board } from "@/src/entities/duck-vs-lamma/model/board";
+'use client'
+
 import { useCrossPadStore } from "@/src/entities/cross-pad/model/store";
-import { useEffect, useState } from "react";
-import { Direction } from "@/src/entities/cross-pad/model/types";
-import { BoardCell } from "@/src/entities/duck-vs-lamma/model/constants";
+import { useGameStore } from "./store";
+import { useEffect } from "react";
+
+let previousCount = 0;
+
 export const useGame = () => {
+  const {
+    currentEmojiBoard,
+    getReservedAnimalMaps,
+    backwardGame,
+    getCount,
+    getMaxCount,
+    getPlayTime,
+    isWon,
+    getLammaCount,
+    getDuckCount,
+    moveAnimalCells
+  } = useGameStore();
+
   const { currentDirection, count } = useCrossPadStore();
 
-  const [board] = useState<Board>(
-    new Board([
-      ["1", "y", "0", "z", "1"],
-      ["z", " ", "x", " ", "z"],
-      ["2", "y", "1", "x", "1"],
-      ["z", " ", "x", " ", "z"],
-      ["1", "z", "1", "y", "1"]],
-      {
-        up: [["1", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-        down: [["1", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-        left: [["1", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-        right: [["2", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-      }
-    ));
-
-  const [currentEmojiBoard, setCurrentEmojiBoard] = useState<string[][]>(board.getEmojiBoard())
-
   useEffect(() => {
-    console.log(currentDirection)
-    if (currentDirection) {
-      board.moveAnimalCells(currentDirection)
-      setCurrentEmojiBoard(board.getEmojiBoard())
+    if (currentDirection && count == previousCount + 1) {
+      moveAnimalCells(currentDirection);
+      previousCount = count;
     }
-
-  }, [currentDirection, count])
+  }, [currentDirection, count]);
 
   return {
     currentEmojiBoard,
-    reservedAnimalMaps: (direction: Direction) => board.getEmojiReservedAnimalMaps(direction),
-    backwardGame: () => {
-      board.backwardGame();
-      setCurrentEmojiBoard(board.getEmojiBoard());
-    },
+    reservedAnimalMaps: getReservedAnimalMaps,
+    backwardGame,
     gameInfo: {
-      count: (direction: Direction) => board.getCount(direction),
-      maxCount: (direction: Direction) => board.getMaxCount(direction),
-      playTime: () => new Date().getTime() - board.getStartDate().getTime(),
-      isWon: () => board.isWon(),
-      lammaCount: () => board.getAnimalCellCount(BoardCell.Lamma),
-      duckCount: () => board.getAnimalCellCount(BoardCell.Duck),
-
+      count: getCount,
+      maxCount: getMaxCount,
+      playTime: getPlayTime,
+      isWon,
+      lammaCount: getLammaCount,
+      duckCount: getDuckCount,
     }
-  }
+  };
 };
