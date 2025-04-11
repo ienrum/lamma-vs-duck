@@ -2,19 +2,17 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/shared/ui/card";
 import useGetRanking from "../api/use-get-ranking";
-import { useUser } from "@/src/shared/api/use-user";
 import { cn } from "@/lib/utils";
 import useInView from "@/src/shared/hook/use-intersection";
 import { useEffect } from "react";
 import formatDate from "@/src/shared/util/format-date";
-import { LEADER_BOARD_TITLE, LEADER_BOARD_DATE_TITLE, LEADER_BOARD_RANK_TITLE, LEADER_BOARD_NAME_TITLE, LEADER_BOARD_SCORE_TITLE } from "../config/constants";
+import { LEADER_BOARD_TITLE, LEADER_BOARD_RANK_TITLE, LEADER_BOARD_NAME_TITLE, LEADER_BOARD_SCORE_TITLE } from "../config/constants";
 import formatTime from "@/src/shared/util/format-time";
+
 const LeaderBoard = () => {
-  const { data, fetchNextPage } = useGetRanking();
-  const { user } = useUser();
+  const { rankList, fetchNextPage, myRank } = useGetRanking("1");
   const { ref, isInView } = useInView();
 
-  const myRank = data.findIndex((item) => item.id === user?.id);
   const today = new Date();
   const formattedDate = formatDate(today);
 
@@ -39,7 +37,7 @@ const LeaderBoard = () => {
             <div>{LEADER_BOARD_NAME_TITLE}</div>
             <div>{LEADER_BOARD_SCORE_TITLE}</div>
           </div>
-          {data.map((item, index) => (
+          {rankList.map((item, index) => (
             <div
               key={item.id}
               className={cn(
@@ -50,7 +48,7 @@ const LeaderBoard = () => {
               )}
             >
               <div className="font-bold text-gray-700">{index + 1}</div>
-              <div className="text-gray-800">{item.name}</div>
+              <div className="text-gray-800">{item.user.raw_user_meta_data.name}</div>
               <div className="text-gray-600">{formatTime(item.score)}</div>
             </div>
           ))}
