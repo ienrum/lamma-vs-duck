@@ -10,6 +10,7 @@ import usePostEnd from "@/src/features/game/api/use-post-game-end";
 import useGetGameBoard from "@/src/features/game/api/use-get-game-board";
 import usePostStart from "@/src/features/game/api/use-post-game-start";
 import usePostCleanup from "@/src/features/game/api/use-post-game-cleanup";
+import Spinner from "@/src/shared/ui/spinner";
 
 
 const DuckVsLammaBoard = () => {
@@ -54,7 +55,7 @@ const DuckVsLammaBoard = () => {
   }, [isWon]);
 
   if (!currentEmojiBoard) {
-    return null
+    return <Spinner size="lg" className="mx-auto" />;
   }
 
   return (

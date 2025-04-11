@@ -1,1 +1,1 @@
-export const HELP_BUTTON_TOOLTIP = '도움이 필요하신가요?';
+export const HELP_BUTTON_TOOLTIP = 'Need help?';

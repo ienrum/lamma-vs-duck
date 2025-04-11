@@ -1,4 +1,5 @@
 import { TopBar } from "@/src/widgets/TopBar/ui/TopBar";
+import { RESULT_TITLE } from './constants/result';
 
 const ResultPageTopbar = () => {
   return (
@@ -7,7 +8,7 @@ const ResultPageTopbar = () => {
         <TopBar.BackButton />
       </TopBar.Left>
       <TopBar.Center>
-        <TopBar.Title text={"결과"} />
+        <TopBar.Title text={RESULT_TITLE} />
       </TopBar.Center>
       <TopBar.Right>
         <TopBar.HelpButton />

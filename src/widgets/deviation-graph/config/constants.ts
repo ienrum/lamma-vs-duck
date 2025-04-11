@@ -1,1 +1,1 @@
-export const PERCENTAGE_SENTENCE = "당신은 상위"
+export const PERCENTAGE_SENTENCE = "You are in the top";
