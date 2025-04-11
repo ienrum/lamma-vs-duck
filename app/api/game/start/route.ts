@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       throw new Error('User not found');
     }
 
-    const { data: rankData, error: rankError } = await supabase.from('rank').select('id').eq('game_id', gameId).eq('user_id', user.id).eq('today', mergeToday(todayString, user.id));
+    const { data: rankData, error: rankError } = await supabase.from('rank').select('id').eq('game_id', gameId).eq('user_id', user.id).eq('today', mergeToday(todayString(), user.id));
 
     if (rankError) {
       throw new Error(rankError.message);
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       game_id: gameId,
       user_id: user.id,
       start_time: new Date().toISOString(),
-      today: mergeToday(todayString, user.id)
+      today: mergeToday(todayString(), user.id)
     }, {
       onConflict: 'today'
     });

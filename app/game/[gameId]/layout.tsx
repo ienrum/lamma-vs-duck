@@ -15,7 +15,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     throw new Error('User not found');
   }
 
-  const { data: rankData } = await supabase.from('rank').select('id').eq('user_id', user.id).eq('today', mergeToday(todayString, user.id)).single();
+  const { data: rankData } = await supabase.from('rank').select('id').eq('user_id', user.id).eq('today', mergeToday(todayString(), user.id)).single();
 
   if (rankData) {
     redirect('/result');

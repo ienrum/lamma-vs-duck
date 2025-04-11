@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       throw new Error('User not found');
     }
 
-    const today = mergeToday(todayString, userId);
+    const today = mergeToday(todayString(), userId);
 
     const startTime = await supabase.from('rank').select('start_time').eq('game_id', gameId).eq('user_id', userId).eq('today', today).single();
     const endTime = new Date().toISOString();

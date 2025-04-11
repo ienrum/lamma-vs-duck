@@ -1,37 +1,47 @@
 import { NextResponse } from 'next/server';
 import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
 import { GameBoardResponseDto } from '@/src/features/game/model/dto/game-board.dto';
-
-const todayDuckBoard = {
-  board: [
-    ["1", "0", "1"],
-    ["2", "1", "1"],
-    ["1", "1", "1"]],
-  reservedAnimalMaps: {
-    up: [["1", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-    down: [["1", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-    left: [["1", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-    right: [["2", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-  }
-};
+import { generateGameData } from '@/src/app/model/util/generate-game-data';
+import { getDailyGameData, setDailyGameData } from '@/src/app/model/game/game-data.model';
 
 export async function GET(request: Request) {
-
   try {
     const { searchParams } = new URL(request.url);
     const gameId = searchParams.get('gameId');
+    const today = new Date().toISOString().split('T')[0];
+
+    // 오늘의 게임 데이터를 가져옴
+    let gameData = getDailyGameData();
+
+    // 오늘의 게임 데이터가 없는 경우 새로 생성
+    if (!gameData) {
+      const generatedData = generateGameData(1);
+      const newGameData = {
+        date: today,
+        board: generatedData.board,
+        reservedAnimalMaps: {
+          up: generatedData.reservedAnimalMaps.up,
+          down: generatedData.reservedAnimalMaps.down,
+          left: generatedData.reservedAnimalMaps.left,
+          right: generatedData.reservedAnimalMaps.right,
+        },
+      };
+      setDailyGameData(newGameData);
+      gameData = newGameData;
+    }
 
     return NextResponse.json<BaseResponseDto<GameBoardResponseDto>>(
       {
         message: 'Game board fetched successfully',
         data: {
-          board: todayDuckBoard.board,
-          reservedAnimalMaps: todayDuckBoard.reservedAnimalMaps,
+          board: gameData.board,
+          reservedAnimalMaps: gameData.reservedAnimalMaps,
         },
       },
       { status: 200 }
     );
   } catch (error) {
+    console.error('Failed to fetch game board:', error);
     return NextResponse.json<BaseResponseDto<null>>(
       {
         message: 'Failed to fetch game board',
