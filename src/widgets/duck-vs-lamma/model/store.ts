@@ -3,21 +3,11 @@ import { Board } from "@/src/entities/duck-vs-lamma/model/board";
 import { Direction } from "@/src/entities/cross-pad/model/types";
 import { BoardCell } from "@/src/entities/duck-vs-lamma/model/constants";
 
-const initialBoard = new Board([
-  ["1", "0", "1"],
-  ["2", "1", "1"],
-  ["1", "1", "1"]],
-  {
-    up: [["1", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-    down: [["1", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-    left: [["1", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-    right: [["2", "1", "0"], ["1", "2", "2"], ["1", "1", "0"]],
-  }
-);
 
 interface GameState {
-  board: Board;
-  currentEmojiBoard: string[][];
+  board: Board | null;
+  currentEmojiBoard: string[][] | null;
+  setBoard: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>) => void;
   moveAnimalCells: (direction: Direction) => void;
   backwardGame: () => void;
   getReservedAnimalMaps: (direction: Direction) => string[];
@@ -30,53 +20,69 @@ interface GameState {
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
-  board: initialBoard,
-  currentEmojiBoard: initialBoard.getEmojiBoard(),
-
+  board: null,
+  currentEmojiBoard: null,
+  setBoard: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>) => {
+    const board = new Board(initialBoard, initialReservedAnimalMaps);
+    set({ board, currentEmojiBoard: board.getEmojiBoard() });
+  },
   moveAnimalCells: (direction: Direction) => {
     const { board } = get();
+    if (!board) return;
     board.moveAnimalCells(direction);
     set({ currentEmojiBoard: board.getEmojiBoard() });
   },
 
   backwardGame: () => {
     const { board } = get();
+    if (!board) return;
     board.backwardGame();
     set({ currentEmojiBoard: board.getEmojiBoard() });
   },
 
   getReservedAnimalMaps: (direction: Direction) => {
     const { board } = get();
+    if (!board) return [];
     return board.getEmojiReservedAnimalMaps(direction);
   },
 
   getCount: (direction: Direction) => {
     const { board } = get();
+    if (!board) return 0;
     return board.getCount(direction);
   },
 
   getMaxCount: (direction: Direction) => {
     const { board } = get();
+    if (!board) return 0;
     return board.getMaxCount(direction);
   },
 
   getPlayTime: () => {
     const { board } = get();
+    if (!board) return 0;
+    if (board.getEndDate()) {
+      return board.getEndDate()!.getTime() - board.getStartDate().getTime();
+    }
+
     return new Date().getTime() - board.getStartDate().getTime();
   },
 
   isWon: () => {
     const { board } = get();
+    if (!board) return false;
     return board.isWon();
   },
 
   getLammaCount: () => {
     const { board } = get();
+    if (!board) return 0;
     return board.getAnimalCellCount(BoardCell.Lamma);
   },
 
   getDuckCount: () => {
     const { board } = get();
+    if (!board) return 0;
     return board.getAnimalCellCount(BoardCell.Duck);
   },
 })); 
