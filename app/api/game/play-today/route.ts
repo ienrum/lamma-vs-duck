@@ -4,7 +4,6 @@ import { todayString } from "../start/route";
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
 import { mergeToday } from "@/src/app/utils/backend/db-today-utils";
 import { NextResponse } from "next/server";
-import { RankResponseDto } from "@/src/widgets/leader-board/model/dto/rank.dto";
 
 export async function GET(request: Request) {
   const cookieStore = await cookies();
@@ -22,7 +21,6 @@ export async function GET(request: Request) {
     console.error(rankError);
   }
 
-  console.log(mergeToday(todayString, user.id));
   if (!rankData) {
     return NextResponse.json<BaseResponseDto<boolean>>(
       {

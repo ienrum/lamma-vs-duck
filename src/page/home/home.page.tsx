@@ -15,7 +15,7 @@ const HomePage = () => {
   const { focus } = useFocusStore()
   const { user } = useUser()
   const { data: gameList } = useGetGameList();
-  const { data: isPlayedToday } = useGetPlayToday();
+  const { data: isPlayedToday } = useGetPlayToday(!!user);
 
   const handleStartGame = (gameId: number) => {
     if (!user) {
