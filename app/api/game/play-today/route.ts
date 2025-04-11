@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     throw new Error('User not found');
   }
 
-  const { data: rankData, error: rankError } = await supabase.from('rank').select('id').eq('user_id', user.id).eq('today', mergeToday(todayString, user.id)).single();
+  const { data: rankData, error: rankError } = await supabase.from('rank').select('id').eq('user_id', user.id).eq('today', mergeToday(todayString(), user.id)).single();
 
   if (rankError) {
     console.error(rankError);

@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       `)
       .range(from, to)
       .order('score', { ascending: true })
-      .like('today', `${todayString}:%`)
+      .like('today', `${todayString()}:%`)
       .neq('score', -1);
 
 
