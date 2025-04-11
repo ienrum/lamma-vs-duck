@@ -1,0 +1,34 @@
+import { todayString } from "@/app/api/game/start/route";
+import { mergeToday } from "@/src/app/utils/backend/db-today-utils";
+import LammaVsDuckTopbar from "@/src/page/game/lamma-vs-duck/lamma-vs-duck.topbar";
+import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+  const cookieStore = await cookies();
+  const supabase = await createClient(cookieStore);
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const { data: rankData } = await supabase.from('rank').select('id').eq('user_id', user.id).eq('today', mergeToday(todayString, user.id)).single();
+
+  if (rankData) {
+    redirect('/result');
+  }
+
+  return (
+    <div>
+      <LammaVsDuckTopbar />
+      <div className="py-4">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export default Layout;
