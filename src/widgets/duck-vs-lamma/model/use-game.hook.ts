@@ -9,6 +9,7 @@ let previousCount = 0;
 export const useGame = () => {
   const {
     currentEmojiBoard,
+    setBoard,
     getReservedAnimalMaps,
     backwardGame,
     getCount,
@@ -33,6 +34,7 @@ export const useGame = () => {
     currentEmojiBoard,
     reservedAnimalMaps: getReservedAnimalMaps,
     backwardGame,
+    setBoard,
     gameInfo: {
       count: getCount,
       maxCount: getMaxCount,

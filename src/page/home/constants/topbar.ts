@@ -1,1 +1,1 @@
-export const TOPBAR_TITLE = '홈';
+export const TOPBAR_TITLE = 'Home';

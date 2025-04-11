@@ -7,18 +7,28 @@ import { useRouter } from 'next/navigation';
 import { useFocusStore } from '@/src/shared/model/focus.store';
 import { signInTooltipId } from '@/src/widgets/TopBar/ui/ProfileButton';
 import { useUser } from '@/src/shared/api/use-user';
+import useGetGameList from '@/src/features/game/api/use-get-game-list';
+import useGetPlayToday from '@/src/features/game/api/use-get-play-today';
 
 const HomePage = () => {
   const router = useRouter();
   const { focus } = useFocusStore()
   const { user } = useUser()
+  const { data: gameList } = useGetGameList();
+  const { data: isPlayedToday } = useGetPlayToday(!!user);
 
-  const handleStartGame = () => {
+  const handleStartGame = (gameId: number) => {
     if (!user) {
       focus(signInTooltipId, 'Sign in', 3000)
-    } else {
-      router.push('/lamma-vs-duck')
+      return;
     }
+
+    if (isPlayedToday) {
+      router.push('/result')
+      return;
+    }
+
+    router.push(`/game/${gameId}`)
   }
 
   return (
@@ -28,7 +38,9 @@ const HomePage = () => {
           <CardTitle>{TOPBAR_TITLE}</CardTitle>
         </CardHeader>
         <CardContent className='flex flex-col gap-4'>
-          <Button color="secondary" onClick={handleStartGame}>시작 하기</Button>
+          {gameList.map((game) => (
+            <Button key={game.id} color="secondary" onClick={() => handleStartGame(game.id)}>{game.title}</Button>
+          ))}
         </CardContent>
       </Card>
     </div>

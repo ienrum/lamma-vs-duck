@@ -1,4 +1,5 @@
 import { TopBar } from "@/src/widgets/TopBar/ui/TopBar";
+import { GAME_TITLE } from './constants/game';
 
 const LammaVsDuckTopbar = () => {
   return (
@@ -7,7 +8,7 @@ const LammaVsDuckTopbar = () => {
         <TopBar.BackButton />
       </TopBar.Left>
       <TopBar.Center>
-        <TopBar.Title text={"게임"} />
+        <TopBar.Title text={GAME_TITLE} />
       </TopBar.Center>
       <TopBar.Right>
         <TopBar.HelpButton />
