@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { RankResponseDto } from '@/src/widgets/leader-board/model/dto/rank.dto';
 import { Rank } from '@/src/widgets/leader-board/model/dto/rank.dto';
-import { todayString } from '../start/route';
+import { todayString } from '@/src/shared/config/today-string';
 
 
 export async function GET(request: Request) {
