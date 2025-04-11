@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
-import { todayString } from '../start/route';
+import { todayString } from '@/src/shared/config/today-string';
 import { GameEndRequestDto, GameEndResponseDto } from '@/src/features/game/model/dto/game-end.dto';
 import { mergeToday } from '@/src/app/utils/backend/db-today-utils';
 

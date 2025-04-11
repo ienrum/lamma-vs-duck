@@ -1,4 +1,4 @@
-import { todayString } from "@/app/api/game/start/route";
+import { todayString } from "@/src/shared/config/today-string";
 import { mergeToday } from "@/src/app/utils/backend/db-today-utils";
 import LammaVsDuckTopbar from "@/src/page/game/lamma-vs-duck/lamma-vs-duck.topbar";
 import { createClient } from "@/utils/supabase/server";

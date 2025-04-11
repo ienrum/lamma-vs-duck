@@ -4,8 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { mergeToday } from '@/src/app/utils/backend/db-today-utils';
-
-export const todayString = new Date().toISOString().split('T')[0];
+import { todayString } from '@/src/shared/config/today-string';
 
 export async function POST(request: Request) {
   const cookieStore = await cookies();
