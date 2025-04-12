@@ -3,8 +3,8 @@ export function generateGameData(difficulty: number) {
   const RESERVED_MAP_SIZE = 3; // 각 방향별로 3개의 예약 타일 리스트
 
   // 난이도에 따른 라마와 오리의 비율 조정
-  const lamaRatio = 0.4;
-  const duckRatio = 0.4
+  const lamaRatio = 0.3;
+  const duckRatio = 0.2
 
   // 보드 초기화 (4x4)
   const board = [];
