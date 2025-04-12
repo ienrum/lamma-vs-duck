@@ -73,7 +73,7 @@ export class Board {
    * @param direction 이동 방향
    */
   public moveAnimalCells(direction: Direction): void {
-    if (this.isExceeded()) {
+    if (this.isExceeded(direction)) {
       return;
     }
 
@@ -183,9 +183,8 @@ export class Board {
   /**
    * 게임 종료 여부 확인
    */
-  private isExceeded(): boolean {
-    const directions: Direction[] = ['up', 'down', 'left', 'right'];
-    return directions.some((direction) => this.state.animalBoardHistory.isLastIndex(direction));
+  private isExceeded(direction: Direction): boolean {
+    return this.state.animalBoardHistory.isLastIndex(direction);
   }
 
   /**
@@ -201,7 +200,7 @@ export class Board {
    * @param direction 방향
    */
   public getMaxCount(direction: Direction): number {
-    return this.state.animalBoardHistory.getMaxCount(direction);
+    return this.state.animalBoardHistory.getMaxCount(direction) - 1;
   }
 
   /**
