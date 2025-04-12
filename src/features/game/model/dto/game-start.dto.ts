@@ -1,3 +1,3 @@
-export interface GameStartResponseDto {
-  startId: string;
+export interface GameStartRequestDto {
+  gameId: number;
 }

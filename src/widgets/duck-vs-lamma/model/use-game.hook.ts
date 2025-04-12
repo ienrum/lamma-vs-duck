@@ -18,8 +18,7 @@ export const useGame = () => {
     isWon,
     getLammaCount,
     getDuckCount,
-    moveAnimalCells,
-    clearBoard
+    moveAnimalCells
   } = useGameStore();
 
   const { currentDirection, count } = useCrossPadStore();
@@ -36,7 +35,6 @@ export const useGame = () => {
     reservedAnimalMaps: getReservedAnimalMaps,
     backwardGame,
     setBoard,
-    clearBoard,
     gameInfo: {
       count: getCount,
       maxCount: getMaxCount,

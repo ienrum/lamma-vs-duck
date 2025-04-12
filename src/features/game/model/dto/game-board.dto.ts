@@ -8,5 +8,4 @@ export interface GameBoardRequestDto {
 export interface GameBoardResponseDto {
   board: string[][];
   reservedAnimalMaps: Record<Direction, string[][]>;
-  startId: string;
 }

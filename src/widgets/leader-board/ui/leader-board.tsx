@@ -10,7 +10,7 @@ import { LEADER_BOARD_TITLE, LEADER_BOARD_RANK_TITLE, LEADER_BOARD_NAME_TITLE, L
 import formatTime from "@/src/shared/util/format-time";
 
 const LeaderBoard = () => {
-  const { rankList, fetchNextPage } = useGetRanking("1");
+  const { rankList, fetchNextPage, myRank } = useGetRanking("1");
   const { ref, isInView } = useInView();
 
   const today = new Date();
@@ -31,7 +31,7 @@ const LeaderBoard = () => {
         <CardTitle className="text-center text-gray-800">
           <div className="text-gray-800">{formattedDate}</div>
         </CardTitle>
-        <CardContent className="h-[60vh] overflow-y-scroll flex flex-col gap-2">
+        <CardContent className="h-[60vh] overflow-y-scroll">
           <div className="grid grid-cols-3 gap-4 p-4 rounded-lg font-semibold text-gray-700 w-full">
             <div>{LEADER_BOARD_RANK_TITLE}</div>
             <div>{LEADER_BOARD_NAME_TITLE}</div>
@@ -41,11 +41,14 @@ const LeaderBoard = () => {
             <div
               key={item.id}
               className={cn(
-                "grid grid-cols-3 gap-1 p-2 rounded-lg transition-all hover:bg-gray-50 w-full bg-amber-300"
+                "grid grid-cols-3 gap-4 p-4 rounded-lg transition-all hover:bg-gray-50 w-full",
+                {
+                  "bg-amber-300": index === myRank,
+                }
               )}
             >
               <div className="font-bold text-gray-700">{index + 1}</div>
-              <div className="text-gray-800 truncate text-ellipsis max-w-[100px]">{item.user.name}</div>
+              <div className="text-gray-800">{item.user.raw_user_meta_data.name}</div>
               <div className="text-gray-600">{formatTime(item.score)}</div>
             </div>
           ))}

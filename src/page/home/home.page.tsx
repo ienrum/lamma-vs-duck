@@ -4,14 +4,30 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/src/shared/ui/card';
 import { TOPBAR_TITLE } from './constants/page';
 import { Button } from '@/src/shared/ui/button';
 import { useRouter } from 'next/navigation';
+import { useFocusStore } from '@/src/shared/model/focus.store';
+import { signInTooltipId } from '@/src/widgets/TopBar/ui/ProfileButton';
+import { useUser } from '@/src/shared/api/use-user';
 import useGetGameList from '@/src/features/game/api/use-get-game-list';
-import Image from 'next/image';
+import useGetPlayToday from '@/src/features/game/api/use-get-play-today';
 
 const HomePage = () => {
   const router = useRouter();
+  const { focus } = useFocusStore()
+  const { user } = useUser()
   const { data: gameList } = useGetGameList();
+  const { data: isPlayedToday } = useGetPlayToday(!!user);
 
   const handleStartGame = (gameId: number) => {
+    if (!user) {
+      focus(signInTooltipId, 'Sign in', 3000)
+      return;
+    }
+
+    if (isPlayedToday) {
+      router.push('/result')
+      return;
+    }
+
     router.push(`/game/${gameId}`)
   }
 
@@ -23,12 +39,7 @@ const HomePage = () => {
         </CardHeader>
         <CardContent className='flex flex-col gap-4'>
           {gameList.map((game) => (
-            <Button key={game.id} color="secondary" onClick={() => handleStartGame(game.id)}>
-              <div className='flex items-center gap-2'>
-                <Image src="/favicon.ico" alt="game" width={20} height={20} className='rounded-full bg-amber-600 border-2 border-black' />
-                {game.title}
-              </div>
-            </Button>
+            <Button key={game.id} color="secondary" onClick={() => handleStartGame(game.id)}>{game.title}</Button>
           ))}
         </CardContent>
       </Card>

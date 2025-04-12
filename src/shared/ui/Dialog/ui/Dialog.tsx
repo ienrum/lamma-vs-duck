@@ -17,8 +17,6 @@ interface DialogProps {
   description?: string;
   children: ReactNode;
   className?: string;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
 }
 
 export const Dialog = ({
@@ -27,11 +25,9 @@ export const Dialog = ({
   description,
   children,
   className,
-  open,
-  onOpenChange,
 }: DialogProps) => {
   return (
-    <RadixDialog open={open} onOpenChange={onOpenChange}>
+    <RadixDialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className={cn('max-w-none', className)}>
         {(title || description) && (

@@ -10,7 +10,7 @@ const HomePageTopbar = () => {
       <TopBar.Right>
         <TopBar.HelpButton />
         <TopBar.StatsLink />
-        {/* <TopBar.ProfileLink /> */}
+        <TopBar.ProfileLink />
       </TopBar.Right>
     </TopBar>
   );

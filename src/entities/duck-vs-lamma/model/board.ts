@@ -54,11 +54,6 @@ export class Board {
     );
   }
 
-  public clearBoard(): void {
-    this.state.animalBoardHistory.clearHistory();
-    this.state.animalBoard = this.copyBoard(this.state.board);
-  }
-
   /**
    * 특정 방향의 예약된 동물 맵을 이모지로 변환하여 반환
    * @param direction 방향

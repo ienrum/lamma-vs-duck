@@ -1,6 +1,7 @@
 
 export type RankResponseDto = {
   myRank: number;
+  rankList: Rank[];
 }
 
 export interface Rank {
@@ -13,6 +14,9 @@ export interface Rank {
   end_date: string;
   user: {
     id: string;
-    name: string;
+    raw_user_meta_data: {
+      name: string;
+      avatar_url: string;
+    };
   };
 }
