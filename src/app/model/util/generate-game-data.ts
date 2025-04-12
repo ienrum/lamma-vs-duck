@@ -13,9 +13,9 @@ export function generateGameData(difficulty: number) {
 
   // 초기 보드 (고정된 패턴)
   let answerBoard: string[][] = [
-    ["2", "2", "2"],
-    ["1", "2", "1"],
-    ["2", "1", "1"],
+    ["2", "0", "2"],
+    ["0", "0", "1"],
+    ["2", "0", "1"],
   ];
 
   answerBoard = shuffleBoard(answerBoard);
@@ -55,15 +55,14 @@ export function generateGameData(difficulty: number) {
   }
 
   const generateRandomReservedAnimalList = () => {
-    const lammaPercent = 0.3;
-    const duckPercent = 0.1;
+    const [lammaPercent, duckPercent] = [0.5, 0.1].sort(() => Math.random() - 0.5);
 
     const reservedAnimalList = [];
     for (let i = 0; i < 3; i++) {
       const random = Math.random();
       if (random < lammaPercent) {
         reservedAnimalList.push("2");
-      } else if (random < lammaPercent + duckPercent) {
+      } else if (random < duckPercent) {
         reservedAnimalList.push("1");
       } else {
         reservedAnimalList.push("0");
