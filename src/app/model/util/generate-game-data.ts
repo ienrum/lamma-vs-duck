@@ -13,8 +13,8 @@ export function generateGameData(difficulty: number) {
 
   // 초기 보드 (고정된 패턴)
   let answerBoard: string[][] = [
-    ["0", "2", "2"],
-    ["1", "0", "0"],
+    ["0", "2", "0"],
+    ["0", "0", "0"],
     ["0", "0", "1"],
   ];
 
@@ -55,7 +55,7 @@ export function generateGameData(difficulty: number) {
   }
 
   const generateRandomReservedAnimalList = () => {
-    const lammaPercent = 0.7;
+    const lammaPercent = 0.3;
     const duckPercent = 0.1;
 
     const reservedAnimalList = [];
