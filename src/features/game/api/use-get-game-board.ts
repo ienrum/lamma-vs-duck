@@ -1,9 +1,18 @@
+'use client';
+
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
 import { GameBoardResponseDto } from "@/src/features/game/model/dto/game-board.dto";
 
 const getGameBoard = async (gameId: number) => {
-  const response = await fetch(`/api/game/board?gameId=${gameId}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/board?gameId=${gameId}`, {
+    method: 'GET',
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
   const data = await response.json() as BaseResponseDto<GameBoardResponseDto>;
   return data;
 };
