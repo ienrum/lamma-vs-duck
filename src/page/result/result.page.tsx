@@ -1,5 +1,4 @@
 import LeaderBoard from "@/src/widgets/leader-board/ui/leader-board";
-// import DeviationGraph from "@/src/widgets/deviation-graph/ui/standard-deviation-graph";
 
 const ResultPage = async () => {
   return (
