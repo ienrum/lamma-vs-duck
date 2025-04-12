@@ -5,7 +5,7 @@ import { GameStartResponseDto } from "@/src/features/game/model/dto/game-start.d
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
 
 const getStart = async (): Promise<BaseResponseDto<GameStartResponseDto>> => {
-  const response = await fetch("/api/game/start", {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/start`, {
     method: "GET",
   });
 

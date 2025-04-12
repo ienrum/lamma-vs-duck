@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
 
 const postEnd = async (data: GameEndRequestDto): Promise<BaseResponseDto<GameEndResponseDto>> => {
-  const response = await fetch("/api/game/end", {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/end`, {
     method: "POST",
     body: JSON.stringify(data),
   });

@@ -2,7 +2,7 @@ import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
 import { useMutation } from "@tanstack/react-query";
 
 const postCleanup = async (): Promise<BaseResponseDto<null>> => {
-  const response = await fetch("/api/game/cleanup", {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/cleanup`, {
     method: "POST",
   });
 
