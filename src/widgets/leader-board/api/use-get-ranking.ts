@@ -1,3 +1,5 @@
+'use client';
+
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { Rank, RankResponseDto } from "@/src/widgets/leader-board/model/dto/rank.dto";
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";

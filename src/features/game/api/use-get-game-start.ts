@@ -1,3 +1,5 @@
+'use client';
+
 import { useQuery } from "@tanstack/react-query";
 import { GameStartResponseDto } from "@/src/features/game/model/dto/game-start.dto";
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
