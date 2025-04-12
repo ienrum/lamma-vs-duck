@@ -12,7 +12,7 @@ const ResultPageTopbar = () => {
       </TopBar.Center>
       <TopBar.Right>
         <TopBar.HelpButton />
-        <TopBar.ProfileLink />
+        {/* <TopBar.ProfileLink /> */}
       </TopBar.Right>
     </TopBar>
   );

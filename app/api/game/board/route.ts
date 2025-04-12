@@ -3,12 +3,37 @@ import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
 import { GameBoardResponseDto } from '@/src/features/game/model/dto/game-board.dto';
 import { generateGameData } from '@/src/app/model/util/generate-game-data';
 import { getDailyGameData, setDailyGameData } from '@/src/app/model/game/game-data.model';
+import { v4 as uuidv4 } from 'uuid';
+import { todayString } from '@/src/shared/config/today-string';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
+  const cookieStore = await cookies();
+  const supabase = await createClient(cookieStore);
+
   try {
     const { searchParams } = new URL(request.url);
     const gameId = searchParams.get('gameId');
-    const today = new Date().toISOString().split('T')[0];
+    const startId = uuidv4();
+    const today = todayString();
+
+    // rank 테이블에 데이터 삽입
+    const { data, error } = await supabase
+      .from('rank')
+      .insert({
+        game_id: 1,
+        start_time: new Date().toISOString(),
+        today: today,
+        start_id: startId,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase error:', error);
+      throw new Error(error.message);
+    }
 
     // 오늘의 게임 데이터를 가져옴
     let gameData = getDailyGameData();
@@ -36,6 +61,7 @@ export async function GET(request: Request) {
         data: {
           board: gameData.board,
           reservedAnimalMaps: gameData.reservedAnimalMaps,
+          startId,
         },
       },
       { status: 200 }

@@ -17,6 +17,7 @@ interface GameState {
   isWon: () => boolean;
   getLammaCount: () => number;
   getDuckCount: () => number;
+  clearBoard: () => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -84,5 +85,11 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { board } = get();
     if (!board) return 0;
     return board.getAnimalCellCount(BoardCell.Duck);
+  },
+
+  clearBoard: () => {
+    const { board } = get();
+    if (!board) return;
+    board.clearBoard();
   },
 })); 

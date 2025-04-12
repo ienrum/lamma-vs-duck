@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
-import { RankResponseDto } from '@/src/widgets/leader-board/model/dto/rank.dto';
 import { Rank } from '@/src/widgets/leader-board/model/dto/rank.dto';
 import { todayString } from '@/src/shared/config/today-string';
 
@@ -10,8 +9,6 @@ import { todayString } from '@/src/shared/config/today-string';
 export async function GET(request: Request) {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
-
-  const { data: { user } } = await supabase.auth.getUser();
 
   const { searchParams } = new URL(request.url);
   const from = parseInt(searchParams.get('from') || '0');
@@ -29,12 +26,12 @@ export async function GET(request: Request) {
         end_time,
         user (
           id,
-          raw_user_meta_data
+          name
         )
       `)
       .range(from, to)
       .order('score', { ascending: true })
-      .like('today', `${todayString()}:%`)
+      .eq('today', todayString())
       .neq('score', -1);
 
 
@@ -44,15 +41,10 @@ export async function GET(request: Request) {
       throw new Error(error.message);
     }
 
-    const response: RankResponseDto = {
-      rankList: data as unknown as Rank[],
-      myRank: data.findIndex((rank) => rank.user_id === user?.id),
-    };
-
-    return NextResponse.json<BaseResponseDto<RankResponseDto>>(
+    return NextResponse.json<BaseResponseDto<Rank[]>>(
       {
         message: 'Rank fetched successfully',
-        data: response,
+        data: data as unknown as Rank[],
       },
       { status: 200 }
     );

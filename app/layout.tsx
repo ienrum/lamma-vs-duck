@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.png',
+        url: '/favicon.ico',
         width: 1200,
         height: 630,
         alt: 'Lamma vs Duck Game',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Lamma vs Duck - Match the Animals!',
     description: 'Match the number of 🦙lamas and 🦆ducks on the board! Use arrow keys to move rows and columns.',
-    images: ['/og-image.png'],
+    images: ['/favicon.ico'],
   },
 };
 

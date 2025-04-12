@@ -1,10 +1,10 @@
 export function generateGameData(difficulty: number) {
-  const BOARD_SIZE = 4; // 4x4 보드
+  const BOARD_SIZE = 3; // 4x4 보드
   const RESERVED_MAP_SIZE = 3; // 각 방향별로 3개의 예약 타일 리스트
 
   // 난이도에 따른 라마와 오리의 비율 조정
-  const lamaRatio = 0.5 + (difficulty - 1) * 0.005; // 난이도 1: 0.5, 난이도 10: 0.75
-  const duckRatio = 1 - lamaRatio;
+  const lamaRatio = 0.4;
+  const duckRatio = 0.4
 
   // 보드 초기화 (4x4)
   const board = [];
@@ -14,7 +14,7 @@ export function generateGameData(difficulty: number) {
       const rand = Math.random();
       if (rand < lamaRatio) {
         row.push("2"); // 라마
-      } else if (rand < lamaRatio + duckRatio) {
+      } else if (rand < duckRatio) {
         row.push("1"); // 오리
       } else {
         row.push("0"); // 빈 칸

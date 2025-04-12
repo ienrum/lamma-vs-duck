@@ -104,4 +104,11 @@ export class BoardHistory {
 
     return count === maxLength;
   }
+
+  /**
+   * 히스토리 초기화
+   */
+  public clearHistory(): void {
+    this.history = [];
+  }
 }
