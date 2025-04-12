@@ -1,1 +1,1 @@
-export const TOPBAR_TITLE = 'Lamma vs Duck';
+export const TOPBAR_TITLE = 'Game List';
