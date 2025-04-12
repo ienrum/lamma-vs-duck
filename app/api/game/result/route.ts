@@ -32,7 +32,8 @@ export async function GET(request: Request) {
       .range(from, to)
       .order('score', { ascending: true })
       .eq('today', todayString())
-      .neq('score', -1);
+      .neq('score', -1)
+      .not('user_id', 'is', null);
 
 
     const { data, error } = await query;
