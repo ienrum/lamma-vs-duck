@@ -26,7 +26,7 @@ export async function registerRecordAction(prevState: any, formData: FormData) {
   });
 
   if (!validatedFields.success) {
-    return { error: "Invalid fields" };
+    return { error: validatedFields.error.formErrors.fieldErrors.name };
   }
 
   const cookieStore = await cookies();

@@ -8,14 +8,16 @@ const shuffleBoard = (board: string[][]) => {
 }
 
 export function generateGameData(difficulty: number) {
-  const BOARD_SIZE = 3; // 3x3 보드
+  const BOARD_SIZE = 4; // 4x4 보드
   const SAME_COUNT = 2;
+  const [lammaPercent, duckPercent] = [0.1, 0.4].sort(() => Math.random() - 0.5);
 
   // 초기 보드 (고정된 패턴)
   let answerBoard: string[][] = [
-    ["2", "0", "2"],
-    ["0", "0", "1"],
-    ["2", "0", "1"],
+    ["1", "0", "2", "0"],
+    ["0", "0", "0", "0"],
+    ["0", "0", "1", "0"],
+    ["0", "0", "0", "0"],
   ];
 
   answerBoard = shuffleBoard(answerBoard);
@@ -55,10 +57,9 @@ export function generateGameData(difficulty: number) {
   }
 
   const generateRandomReservedAnimalList = () => {
-    const [lammaPercent, duckPercent] = [0.5, 0.1].sort(() => Math.random() - 0.5);
 
     const reservedAnimalList = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
       const random = Math.random();
       if (random < lammaPercent) {
         reservedAnimalList.push("2");
@@ -108,9 +109,8 @@ export function generateGameData(difficulty: number) {
     if (isSameCountInBoard(newBoard.newBoard)) {
       continue;
     }
-    console.log(direction, newBoard.shiftedList, reservedAnimalList);
     printBoard(newBoard.newBoard);
-    reservedAnimalMaps[oppositeDirection(direction)].push([...newBoard.shiftedList]);
+    reservedAnimalMaps[oppositeDirection(direction)].unshift([...newBoard.shiftedList]);
     tempBoard = copyBoard(newBoard.newBoard);
     cnt++;
   }

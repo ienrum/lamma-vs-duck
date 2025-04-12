@@ -9,6 +9,7 @@ import { BoardType, ReservedAnimalList } from "./types";
 export class BoardHistory {
   private history: BoardType[];
   private reservedAnimalMaps: ReservedAnimalMaps;
+  private N: number;
 
   /**
    * 게임 스냅샷 초기화
@@ -18,6 +19,7 @@ export class BoardHistory {
   constructor(gameSnapshot: BoardType, reservedAnimalMaps: ReservedAnimalMaps) {
     this.history = [this.copyBoard(gameSnapshot)];
     this.reservedAnimalMaps = reservedAnimalMaps;
+    this.N = gameSnapshot.length;
   }
 
   /**
@@ -83,10 +85,10 @@ export class BoardHistory {
     const maxLength = this.reservedAnimalMaps.getAnimalMapsLength(direction);
 
     if (currentIndex >= maxLength) {
-      return ["0", "0", "0"] as ReservedAnimalList;
+      return new Array(this.N).fill("0");
     }
 
-    return this.reservedAnimalMaps.getAnimalMaps(direction)[currentIndex] ?? ["0", "0", "0"];
+    return this.reservedAnimalMaps.getAnimalMaps(direction)[currentIndex] ?? new Array(this.N).fill("0");
   }
 
   /**

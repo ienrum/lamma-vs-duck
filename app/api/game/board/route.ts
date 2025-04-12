@@ -36,7 +36,7 @@ export async function GET(request: Request) {
 
 
     // 오늘의 게임 데이터가 없는 경우 새로 생성
-    const generatedData = generateGameData(4);
+    const generatedData = generateGameData(6);
     const newGameData = {
       date: today,
       board: generatedData.board,
