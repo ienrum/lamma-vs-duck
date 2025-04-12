@@ -10,7 +10,7 @@ import usePostGameEnd from "../game/api/use-post-game-end";
 
 const RecordForm = ({ startId }: { startId: string }) => {
   const gameId = useParams().gameId;
-  const [state, formAction] = useActionState(registerRecordAction, null);
+  const [state, formAction, isPending] = useActionState(registerRecordAction, null);
   const { mutate: postEndGame } = usePostGameEnd();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const RecordForm = ({ startId }: { startId: string }) => {
             {state?.error && <p className="text-red-500">{state.error}</p>}
             <Input type="hidden" name="startId" value={startId} />
             <Input type="hidden" name="gameId" value={gameId} />
-            <Button type="submit">Record</Button>
+            <Button type="submit" disabled={isPending}>Record</Button>
           </form>
         </DialogDescription>
       </DialogContent>

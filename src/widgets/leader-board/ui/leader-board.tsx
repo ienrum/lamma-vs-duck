@@ -8,9 +8,10 @@ import { useEffect } from "react";
 import formatDate from "@/src/shared/util/format-date";
 import { LEADER_BOARD_TITLE, LEADER_BOARD_RANK_TITLE, LEADER_BOARD_NAME_TITLE, LEADER_BOARD_SCORE_TITLE } from "../config/constants";
 import formatTime from "@/src/shared/util/format-time";
+import { Button } from "@/src/shared/ui/button";
 
 const LeaderBoard = () => {
-  const { rankList, fetchNextPage } = useGetRanking("1");
+  const { rankList, fetchNextPage, refetch } = useGetRanking("1");
   const { ref, isInView } = useInView();
 
   const today = new Date();
@@ -31,6 +32,13 @@ const LeaderBoard = () => {
         <CardTitle className="text-center text-gray-800">
           <div className="text-gray-800">{formattedDate}</div>
         </CardTitle>
+        <div className="flex justify-center">
+          <Button color="secondary" variant="outline" onClick={() => {
+            refetch();
+          }}>
+            refresh
+          </Button>
+        </div>
         <CardContent className="h-[60vh] overflow-y-scroll flex flex-col gap-2">
           <div className="grid grid-cols-3 gap-4 p-4 rounded-lg font-semibold text-gray-700 w-full">
             <div>{LEADER_BOARD_RANK_TITLE}</div>

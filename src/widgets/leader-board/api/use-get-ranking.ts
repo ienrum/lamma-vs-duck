@@ -6,7 +6,7 @@ import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
 
 const PAGE_COUNT = 10;
 
-const getRanking = async (gameId: string, pageParam: number) => {
+export const getRanking = async (gameId: string, pageParam: number) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/result?gameId=${gameId}&from=${pageParam}&to=${pageParam + PAGE_COUNT}`, {
     cache: 'no-store',
     method: 'GET',
@@ -16,7 +16,7 @@ const getRanking = async (gameId: string, pageParam: number) => {
 };
 
 const useGetRanking = (gameId: string) => {
-  const { data, isLoading, error, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery({
+  const { data, isLoading, error, fetchNextPage, hasNextPage, refetch } = useSuspenseInfiniteQuery({
     queryKey: ["ranking", gameId],
     queryFn: ({ pageParam = 0 }) => getRanking(gameId, pageParam),
     getNextPageParam: (lastPage, pages) => {
@@ -28,7 +28,7 @@ const useGetRanking = (gameId: string) => {
     },
   });
 
-  return { rankList: data, isLoading, error, fetchNextPage, hasNextPage };
+  return { rankList: data, isLoading, error, fetchNextPage, hasNextPage, refetch };
 };
 
 export default useGetRanking;

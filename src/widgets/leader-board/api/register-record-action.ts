@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import { cookies } from "next/headers";
 import { z } from "zod";
+import { getQueryClient } from "@/src/app/utils/get-query-client";
 
 
 const recordFormSchema = z.object({
@@ -46,6 +47,10 @@ export async function registerRecordAction(prevState: any, formData: FormData) {
   if (error) {
     return { error: "Rank creation failed" };
   }
+
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  const queryClient = getQueryClient();
+  queryClient.invalidateQueries({ queryKey: ["ranking", gameId] });
 
   redirect('/result');
 }
