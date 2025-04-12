@@ -13,9 +13,9 @@ export function generateGameData(difficulty: number) {
 
   // 초기 보드 (고정된 패턴)
   let answerBoard: string[][] = [
-    ["0", "2", "0"],
-    ["0", "0", "0"],
-    ["0", "0", "1"],
+    ["2", "2", "2"],
+    ["1", "2", "1"],
+    ["2", "1", "1"],
   ];
 
   answerBoard = shuffleBoard(answerBoard);
