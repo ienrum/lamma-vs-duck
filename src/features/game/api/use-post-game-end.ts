@@ -6,6 +6,7 @@ const postEnd = async (data: GameEndRequestDto): Promise<BaseResponseDto<GameEnd
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/end`, {
     method: "POST",
     body: JSON.stringify(data),
+    cache: 'no-store',
   });
   if (!response.ok) {
     throw new Error("Failed to post game end");

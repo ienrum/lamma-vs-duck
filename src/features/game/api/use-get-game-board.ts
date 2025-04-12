@@ -7,7 +7,12 @@ import { GameBoardResponseDto } from "@/src/features/game/model/dto/game-board.d
 const getGameBoard = async (gameId: number) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/board?gameId=${gameId}`, {
     method: 'GET',
+    cache: 'no-store',
   });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
   const data = await response.json() as BaseResponseDto<GameBoardResponseDto>;
   return data;
 };

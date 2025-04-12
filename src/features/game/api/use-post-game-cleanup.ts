@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 const postCleanup = async (): Promise<BaseResponseDto<null>> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/cleanup`, {
     method: "POST",
+    cache: 'no-store',
   });
 
   if (!response.ok) {

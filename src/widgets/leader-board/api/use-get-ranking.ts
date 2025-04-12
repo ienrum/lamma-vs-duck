@@ -7,7 +7,10 @@ import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
 const PAGE_COUNT = 10;
 
 const getRanking = async (gameId: string, pageParam: number) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/result?gameId=${gameId}&from=${pageParam}&to=${pageParam + PAGE_COUNT}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game/result?gameId=${gameId}&from=${pageParam}&to=${pageParam + PAGE_COUNT}`, {
+    cache: 'no-store',
+    method: 'GET',
+  });
   const data = await response.json() as BaseResponseDto<Rank[]>;
   return data;
 };
