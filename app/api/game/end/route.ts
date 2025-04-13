@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.from('rank').update({
       end_time: endTime,
       score,
-    }).eq('game_id', gameId).eq('start_id', startId).select('id');
+    }).eq('game_id', gameId).eq('start_id', startId).is('end_time', null).select('id');
 
     if (error) {
       throw new Error(error.message);

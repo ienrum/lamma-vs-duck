@@ -8,16 +8,15 @@ const shuffleBoard = (board: string[][]) => {
 }
 
 export function generateGameData(difficulty: number) {
-  const BOARD_SIZE = 4; // 4x4 보드
+  const BOARD_SIZE = 3; // 4x4 보드
   const SAME_COUNT = 2;
-  const [lammaPercent, duckPercent] = [0.1, 0.4].sort(() => Math.random() - 0.5);
+  const [lammaPercent, duckPercent] = [0.05, 0.2].sort(() => Math.random() - 0.5);
 
   // 초기 보드 (고정된 패턴)
   let answerBoard: string[][] = [
-    ["1", "0", "2", "0"],
-    ["0", "0", "0", "0"],
-    ["0", "0", "1", "0"],
-    ["0", "0", "0", "0"],
+    ["1", "0", "2"],
+    ["1", "2", "2"],
+    ["1", "1", "2"],
   ];
 
   answerBoard = shuffleBoard(answerBoard);
