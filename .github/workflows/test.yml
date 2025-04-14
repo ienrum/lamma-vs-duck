@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main2 ]
   pull_request:
-    branches: [ main ]
+    branches: [ main2 ]
 
 # 권한 설정 추가
 permissions:
