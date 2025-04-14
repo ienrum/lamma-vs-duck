@@ -5,6 +5,7 @@ import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
 import { todayString } from '@/src/shared/config/today-string';
 import { GameEndRequestDto, GameEndResponseDto } from '@/src/features/game/model/dto/game-end.dto';
 import { mergeToday } from '@/src/app/utils/backend/db-today-utils';
+import { getSupabaseUser } from '@/src/app/config/get-supabase-user';
 
 export async function POST(request: Request) {
   const cookieStore = await cookies();
@@ -13,7 +14,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json() as GameEndRequestDto;
     const { gameId } = body;
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await getSupabaseUser(supabase, cookieStore)
     const userId = user?.id;
 
     if (!userId) {

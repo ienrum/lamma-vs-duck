@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { mergeToday } from '@/src/app/utils/backend/db-today-utils';
 import { todayString } from '@/src/shared/config/today-string';
+import { getSupabaseUser } from '@/src/app/config/get-supabase-user';
 
 export async function POST(request: Request) {
   const cookieStore = await cookies();
@@ -14,7 +15,7 @@ export async function POST(request: Request) {
     const body = await request.json() as GameStartRequestDto;
     const { gameId } = body;
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await getSupabaseUser(supabase, cookieStore)
 
     if (!user) {
       throw new Error('User not found');

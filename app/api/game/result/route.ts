@@ -5,13 +5,13 @@ import { createClient } from '@/utils/supabase/server';
 import { RankResponseDto } from '@/src/widgets/leader-board/model/dto/rank.dto';
 import { Rank } from '@/src/widgets/leader-board/model/dto/rank.dto';
 import { todayString } from '@/src/shared/config/today-string';
-
+import { getSupabaseUser } from '@/src/app/config/get-supabase-user';
 
 export async function GET(request: Request) {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await getSupabaseUser(supabase, cookieStore)
 
   const { searchParams } = new URL(request.url);
   const from = parseInt(searchParams.get('from') || '0');

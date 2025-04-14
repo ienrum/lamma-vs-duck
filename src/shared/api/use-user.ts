@@ -1,10 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createClient } from "@/utils/supabase/client";
+import { getSupabaseUser } from "@/src/app/config/get-supabase-user";
 
 const getUser = async () => {
-  const supabase = createClient()
-
-  const { data } = await supabase.auth.getUser()
+  const { data } = await getSupabaseUser()
 
   return data
 };
