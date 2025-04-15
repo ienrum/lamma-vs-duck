@@ -25,7 +25,6 @@ export async function GET(request: Request) {
         score,
         user_id,
         game_id,
-        start_time,
         end_time,
         user (
           id,
@@ -34,7 +33,8 @@ export async function GET(request: Request) {
       `)
       .range(from, to)
       .order('score', { ascending: true })
-      .like('today', `${todayString()}:%`)
+      .gte('end_time', `${todayString()} 00:00:00`)
+      .lte('end_time', `${todayString()} 23:59:59`)
       .neq('score', -1);
 
 

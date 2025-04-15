@@ -3,12 +3,13 @@ import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
 import { GameBoardResponseDto } from '@/src/features/game/model/dto/game-board.dto';
 import { generateGameData } from '@/src/app/model/util/generate-game-data';
 import { getDailyGameData, setDailyGameData } from '@/src/app/model/game/game-data.model';
+import { todayString } from '@/src/shared/config/today-string';
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const gameId = searchParams.get('gameId');
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayString();
 
     // 오늘의 게임 데이터를 가져옴
     let gameData = getDailyGameData();

@@ -3,7 +3,6 @@
 import { getSupabaseUser } from "@/src/app/config/get-supabase-user";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
-import { mergeToday } from '@/src/app/utils/backend/db-today-utils';
 import { todayString } from "@/src/shared/config/today-string";
 import { redirect } from "next/navigation";
 
@@ -24,11 +23,14 @@ export async function endGameAction(prevState: any, formData: FormData) {
     return { error: 'User not found' };
   }
 
-  const today = mergeToday(todayString(), user.id);
+  const today = todayString();
   const endTime = new Date().toISOString();
 
   const score = new Date(endTime).getTime() - new Date(startTime).getTime()
-  const { data: rankData } = await supabase.from('rank').select('id').eq('user_id', user.id).eq('today', today).single();
+  const { data: rankData } = await supabase.from('rank').select('id').eq('user_id', user.id)
+    .gte('end_time', `${today} 00:00:00`)
+    .lte('end_time', `${today} 23:59:59`)
+    .single();
 
   if (rankData) {
     return { error: 'Rank already exists' };
@@ -37,7 +39,6 @@ export async function endGameAction(prevState: any, formData: FormData) {
   const { error } = await supabase.from('rank').insert({
     game_id: gameId,
     user_id: user.id,
-    today,
     end_time: endTime,
     score,
   });
