@@ -2,12 +2,13 @@ import { create } from 'zustand';
 import { Board } from "@/src/entities/duck-vs-lamma/model/board";
 import { Direction } from "@/src/entities/cross-pad/model/types";
 import { BoardCell } from "@/src/entities/duck-vs-lamma/model/constants";
+import { BoardType } from '@/src/entities/duck-vs-lamma/model/types';
 
 
 interface GameState {
   board: Board | null;
   currentEmojiBoard: string[][] | null;
-  setBoard: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>) => void;
+  setBoard: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>, score?: number) => void;
   moveAnimalCells: (direction: Direction) => void;
   backwardGame: () => void;
   getReservedAnimalMaps: (direction: Direction) => string[];
@@ -22,8 +23,8 @@ interface GameState {
 export const useGameStore = create<GameState>((set, get) => ({
   board: null,
   currentEmojiBoard: null,
-  setBoard: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>) => {
-    const board = new Board(initialBoard, initialReservedAnimalMaps);
+  setBoard: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>, score?: number) => {
+    const board = new Board(initialBoard, initialReservedAnimalMaps, score);
     set({ board, currentEmojiBoard: board.getEmojiBoard() });
   },
   moveAnimalCells: (direction: Direction) => {
@@ -62,10 +63,10 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { board } = get();
     if (!board) return 0;
     if (board.getEndDate()) {
-      return board.getEndDate()!.getTime() - board.getStartDate().getTime();
+      return board.getEndDate()!.getTime() - board.getStartDate().getTime() + board.getPlayTime();
     }
 
-    return new Date().getTime() - board.getStartDate().getTime();
+    return new Date().getTime() - board.getStartDate().getTime() + board.getPlayTime();
   },
 
   isWon: () => {

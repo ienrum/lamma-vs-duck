@@ -8,9 +8,9 @@ import { redirect } from "next/navigation";
 
 export async function endGameAction(prevState: any, formData: FormData) {
   const gameId = formData.get('gameId')?.toString();
-  const startTime = formData.get('startTime')?.toString();
+  const score = formData.get('score')?.toString();
 
-  if (!gameId || !startTime) {
+  if (!gameId || !score) {
     return { error: 'Invalid form data' };
   }
 
@@ -26,7 +26,6 @@ export async function endGameAction(prevState: any, formData: FormData) {
   const today = todayString();
   const endTime = new Date().toISOString();
 
-  const score = new Date(endTime).getTime() - new Date(startTime).getTime()
   const { data: rankData } = await supabase.from('rank').select('id').eq('user_id', user.id)
     .gte('end_time', `${today} 00:00:00`)
     .lte('end_time', `${today} 23:59:59`)

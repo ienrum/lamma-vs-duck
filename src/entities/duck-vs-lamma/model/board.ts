@@ -13,13 +13,13 @@ export class Board {
   private state: BoardState;
   private startDate: Date;
   private endDate?: Date;
-
+  private playTime: number;
   /**
    * 게임 보드 초기화
    * @param board 초기 보드 문자열 배열
    * @param reservedAnimalMaps 예약된 동물 맵
    */
-  constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>) {
+  constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>, count: number = 0) {
     this.startDate = new Date();
     const initialBoard = this.initializeBoard(board);
     const animalBoard = initialBoard
@@ -27,6 +27,8 @@ export class Board {
 
     const reservedAnimalMapsHistory = new ReservedAnimalMaps(reservedAnimalMaps);
     const animalBoardHistory = new BoardHistory(this.copyBoard(animalBoard), reservedAnimalMapsHistory);
+
+    this.playTime = count;
 
     this.state = {
       board: initialBoard,
@@ -243,5 +245,12 @@ export class Board {
    */
   private copyBoard(board: BoardType): BoardType {
     return board.map((row) => [...row]);
+  }
+
+  /**
+   * 게임 플레이 시간 반환
+   */
+  public getPlayTime(): number {
+    return this.playTime;
   }
 }

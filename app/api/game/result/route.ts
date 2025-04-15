@@ -35,7 +35,6 @@ export async function GET(request: Request) {
       .order('score', { ascending: true })
       .gte('end_time', `${todayString()} 00:00:00`)
       .lte('end_time', `${todayString()} 23:59:59`)
-      .neq('score', -1);
 
 
     const { data, error } = await query;

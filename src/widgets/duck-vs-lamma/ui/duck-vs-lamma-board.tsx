@@ -5,14 +5,14 @@ import ReservedAnimalCells from "./reserved-animall-cells";
 import GameScoreBox from "./game-score-box";
 import GameBoard from "./game-board";
 import { useParams } from "next/navigation";
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import useGetGameBoard from "@/src/features/game/api/use-get-game-board";
 import Spinner from "@/src/shared/ui/spinner";
 import { endGameAction } from "../api/end-game-action";
+let timer: NodeJS.Timeout;
 
 const DuckVsLammaBoard = () => {
   const { currentEmojiBoard, gameInfo, reservedAnimalMaps, setBoard } = useGame();
-
   const gameId = Number(useParams().gameId);
   const { data } = useGetGameBoard(gameId);
   const isWon = gameInfo.isWon();
@@ -20,12 +20,31 @@ const DuckVsLammaBoard = () => {
   const [state, formAction, isPending] = useActionState(endGameAction, null);
 
   useEffect(() => {
-    setBoard(data.board, data.reservedAnimalMaps);
+    const score = localStorage.getItem('score');
+
+    if (score && data.board && data.reservedAnimalMaps) {
+      setBoard(data.board, data.reservedAnimalMaps, Number(score));
+    } else {
+      setBoard(data.board, data.reservedAnimalMaps);
+    }
   }, [])
+
+  useEffect(() => {
+    timer = setInterval(() => {
+      const playTime = gameInfo.playTime();
+      localStorage.setItem('score', playTime.toString());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer)
+    };
+  }, []);
 
   useEffect(() => {
     if (isWon) {
       gameEndRef.current?.requestSubmit();
+      clearInterval(timer);
+      localStorage.removeItem('score');
     }
   }, [isWon]);
 
@@ -41,7 +60,7 @@ const DuckVsLammaBoard = () => {
     <>
       <form action={formAction} hidden ref={gameEndRef}>
         <input type="hidden" name="gameId" value={gameId} />
-        <input type="hidden" name="startTime" value={new Date().toISOString()} />
+        <input type="hidden" name="score" value={localStorage.getItem('score') || '0'} />
       </form>
       {isPending && <Spinner size="lg" className="mx-auto" />}
       <GameScoreBox gameInfo={gameInfo} />
