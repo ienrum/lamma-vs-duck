@@ -8,8 +8,6 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
 import usePostEnd from "@/src/features/game/api/use-post-game-end";
 import useGetGameBoard from "@/src/features/game/api/use-get-game-board";
-import usePostStart from "@/src/features/game/api/use-post-game-start";
-import usePostCleanup from "@/src/features/game/api/use-post-game-cleanup";
 import Spinner from "@/src/shared/ui/spinner";
 
 
@@ -19,29 +17,12 @@ const DuckVsLammaBoard = () => {
 
   const gameId = Number(useParams().gameId);
 
-  const { mutate: postStart } = usePostStart();
   const { mutate: postEnd } = usePostEnd();
-  const { mutate: postCleanup } = usePostCleanup();
   const { data } = useGetGameBoard(gameId);
   const isWon = gameInfo.isWon();
 
   useEffect(() => {
-    postStart({
-      gameId,
-    }, {
-      onSuccess: () => {
-        setBoard(data.board, data.reservedAnimalMaps);
-      },
-      onError: () => {
-        router.push("/result");
-        postCleanup();
-      }
-    });
-
-    return () => {
-      postCleanup();
-    }
-
+    setBoard(data.board, data.reservedAnimalMaps);
   }, [])
 
   useEffect(() => {
