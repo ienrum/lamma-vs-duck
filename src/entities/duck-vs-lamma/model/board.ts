@@ -36,15 +36,19 @@ export class Board {
    * @param update 업데이트할 상태
    */
   public updateState(update: BoardStateUpdate): void {
-    const { boardHistory: animalBoardHistory, ...newState } = update;
-    if (animalBoardHistory) {
-      this.state.boardHistory.updateBoard(animalBoardHistory.history, animalBoardHistory.reservedAnimalMapsHistory);
+    const { boardHistory, ...newState } = update;
+    if (boardHistory) {
+      this.state.boardHistory.updateBoard(boardHistory.history, boardHistory.reservedAnimalMapsHistory);
     }
     this.state = { ...this.state, ...newState };
   }
 
-  public getState(): BoardState {
-    return this.state;
+  public getState(): BoardStateUpdate {
+    return {
+      board: this.state.board,
+      boardSize: this.state.boardSize,
+      boardHistory: this.state.boardHistory.getBoardHistoryState(),
+    }
   }
 
   /**

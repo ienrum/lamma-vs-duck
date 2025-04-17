@@ -99,4 +99,12 @@ export class ReservedAnimalMapsHistory {
   public getAnimalMapsLength(direction: Direction): number {
     return this.reservedAnimalMaps[direction].length;
   }
+
+  public getReservedAnimalMapsHistoryState(): ReservedAnimalMapsHistoryState {
+    return {
+      reservedAnimalMaps: this.reservedAnimalMaps,
+      countSnapshot: this.countSnapshot,
+      indexSnapshot: this.indexSnapshot,
+    };
+  }
 }

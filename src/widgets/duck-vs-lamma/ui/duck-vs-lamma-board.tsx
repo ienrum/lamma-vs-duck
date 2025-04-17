@@ -9,16 +9,14 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import useGetGameBoard from "@/src/features/game/api/use-get-game-board";
 import Spinner from "@/src/shared/ui/spinner";
 import { endGameAction } from "../api/end-game-action";
-import { BoardState } from "@/src/entities/duck-vs-lamma/model/types";
-import { Direction } from "@/src/entities/cross-pad/model/types";
+import { BoardStateUpdate } from "@/src/entities/duck-vs-lamma/model/types";
 import { getLocalStorage, removeLocalStorage, setLocalStorage } from "@/src/shared/util/localstorage-utils";
 
 let timer: NodeJS.Timeout;
 
 interface GameState {
   score: number;
-  boardState: BoardState;
-  reservedAnimalMaps: Record<Direction, string[][]>;
+  boardState: BoardStateUpdate;
 }
 
 const DuckVsLammaBoard = () => {
@@ -44,7 +42,6 @@ const DuckVsLammaBoard = () => {
       setLocalStorage('gameState', {
         score: playTime,
         boardState: gameInfo.boardState(),
-        reservedAnimalMaps: reservedAnimalMaps
       });
     }, 1000);
 

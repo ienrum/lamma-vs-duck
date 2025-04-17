@@ -114,4 +114,11 @@ export class BoardHistory {
 
     return count === maxLength;
   }
+
+  public getBoardHistoryState() {
+    return {
+      history: this.history,
+      reservedAnimalMapsHistory: this.reservedAnimalMapsHistory.getReservedAnimalMapsHistoryState(),
+    };
+  }
 }
