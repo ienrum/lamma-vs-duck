@@ -11,6 +11,7 @@ import Spinner from "@/src/shared/ui/spinner";
 import { endGameAction } from "../api/end-game-action";
 import { BoardState } from "@/src/entities/duck-vs-lamma/model/types";
 import { Direction } from "@/src/entities/cross-pad/model/types";
+import { getLocalStorage, removeLocalStorage, setLocalStorage } from "@/src/shared/util/localstorage-utils";
 
 let timer: NodeJS.Timeout;
 
@@ -18,16 +19,6 @@ interface GameState {
   score: number;
   boardState: BoardState;
   reservedAnimalMaps: Record<Direction, string[][]>;
-}
-
-const getLocalStorage = <T,>(key: string): T | null => {
-  const jsonData = localStorage.getItem(key);
-  const data = jsonData ? JSON.parse(jsonData) as T : null;
-  return data;
-}
-
-const setLocalStorage = <T,>(key: string, data: T) => {
-  localStorage.setItem(key, JSON.stringify(data));
 }
 
 const DuckVsLammaBoard = () => {
@@ -67,7 +58,7 @@ const DuckVsLammaBoard = () => {
       gameEndRef.current?.requestSubmit();
       clearInterval(timer);
       endGame(new Date());
-      localStorage.removeItem('gameState');
+      removeLocalStorage('gameState');
     }
   }, [isWon]);
 
