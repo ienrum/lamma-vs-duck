@@ -1,6 +1,6 @@
 import { Direction } from "../../cross-pad/model/types";
 import { BoardCell } from "./constants";
-import { ReservedAnimalList, ReservedAnimalListHistory } from "./types";
+import { ReservedAnimalList, ReservedAnimalListHistory, ReservedAnimalMapsHistoryState } from "./types";
 /**
  * 예약된 동물 맵을 관리하는 클래스 
  */
@@ -19,7 +19,7 @@ export class ReservedAnimalMapsHistory {
     this.countSnapshot = this.initializeCountSnapshot();
   }
 
-  public updateReservedAnimalMaps(reservedAnimalMaps: any): void {
+  public updateReservedAnimalMaps(reservedAnimalMaps: ReservedAnimalMapsHistoryState): void {
     this.reservedAnimalMaps = reservedAnimalMaps.reservedAnimalMaps;
     this.indexSnapshot = reservedAnimalMaps.indexSnapshot;
     this.countSnapshot = reservedAnimalMaps.countSnapshot;

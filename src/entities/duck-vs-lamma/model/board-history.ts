@@ -1,6 +1,6 @@
 import { Direction } from "../../cross-pad/model/types";
 import { ReservedAnimalMapsHistory } from "./reserved-animal-maps";
-import { BoardType, ReservedAnimalList } from "./types";
+import { BoardType, ReservedAnimalList, ReservedAnimalMapsHistoryState } from "./types";
 
 
 /**
@@ -25,7 +25,7 @@ export class BoardHistory {
    * @param history 업데이트할 보드 history 상태  
    * @param reservedAnimalMaps 업데이트할 예약된 동물 맵 상태
    */
-  public updateBoard(history: BoardType[], reservedAnimalMaps: any): void {
+  public updateBoard(history: BoardType[], reservedAnimalMaps: ReservedAnimalMapsHistoryState): void {
     this.history = history;
     this.reservedAnimalMapsHistory.updateReservedAnimalMaps(reservedAnimalMaps);
   }

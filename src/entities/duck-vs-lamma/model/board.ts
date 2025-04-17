@@ -1,6 +1,6 @@
 'use client'
 
-import { animalCells, BoardCell, boardCellEmoji, switchCells } from "./constants";
+import { BoardCell, boardCellEmoji } from "./constants";
 import { Direction } from "../../cross-pad/model/types";
 import { BoardHistory } from "./board-history";
 import { ReservedAnimalMapsHistory } from "./reserved-animal-maps";
@@ -227,17 +227,4 @@ export class Board {
   private copyBoard(board: BoardType): BoardType {
     return board.map((row) => [...row]);
   }
-
-  /**
-   * 보드 state 업데이트
-   */
-  public updateBoardState(board: BoardState): void {
-    this.updateState({
-      ...board
-    });
-  }
-}
-
-const deepCopyObject = <T>(obj: T): T => {
-  return JSON.parse(JSON.stringify(obj));
 }
