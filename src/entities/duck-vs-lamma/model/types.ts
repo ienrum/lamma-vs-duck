@@ -16,5 +16,5 @@ export interface BoardStateUpdate {
   board?: BoardType;
   animalBoard?: BoardType;
   animalCellBoardSize?: number;
-  animalBoardHistory?: BoardHistory;
+  animalBoardHistory?: any;
 }

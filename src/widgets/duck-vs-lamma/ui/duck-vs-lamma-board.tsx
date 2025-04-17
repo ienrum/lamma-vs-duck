@@ -9,10 +9,29 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import useGetGameBoard from "@/src/features/game/api/use-get-game-board";
 import Spinner from "@/src/shared/ui/spinner";
 import { endGameAction } from "../api/end-game-action";
+import { BoardState } from "@/src/entities/duck-vs-lamma/model/types";
+import { Direction } from "@/src/entities/cross-pad/model/types";
+
 let timer: NodeJS.Timeout;
 
+interface GameState {
+  score: number;
+  boardState: BoardState;
+  reservedAnimalMaps: Record<Direction, string[][]>;
+}
+
+const getLocalStorage = <T,>(key: string): T | null => {
+  const jsonData = localStorage.getItem(key);
+  const data = jsonData ? JSON.parse(jsonData) as T : null;
+  return data;
+}
+
+const setLocalStorage = <T,>(key: string, data: T) => {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
 const DuckVsLammaBoard = () => {
-  const { currentEmojiBoard, gameInfo, reservedAnimalMaps, setBoard } = useGame();
+  const { currentEmojiBoard, gameInfo, reservedAnimalMaps, setBoard, endGame } = useGame();
   const gameId = Number(useParams().gameId);
   const { data } = useGetGameBoard(gameId);
   const isWon = gameInfo.isWon();
@@ -20,10 +39,9 @@ const DuckVsLammaBoard = () => {
   const [state, formAction, isPending] = useActionState(endGameAction, null);
 
   useEffect(() => {
-    const score = localStorage.getItem('score');
-
-    if (score && data.board && data.reservedAnimalMaps) {
-      setBoard(data.board, data.reservedAnimalMaps, Number(score));
+    const gameState = getLocalStorage<GameState>('gameState');
+    if (gameState && data.board && data.reservedAnimalMaps) {
+      setBoard(data.board, data.reservedAnimalMaps, Number(gameState.score), gameState.boardState);
     } else {
       setBoard(data.board, data.reservedAnimalMaps);
     }
@@ -32,7 +50,11 @@ const DuckVsLammaBoard = () => {
   useEffect(() => {
     timer = setInterval(() => {
       const playTime = gameInfo.playTime();
-      localStorage.setItem('score', playTime.toString());
+      setLocalStorage('gameState', {
+        score: playTime,
+        boardState: gameInfo.boardState(),
+        reservedAnimalMaps: reservedAnimalMaps
+      });
     }, 1000);
 
     return () => {
@@ -44,7 +66,8 @@ const DuckVsLammaBoard = () => {
     if (isWon) {
       gameEndRef.current?.requestSubmit();
       clearInterval(timer);
-      localStorage.removeItem('score');
+      endGame(new Date());
+      localStorage.removeItem('gameState');
     }
   }, [isWon]);
 
@@ -60,7 +83,7 @@ const DuckVsLammaBoard = () => {
     <>
       <form action={formAction} hidden ref={gameEndRef}>
         <input type="hidden" name="gameId" value={gameId} />
-        <input type="hidden" name="score" value={localStorage.getItem('score') || '0'} />
+        <input type="hidden" name="score" value={getLocalStorage<GameState>('gameState')?.score || '0'} />
       </form>
       {isPending && <Spinner size="lg" className="mx-auto" />}
       <GameScoreBox gameInfo={gameInfo} />

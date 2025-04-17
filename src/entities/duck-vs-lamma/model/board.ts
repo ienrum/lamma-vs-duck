@@ -3,7 +3,7 @@
 import { animalCells, BoardCell, boardCellEmoji, switchCells } from "./constants";
 import { Direction } from "../../cross-pad/model/types";
 import { BoardHistory } from "./board-history";
-import { ReservedAnimalMaps } from "./reserved-animal-maps";
+import { ReservedAnimalMapsHistory } from "./reserved-animal-maps";
 import { BoardState, BoardStateUpdate, BoardType } from "./types";
 
 /**
@@ -11,24 +11,19 @@ import { BoardState, BoardStateUpdate, BoardType } from "./types";
  */
 export class Board {
   private state: BoardState;
-  private startDate: Date;
-  private endDate?: Date;
-  private playTime: number;
+
   /**
    * 게임 보드 초기화
    * @param board 초기 보드 문자열 배열
    * @param reservedAnimalMaps 예약된 동물 맵
    */
-  constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>, count: number = 0) {
-    this.startDate = new Date();
+  constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>) {
     const initialBoard = this.initializeBoard(board);
     const animalBoard = initialBoard
     const animalCellBoardSize = animalBoard.length;
 
-    const reservedAnimalMapsHistory = new ReservedAnimalMaps(reservedAnimalMaps);
+    const reservedAnimalMapsHistory = new ReservedAnimalMapsHistory(reservedAnimalMaps);
     const animalBoardHistory = new BoardHistory(this.copyBoard(animalBoard), reservedAnimalMapsHistory);
-
-    this.playTime = count;
 
     this.state = {
       board: initialBoard,
@@ -42,8 +37,16 @@ export class Board {
    * 상태 업데이트
    * @param update 업데이트할 상태
    */
-  private updateState(update: BoardStateUpdate): void {
-    this.state = { ...this.state, ...update };
+  public updateState(update: BoardStateUpdate): void {
+    const { animalBoardHistory, ...newState } = update;
+    if (animalBoardHistory) {
+      this.state.animalBoardHistory.updateBoard(animalBoardHistory.history, animalBoardHistory.reservedAnimalMapsHistory);
+    }
+    this.state = { ...this.state, ...newState };
+  }
+
+  public getState(): BoardState {
+    return this.state;
   }
 
   /**
@@ -96,10 +99,6 @@ export class Board {
       animalBoard: newAnimalBoard,
       board: newAnimalBoard
     });
-
-    if (this.isWon()) {
-      this.endDate = new Date();
-    }
   }
 
   /**
@@ -202,20 +201,6 @@ export class Board {
   }
 
   /**
-   * 게임 시작 시간 반환
-   */
-  public getStartDate(): Date {
-    return this.startDate;
-  }
-
-  /**
-   * 게임 종료 시간 반환
-   */
-  public getEndDate(): Date | undefined {
-    return this.endDate;
-  }
-
-  /**
    * 게임 종료여부
    */
   public isWon(): boolean {
@@ -248,9 +233,15 @@ export class Board {
   }
 
   /**
-   * 게임 플레이 시간 반환
+   * 보드 state 업데이트
    */
-  public getPlayTime(): number {
-    return this.playTime;
+  public updateBoardState(board: BoardState): void {
+    this.updateState({
+      ...board
+    });
   }
+}
+
+const deepCopyObject = <T>(obj: T): T => {
+  return JSON.parse(JSON.stringify(obj));
 }
