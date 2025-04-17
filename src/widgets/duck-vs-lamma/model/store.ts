@@ -44,7 +44,6 @@ export const useGameStore = create<GameState>((set, get) => ({
       set({ playTimeOffset });
     }
     if (boardState) {
-      console.log('initGame', boardState);
       board.updateState(boardState);
     }
 
