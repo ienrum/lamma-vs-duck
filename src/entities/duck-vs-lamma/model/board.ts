@@ -19,17 +19,15 @@ export class Board {
    */
   constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>) {
     const initialBoard = this.initializeBoard(board);
-    const animalBoard = initialBoard
-    const animalCellBoardSize = animalBoard.length;
+    const animalCellBoardSize = initialBoard.length;
 
     const reservedAnimalMapsHistory = new ReservedAnimalMapsHistory(reservedAnimalMaps);
-    const animalBoardHistory = new BoardHistory(this.copyBoard(animalBoard), reservedAnimalMapsHistory);
+    const animalBoardHistory = new BoardHistory(this.copyBoard(initialBoard), reservedAnimalMapsHistory);
 
     this.state = {
       board: initialBoard,
-      animalBoard,
-      animalCellBoardSize,
-      animalBoardHistory
+      boardSize: animalCellBoardSize,
+      boardHistory: animalBoardHistory
     };
   }
 
@@ -38,9 +36,9 @@ export class Board {
    * @param update 업데이트할 상태
    */
   public updateState(update: BoardStateUpdate): void {
-    const { animalBoardHistory, ...newState } = update;
+    const { boardHistory: animalBoardHistory, ...newState } = update;
     if (animalBoardHistory) {
-      this.state.animalBoardHistory.updateBoard(animalBoardHistory.history, animalBoardHistory.reservedAnimalMapsHistory);
+      this.state.boardHistory.updateBoard(animalBoardHistory.history, animalBoardHistory.reservedAnimalMapsHistory);
     }
     this.state = { ...this.state, ...newState };
   }
@@ -64,7 +62,7 @@ export class Board {
    * @param direction 방향
    */
   public getEmojiReservedAnimalMaps(direction: Direction): string[] {
-    return this.state.animalBoardHistory.getReservedAnimalMaps(direction)
+    return this.state.boardHistory.getReservedAnimalMaps(direction)
       .map((cell: BoardCell) => boardCellEmoji[cell]);
   }
 
@@ -93,10 +91,9 @@ export class Board {
         return;
     }
 
-    this.state.animalBoardHistory.forwardGame(this.copyBoard(newAnimalBoard), direction);
+    this.state.boardHistory.forwardGame(this.copyBoard(newAnimalBoard), direction);
 
     this.updateState({
-      animalBoard: newAnimalBoard,
       board: newAnimalBoard
     });
   }
@@ -109,9 +106,9 @@ export class Board {
   private moveHorizontal(direction: "left" | "right", reservedAnimals: BoardCell[]): BoardType {
     const isLeft = direction === "left";
     const startIndex = isLeft ? 1 : 0;
-    const endIndex = isLeft ? this.state.animalCellBoardSize : this.state.animalCellBoardSize - 1;
+    const endIndex = isLeft ? this.state.boardSize : this.state.boardSize - 1;
 
-    return this.state.animalBoard.map((row, index) => {
+    return this.state.board.map((row, index) => {
       const reservedCell = reservedAnimals[index];
       const shiftedRow = row.slice(startIndex, endIndex);
 
@@ -129,9 +126,9 @@ export class Board {
   private moveVertical(direction: "up" | "down", reservedAnimals: BoardCell[]): BoardType {
     const isUp = direction === "up";
     const startIndex = isUp ? 1 : 0;
-    const endIndex = isUp ? this.state.animalCellBoardSize : this.state.animalCellBoardSize - 1;
+    const endIndex = isUp ? this.state.boardSize : this.state.boardSize - 1;
 
-    const movingRows = this.state.animalBoard.slice(startIndex, endIndex);
+    const movingRows = this.state.board.slice(startIndex, endIndex);
     return isUp
       ? [...movingRows, reservedAnimals]
       : [reservedAnimals, ...movingRows];
@@ -141,19 +138,18 @@ export class Board {
    * 게임 상태를 뒤로 돌리는 메서드
    */
   public backwardGame(): void {
-    if (!this.state.animalBoardHistory) {
+    if (!this.state.boardHistory) {
       console.warn('게임 스냅샷이 없습니다.');
       return;
     }
 
-    const snapshot = this.state.animalBoardHistory.getHistory();
+    const snapshot = this.state.boardHistory.getHistory();
     if (snapshot.length > 1) {
-      this.state.animalBoardHistory.backwardGame();
+      this.state.boardHistory.backwardGame();
     }
 
-    const lastSnapshot = this.state.animalBoardHistory.getHistory()[this.state.animalBoardHistory.getHistory().length - 1];
+    const lastSnapshot = this.state.boardHistory.getHistory()[this.state.boardHistory.getHistory().length - 1];
     this.updateState({
-      animalBoard: lastSnapshot,
       board: lastSnapshot
     });
   }
@@ -172,7 +168,7 @@ export class Board {
    * @param direction 방향
    */
   private getReservedAnimalCells(direction: Direction): BoardCell[] {
-    const reservedAnimals = this.state.animalBoardHistory.getReservedAnimalMaps(direction);
+    const reservedAnimals = this.state.boardHistory.getReservedAnimalMaps(direction);
     return reservedAnimals.map((cell: BoardCell) => cell);
   }
 
@@ -181,7 +177,7 @@ export class Board {
    */
   private isExceeded(): boolean {
     const directions: Direction[] = ['up', 'down', 'left', 'right'];
-    return directions.some((direction) => this.state.animalBoardHistory.isLastIndex(direction));
+    return directions.some((direction) => this.state.boardHistory.isLastIndex(direction));
   }
 
   /**
@@ -189,7 +185,7 @@ export class Board {
    * @param direction 방향
    */
   public getCount(direction: Direction): number {
-    return this.state.animalBoardHistory.getCount(direction);
+    return this.state.boardHistory.getCount(direction);
   }
 
   /**
@@ -197,18 +193,18 @@ export class Board {
    * @param direction 방향
    */
   public getMaxCount(direction: Direction): number {
-    return this.state.animalBoardHistory.getMaxCount(direction);
+    return this.state.boardHistory.getMaxCount(direction);
   }
 
   /**
    * 게임 종료여부
    */
   public isWon(): boolean {
-    const duckCellCount = this.state.animalBoard.reduce((acc, row) => {
+    const duckCellCount = this.state.board.reduce((acc, row) => {
       return acc + row.filter((cell) => cell === BoardCell.Duck).length;
     }, 0);
 
-    const lammaCellCount = this.state.animalBoard.reduce((acc, row) => {
+    const lammaCellCount = this.state.board.reduce((acc, row) => {
       return acc + row.filter((cell) => cell === BoardCell.Lamma).length;
     }, 0);
 
@@ -219,7 +215,7 @@ export class Board {
    * 라마 혹은 오리 셀 카운트 반환
    */
   public getAnimalCellCount(animal: BoardCell): number {
-    return this.state.animalBoard.reduce((acc, row) => {
+    return this.state.board.reduce((acc, row) => {
       return acc + row.filter((cell) => cell === animal).length;
     }, 0);
   }

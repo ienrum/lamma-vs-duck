@@ -7,14 +7,12 @@ export type ReservedAnimalListHistory = ReservedAnimalList[];
 
 export interface BoardState {
   board: BoardType;
-  animalBoard: BoardType;
-  animalCellBoardSize: number;
-  animalBoardHistory: BoardHistory;
+  boardSize: number;
+  boardHistory: BoardHistory;
 }
 
 export interface BoardStateUpdate {
   board?: BoardType;
-  animalBoard?: BoardType;
-  animalCellBoardSize?: number;
-  animalBoardHistory?: any;
+  boardSize?: number;
+  boardHistory?: any;
 }
