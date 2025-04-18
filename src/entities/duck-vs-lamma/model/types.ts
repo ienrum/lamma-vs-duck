@@ -1,20 +1,34 @@
 import { BoardCell } from "./constants";
 import { BoardHistory } from "./board-history";
+import { Direction } from "../../cross-pad/model/types";
+
 
 export type BoardType = BoardCell[][];
 export type ReservedAnimalList = BoardCell[];
 export type ReservedAnimalListHistory = ReservedAnimalList[];
 
+/**
+ * ReservedAnimalMapsHistory 클래스의 상태만을 담는 타입
+ */
+export interface ReservedAnimalMapsHistoryState {
+  reservedAnimalMaps: Record<Direction, ReservedAnimalListHistory>;
+  countSnapshot: Record<Direction, number>;
+  indexSnapshot: [Direction, number][];
+}
+
+export interface BoardHistoryState {
+  history: BoardType[];
+  reservedAnimalMapsHistory: ReservedAnimalMapsHistoryState;
+}
+
 export interface BoardState {
   board: BoardType;
-  animalBoard: BoardType;
-  animalCellBoardSize: number;
-  animalBoardHistory: BoardHistory;
+  boardSize: number;
+  boardHistory: BoardHistory;
 }
 
 export interface BoardStateUpdate {
   board?: BoardType;
-  animalBoard?: BoardType;
-  animalCellBoardSize?: number;
-  animalBoardHistory?: BoardHistory;
+  boardSize?: number;
+  boardHistory?: BoardHistoryState;
 }

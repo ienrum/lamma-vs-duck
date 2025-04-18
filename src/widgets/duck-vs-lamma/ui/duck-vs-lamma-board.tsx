@@ -1,74 +1,61 @@
 'use client'
 
 import { useGame } from "../model/use-game.hook";
-import ReservedAnimalCells from "./reserved-animall-cells";
-import GameScoreBox from "./game-score-box";
-import GameBoard from "./game-board";
-import { useRouter, useParams } from "next/navigation";
-import { useEffect } from "react";
-import usePostEnd from "@/src/features/game/api/use-post-game-end";
+import { useParams } from "next/navigation";
 import useGetGameBoard from "@/src/features/game/api/use-get-game-board";
-import usePostStart from "@/src/features/game/api/use-post-game-start";
-import usePostCleanup from "@/src/features/game/api/use-post-game-cleanup";
 import Spinner from "@/src/shared/ui/spinner";
-
+import { useGamePersistence } from "../hooks/use-game-persistence";
+import { useGameSubmission } from "../hooks/use-game-submission";
+import { GameSubmissionForm } from "./GameSubmissionForm";
+import { GameBoardLayout } from "./GameBoardLayout";
+import { useRef } from "react";
 
 const DuckVsLammaBoard = () => {
-  const { currentEmojiBoard, gameInfo, reservedAnimalMaps, setBoard } = useGame();
-  const router = useRouter();
-
+  const { currentEmojiBoard, gameInfo, reservedAnimalMaps, setBoard, endGame } = useGame();
   const gameId = Number(useParams().gameId);
-
-  const { mutate: postStart } = usePostStart();
-  const { mutate: postEnd } = usePostEnd();
-  const { mutate: postCleanup } = usePostCleanup();
+  const gameEndRef = useRef<HTMLFormElement>(null);
   const { data } = useGetGameBoard(gameId);
-  const isWon = gameInfo.isWon();
 
-  useEffect(() => {
-    postStart({
-      gameId,
-    }, {
-      onSuccess: () => {
-        setBoard(data.board, data.reservedAnimalMaps);
-      },
-      onError: () => {
-        router.push("/result");
-        postCleanup();
-      }
-    });
-
-    return () => {
-      postCleanup();
+  // 게임 상태 지속성 관리
+  const { getGameScore } = useGamePersistence({
+    gameInfo,
+    endGame,
+    setBoard,
+    boardData: data,
+    onGameEnd: () => {
+      gameEndRef.current?.requestSubmit();
     }
+  });
 
-  }, [])
-
-  useEffect(() => {
-    if (isWon) {
-      postEnd({ gameId }, {
-        onSuccess: () => {
-          router.push("/result");
-        }
-      });
-    }
-  }, [isWon]);
+  // 게임 제출 로직 관리
+  const { formAction, isPending, error } = useGameSubmission({
+    gameId,
+    getGameScore,
+  });
 
   if (!currentEmojiBoard) {
     return <Spinner size="lg" className="mx-auto" />;
   }
 
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <>
-      <GameScoreBox gameInfo={gameInfo} />
-      <span className="w-full h-[1px] bg-gray-300 my-4" />
-      <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("down")} direction="down" />
-      <div className="flex gap-2">
-        <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("right")} direction="right" />
-        <GameBoard currentEmojiBoard={currentEmojiBoard} />
-        <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("left")} direction="left" />
-      </div>
-      <ReservedAnimalCells reservedAnimalList={reservedAnimalMaps("up")} direction="up" />
+      <GameSubmissionForm
+        gameEndRef={gameEndRef}
+        formAction={formAction}
+        gameId={gameId}
+        getGameScore={getGameScore}
+        isPending={isPending}
+      />
+
+      <GameBoardLayout
+        currentEmojiBoard={currentEmojiBoard}
+        gameInfo={gameInfo}
+        reservedAnimalMaps={reservedAnimalMaps}
+      />
     </>
   );
 };

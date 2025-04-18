@@ -1,11 +1,13 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
 import { GameBoardResponseDto } from "@/src/features/game/model/dto/game-board.dto";
+import { BASE_URL } from "@/src/app/config/baseurl";
+import { customFetchJson } from "@/src/shared/util/fetch-utils";
 
 const getGameBoard = async (gameId: number) => {
-  const response = await fetch(`/api/game/board?gameId=${gameId}`);
-  const data = await response.json() as BaseResponseDto<GameBoardResponseDto>;
-  return data;
+  return await customFetchJson<BaseResponseDto<GameBoardResponseDto>>(
+    `${BASE_URL}/api/game/board?gameId=${gameId}`
+  );
 };
 
 const useGetGameBoard = (gameId: number) => {

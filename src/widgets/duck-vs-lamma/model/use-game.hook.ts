@@ -9,7 +9,7 @@ let previousCount = 0;
 export const useGame = () => {
   const {
     currentEmojiBoard,
-    setBoard,
+    initGame: setBoard,
     getReservedAnimalMaps,
     backwardGame,
     getCount,
@@ -18,7 +18,10 @@ export const useGame = () => {
     isWon,
     getLammaCount,
     getDuckCount,
-    moveAnimalCells
+    moveAnimalCells,
+    endGame,
+    score,
+    getBoardState
   } = useGameStore();
 
   const { currentDirection, count } = useCrossPadStore();
@@ -35,6 +38,9 @@ export const useGame = () => {
     reservedAnimalMaps: getReservedAnimalMaps,
     backwardGame,
     setBoard,
+    endGame: (endTime: Date) => {
+      endGame(endTime);
+    },
     gameInfo: {
       count: getCount,
       maxCount: getMaxCount,
@@ -42,6 +48,8 @@ export const useGame = () => {
       isWon,
       lammaCount: getLammaCount,
       duckCount: getDuckCount,
+      score,
+      boardState: getBoardState
     }
   };
 };
