@@ -212,7 +212,9 @@ export class Board {
       return acc + row.filter((cell) => cell === BoardCell.Lamma).length;
     }, 0);
 
-    return duckCellCount === lammaCellCount;
+    const isNotEmpty = duckCellCount > 0 || lammaCellCount > 0;
+
+    return isNotEmpty && duckCellCount === lammaCellCount;
   }
 
   /**
