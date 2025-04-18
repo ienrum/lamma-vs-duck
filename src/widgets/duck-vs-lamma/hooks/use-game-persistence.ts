@@ -55,7 +55,7 @@ export const useGamePersistence = ({
     } else {
       setBoard(boardData.board, boardData.reservedAnimalMaps);
     }
-  }, []);
+  }, [boardData.board, boardData.reservedAnimalMaps, setBoard]);
 
   // 게임 상태 주기적 저장
   useEffect(() => {
