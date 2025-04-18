@@ -1,56 +1,48 @@
+const completionMessage = `
+Game Goal 🎯
+- Match the number of 🦙lamas and 🦆ducks on the board!
+
+Game Rules 🎮
+- Use the ↑/↓/←/→ buttons to move the entire **row and column** on the board
+  - The tiles waiting at the edges will automatically enter when moving
+
+Winning Condition 🏆
+- Match the number of 🦙lamas and 🦆ducks on the board!
+
+이런 룰을 가진 게임이 있습니다.
+
+최대한 게임을 즐기게 하기 위해 오직 하나의 답만 존재하도록 game data를 만드려합니다. 
+
+만들어주세요 형식은 다음과 같습니다.
+
+export type Direction = "up" | "down" | "left" | "right";
+
+export interface GameBoardRequestDto {
+  gameId: string;
+  userId: string;
+}
+export enum BoardCell {
+  Empty = '0',
+  Duck = '1',
+  Lamma = '2',
+}
+
+export interface GameBoardResponseDto {
+  board: string[][];
+  reservedAnimalMaps: Record<Direction, BoardCell[][]>;
+}`
+
 export function generateGameData(difficulty: number) {
-  const BOARD_SIZE = 4; // 4x4 보드
-  const RESERVED_MAP_SIZE = 3; // 각 방향별로 3개의 예약 타일 리스트
-
-  // 난이도에 따른 라마와 오리의 비율 조정
-  const lamaRatio = 0.5 + (difficulty - 1) * 0.005; // 난이도 1: 0.5, 난이도 10: 0.75
-  const duckRatio = 1 - lamaRatio;
-
-  // 보드 초기화 (4x4)
-  const board = [];
-  for (let i = 0; i < BOARD_SIZE; i++) {
-    const row = [];
-    for (let j = 0; j < BOARD_SIZE; j++) {
-      const rand = Math.random();
-      if (rand < lamaRatio) {
-        row.push("2"); // 라마
-      } else if (rand < lamaRatio + duckRatio) {
-        row.push("1"); // 오리
-      } else {
-        row.push("0"); // 빈 칸
-      }
-    }
-    board.push(row);
-  }
-
-  // 예약된 동물 맵 초기화 (각 방향별로 3개 리스트)
-  const reservedAnimalMaps = {
-    up: [],
-    down: [],
-    left: [],
-    right: [],
-  } as Record<string, string[][]>;
-
-  for (let dir in reservedAnimalMaps) {
-    for (let k = 0; k < RESERVED_MAP_SIZE; k++) {
-      const tileList: string[] = [];
-      for (let i = 0; i < BOARD_SIZE; i++) {
-        const rand = Math.random();
-        if (rand < lamaRatio) {
-          tileList.push("2"); // 라마
-        } else if (rand < lamaRatio + duckRatio) {
-          tileList.push("1"); // 오리
-        } else {
-          tileList.push("0"); // 빈 칸
-        }
-      }
-      reservedAnimalMaps[dir as keyof typeof reservedAnimalMaps].push(tileList);
-    }
-  }
-
-  // 생성된 데이터 반환
   return {
-    board,
-    reservedAnimalMaps,
+    board: [
+      ["1", "1"],
+      ["1", "1"]
+    ],
+    reservedAnimalMaps: {
+      up: [["2", "0"]],
+      down: [["0", "2"]],
+      left: [["0", "2"]],
+      right: [["2", "0"]]
+    }
   };
 }
