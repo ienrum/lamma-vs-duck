@@ -14,7 +14,7 @@ export const ProfileLink = async () => {
     queryFn: async () => {
       const cookieStore = await cookies()
       const supabase = await createClient(cookieStore)
-      const { data } = await getSupabaseUser(supabase, cookieStore)
+      const { data } = await getSupabaseUser(supabase)
       return data
     }
   })

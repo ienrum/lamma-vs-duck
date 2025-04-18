@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
 
-  const { data: { user } } = await getSupabaseUser(supabase, cookieStore)
+  const { data: { user } } = await getSupabaseUser(supabase)
 
   if (!user) {
     throw new Error('User not found');

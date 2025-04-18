@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
 
-  const { data: { user } } = await getSupabaseUser(supabase, cookieStore)
+  const { data: { user } } = await getSupabaseUser(supabase)
 
   const { searchParams } = new URL(request.url);
   const from = parseInt(searchParams.get('from') || '0');

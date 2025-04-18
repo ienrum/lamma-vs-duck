@@ -17,7 +17,7 @@ export async function endGameAction(prevState: any, formData: FormData) {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
 
-  const { data: { user } } = await getSupabaseUser(supabase, cookieStore);
+  const { data: { user } } = await getSupabaseUser(supabase);
 
   if (!user) {
     return { error: 'User not found' };
