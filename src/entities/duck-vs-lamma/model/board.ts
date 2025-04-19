@@ -75,7 +75,7 @@ export class Board {
    * @param direction 이동 방향
    */
   public moveAnimalCells(direction: Direction): void {
-    if (this.isExceeded()) {
+    if (this.isExceeded(direction)) {
       return;
     }
 
@@ -177,11 +177,10 @@ export class Board {
   }
 
   /**
-   * 게임 종료 여부 확인
+   * 특정 방향 최대 카운트 초과 여부 확인
    */
-  private isExceeded(): boolean {
-    const directions: Direction[] = ['up', 'down', 'left', 'right'];
-    return directions.some((direction) => this.state.boardHistory.isLastIndex(direction));
+  private isExceeded(direction: Direction): boolean {
+    return this.state.boardHistory.isLastIndex(direction);
   }
 
   /**

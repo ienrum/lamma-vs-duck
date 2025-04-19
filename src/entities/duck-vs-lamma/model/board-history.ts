@@ -90,6 +90,10 @@ export class BoardHistory {
    */
   public getReservedAnimalMaps(direction: Direction): ReservedAnimalList {
     const currentIndex = this.getCurrentIndex(direction);
+    if (currentIndex < 0) {
+      return [];
+    }
+
     return this.reservedAnimalMapsHistory.getAnimalMaps(direction)[currentIndex];
   }
 
@@ -101,7 +105,11 @@ export class BoardHistory {
     const currentIndex = this.reservedAnimalMapsHistory.getCountSnapshot(direction);
     const maxLength = this.reservedAnimalMapsHistory.getAnimalMapsLength(direction);
 
-    return currentIndex >= maxLength ? maxLength - 1 : currentIndex;
+    if (currentIndex >= maxLength) {
+      return maxLength - 1;
+    }
+
+    return currentIndex;
   }
 
   /**
