@@ -24,6 +24,7 @@ interface UseGamePersistenceProps {
   boardData: {
     board: any;
     reservedAnimalMaps: any;
+    whoIsWin: string;
   };
   onGameEnd: () => void;
 }
@@ -55,7 +56,7 @@ export const useGamePersistence = ({
         gameState.boardState,
       );
     } else {
-      setBoard(boardData.board, boardData.reservedAnimalMaps, "lamma");
+      setBoard(boardData.board, boardData.reservedAnimalMaps, boardData.whoIsWin);
     }
   }, [boardData.board, boardData.reservedAnimalMaps, setBoard]);
 
