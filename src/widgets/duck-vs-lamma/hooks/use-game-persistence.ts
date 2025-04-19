@@ -17,8 +17,9 @@ interface UseGamePersistenceProps {
   setBoard: (
     board: any,
     reservedAnimalMaps: any,
+    whoIsWin: string,
     score?: number,
-    boardState?: BoardStateUpdate
+    boardState?: BoardStateUpdate,
   ) => void;
   boardData: {
     board: any;
@@ -49,11 +50,12 @@ export const useGamePersistence = ({
       setBoard(
         boardData.board,
         boardData.reservedAnimalMaps,
+        gameState.boardState.whoIsWin || "lamma",
         Number(gameState.score),
-        gameState.boardState
+        gameState.boardState,
       );
     } else {
-      setBoard(boardData.board, boardData.reservedAnimalMaps);
+      setBoard(boardData.board, boardData.reservedAnimalMaps, "lamma");
     }
   }, [boardData.board, boardData.reservedAnimalMaps, setBoard]);
 
@@ -62,6 +64,7 @@ export const useGamePersistence = ({
     persistenceTimer = setInterval(() => {
       const playTime = gameInfo.playTime();
       const boardState = gameInfo.boardState();
+
       if (boardState) {
         setLocalStorage('gameState', {
           score: playTime,

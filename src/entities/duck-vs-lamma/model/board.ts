@@ -17,7 +17,7 @@ export class Board {
    * @param board 초기 보드 문자열 배열
    * @param reservedAnimalMaps 예약된 동물 맵
    */
-  constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>) {
+  constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>, whoIsWin: string = "lamma") {
     const initialBoard = this.initializeBoard(board);
     const animalCellBoardSize = initialBoard.length;
 
@@ -27,7 +27,8 @@ export class Board {
     this.state = {
       board: initialBoard,
       boardSize: animalCellBoardSize,
-      boardHistory: animalBoardHistory
+      boardHistory: animalBoardHistory,
+      whoIsWin: whoIsWin
     };
   }
 
@@ -48,6 +49,7 @@ export class Board {
       board: this.state.board,
       boardSize: this.state.boardSize,
       boardHistory: this.state.boardHistory.getBoardHistoryState(),
+      whoIsWin: this.state.whoIsWin
     }
   }
 
@@ -203,17 +205,14 @@ export class Board {
    * 게임 종료여부
    */
   public isWon(): boolean {
-    const duckCellCount = this.state.board.reduce((acc, row) => {
-      return acc + row.filter((cell) => cell === BoardCell.Duck).length;
-    }, 0);
+    const winnerCell = {
+      lamma: BoardCell.Lamma,
+      duck: BoardCell.Duck
+    }[this.state.whoIsWin]
+    const cellCount = this.state.board.flat().filter((cell) => cell === winnerCell).length;
+    const fullOfAnimal = cellCount === this.state.boardSize * this.state.boardSize;
 
-    const lammaCellCount = this.state.board.reduce((acc, row) => {
-      return acc + row.filter((cell) => cell === BoardCell.Lamma).length;
-    }, 0);
-
-    const isNotEmpty = duckCellCount > 0 || lammaCellCount > 0;
-
-    return isNotEmpty && duckCellCount === lammaCellCount;
+    return fullOfAnimal;
   }
 
   /**

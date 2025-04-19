@@ -9,6 +9,7 @@ export interface GameData {
     left: string[][];
     right: string[][];
   };
+  whoIsWin: string;
 }
 
 // 메모리에 저장할 게임 데이터

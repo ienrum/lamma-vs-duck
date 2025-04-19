@@ -13,6 +13,7 @@ interface GameBoardLayoutProps {
     duckCount: () => number;
     count: (direction: Direction) => number;
     maxCount: (direction: Direction) => number;
+    whoIsWin: () => string;
   };
   reservedAnimalMaps: (direction: Direction) => string[];
 }
