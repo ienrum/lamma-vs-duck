@@ -5,13 +5,13 @@ import { createClient } from '@/utils/supabase/server';
 import { RankResponseDto } from '@/src/widgets/leader-board/model/dto/rank.dto';
 import { Rank } from '@/src/widgets/leader-board/model/dto/rank.dto';
 import { todayString } from '@/src/shared/config/today-string';
-
+import { getSupabaseUser } from '@/src/app/config/get-supabase-user';
 
 export async function GET(request: Request) {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await getSupabaseUser(supabase)
 
   const { searchParams } = new URL(request.url);
   const from = parseInt(searchParams.get('from') || '0');
@@ -25,7 +25,6 @@ export async function GET(request: Request) {
         score,
         user_id,
         game_id,
-        start_time,
         end_time,
         user (
           id,
@@ -34,8 +33,8 @@ export async function GET(request: Request) {
       `)
       .range(from, to)
       .order('score', { ascending: true })
-      .like('today', `${todayString()}:%`)
-      .neq('score', -1);
+      .gte('end_time', `${todayString()} 00:00:00`)
+      .lte('end_time', `${todayString()} 23:59:59`)
 
 
     const { data, error } = await query;

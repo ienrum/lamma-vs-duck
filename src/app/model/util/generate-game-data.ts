@@ -1,56 +1,94 @@
-export function generateGameData(difficulty: number) {
-  const BOARD_SIZE = 4; // 4x4 보드
-  const RESERVED_MAP_SIZE = 3; // 각 방향별로 3개의 예약 타일 리스트
+import { Direction } from "@/src/entities/cross-pad/model/types"
+import { BoardCell } from "@/src/entities/duck-vs-lamma/model/constants"
 
-  // 난이도에 따른 라마와 오리의 비율 조정
-  const lamaRatio = 0.5 + (difficulty - 1) * 0.005; // 난이도 1: 0.5, 난이도 10: 0.75
-  const duckRatio = 1 - lamaRatio;
+const generateRandomDirection = (): Direction => {
+  const directions = ["up", "down", "left", "right"]
+  return directions[Math.floor(Math.random() * 4)] as Direction
+}
 
-  // 보드 초기화 (4x4)
-  const board = [];
-  for (let i = 0; i < BOARD_SIZE; i++) {
-    const row = [];
-    for (let j = 0; j < BOARD_SIZE; j++) {
-      const rand = Math.random();
-      if (rand < lamaRatio) {
-        row.push("2"); // 라마
-      } else if (rand < lamaRatio + duckRatio) {
-        row.push("1"); // 오리
-      } else {
-        row.push("0"); // 빈 칸
-      }
-    }
-    board.push(row);
+const moveBoard = (board: string[][], direction: Direction, reservedList: BoardCell[]) => {
+  const newBoard = board.map(row => [...row])
+  const newReservedList = [...reservedList]
+  let popedList: BoardCell[] = []
+
+  if (direction === "up") {
+    popedList = newBoard.shift() as BoardCell[]
+    newBoard.push(newReservedList)
+  } else if (direction === "down") {
+    popedList = newBoard.pop() as BoardCell[]
+    newBoard.unshift(newReservedList)
+  } else if (direction === "left") {
+    newBoard.forEach(row => popedList.push(row.shift() as BoardCell))
+    newBoard.forEach((row, index) => row.push(newReservedList[index]))
+  } else if (direction === "right") {
+    newBoard.forEach(row => popedList.push(row.pop() as BoardCell))
+    newBoard.forEach((row, index) => row.unshift(newReservedList[index]))
   }
 
-  // 예약된 동물 맵 초기화 (각 방향별로 3개 리스트)
+  return {
+    newBoard,
+    popedList
+  }
+}
+
+const generateRandomAnimalList = (boardSize: number): BoardCell[] => {
+  const reservedAnimalList = ["1", "2", "0"]
+
+  const animalList = Array.from({ length: boardSize }, () => reservedAnimalList[Math.floor(Math.random() * 3)])
+  return animalList as BoardCell[]
+}
+
+const generateInitialBoard = (boardSize: number, whoIsWin: "duck" | "lamma") => {
+  const board = Array.from({ length: boardSize }, () => Array(boardSize).fill(whoIsWin === "duck" ? "1" : "2"));
+
+  return board
+}
+
+const getOppositeDirection = (direction: Direction): Direction => {
+  return {
+    up: "down",
+    down: "up",
+    left: "right",
+    right: "left"
+  }[direction] as Direction
+}
+
+const generateReservedAnimalMaps = (board: string[][], boardSize: number, whoIsWin: "duck" | "lamma", depth: number) => {
+  let currentBoard = board.map(row => [...row])
   const reservedAnimalMaps = {
     up: [],
     down: [],
     left: [],
-    right: [],
-  } as Record<string, string[][]>;
+    right: []
+  } as Record<Direction, BoardCell[][]>
 
-  for (let dir in reservedAnimalMaps) {
-    for (let k = 0; k < RESERVED_MAP_SIZE; k++) {
-      const tileList: string[] = [];
-      for (let i = 0; i < BOARD_SIZE; i++) {
-        const rand = Math.random();
-        if (rand < lamaRatio) {
-          tileList.push("2"); // 라마
-        } else if (rand < lamaRatio + duckRatio) {
-          tileList.push("1"); // 오리
-        } else {
-          tileList.push("0"); // 빈 칸
-        }
-      }
-      reservedAnimalMaps[dir as keyof typeof reservedAnimalMaps].push(tileList);
-    }
+  while (depth > 0) {
+    const randomDirection = generateRandomDirection()
+    const randomAnimalList = generateRandomAnimalList(boardSize)
+    const { newBoard, popedList } = moveBoard(currentBoard, randomDirection, randomAnimalList)
+    currentBoard = newBoard
+    const oppositeDirection = getOppositeDirection(randomDirection)
+    console.log("oppositeDirection", oppositeDirection)
+    reservedAnimalMaps[oppositeDirection].unshift(popedList)
+    depth--
   }
 
-  // 생성된 데이터 반환
   return {
-    board,
+    board: currentBoard,
+    reservedAnimalMaps
+  }
+}
+
+
+export function generateGameData(difficulty: number) {
+  const boardSize = 4;
+  const whoIsWin = ["lamma", "duck"][Math.floor(Math.random() * 2)] as "lamma" | "duck";
+  const board = generateInitialBoard(boardSize, whoIsWin);
+  const { board: finalBoard, reservedAnimalMaps } = generateReservedAnimalMaps(board, boardSize, whoIsWin, difficulty);
+
+  return {
+    board: finalBoard,
     reservedAnimalMaps,
-  };
+    whoIsWin
+  }
 }

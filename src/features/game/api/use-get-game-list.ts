@@ -1,24 +1,21 @@
+'use client'
+
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { GameListResponseDto } from "@/src/features/game/model/dto/game-list.dto";
+import { BASE_URL } from "@/src/app/config/baseurl";
+import { customFetchJson } from "@/src/shared/util/fetch-utils";
 
 const getGameList = async () => {
-  const response = await fetch('/api/game/list');
-  const data = await response.json() as BaseResponseDto<GameListResponseDto>;
-  return data;
+  return await customFetchJson<BaseResponseDto<GameListResponseDto>>(`${BASE_URL}/api/game/list`);
 };
 
 const useGetGameList = () => {
-  const { data, isLoading, error } = useSuspenseQuery({
+  return useSuspenseQuery({
     queryKey: ['gameList'],
     queryFn: () => getGameList(),
+    select: (data) => data.data
   });
-
-  return {
-    data: data.data,
-    isLoading,
-    error,
-  };
 };
 
 export default useGetGameList;

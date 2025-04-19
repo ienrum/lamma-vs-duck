@@ -1,10 +1,10 @@
 import { Direction } from "../../cross-pad/model/types";
 import { BoardCell } from "./constants";
-import { ReservedAnimalList, ReservedAnimalListHistory } from "./types";
+import { ReservedAnimalList, ReservedAnimalListHistory, ReservedAnimalMapsHistoryState } from "./types";
 /**
  * 예약된 동물 맵을 관리하는 클래스 
  */
-export class ReservedAnimalMaps {
+export class ReservedAnimalMapsHistory {
   private reservedAnimalMaps: Record<Direction, ReservedAnimalListHistory>;
   private countSnapshot: Record<Direction, number>;
   private indexSnapshot: [Direction, number][];
@@ -17,6 +17,12 @@ export class ReservedAnimalMaps {
     this.reservedAnimalMaps = this.initializeReservedAnimalMaps(reservedAnimalMaps);
     this.indexSnapshot = [];
     this.countSnapshot = this.initializeCountSnapshot();
+  }
+
+  public updateReservedAnimalMaps(reservedAnimalMaps: ReservedAnimalMapsHistoryState): void {
+    this.reservedAnimalMaps = reservedAnimalMaps.reservedAnimalMaps;
+    this.indexSnapshot = reservedAnimalMaps.indexSnapshot;
+    this.countSnapshot = reservedAnimalMaps.countSnapshot;
   }
 
   private initializeReservedAnimalMaps(reservedAnimalMaps: Record<Direction, string[][]>): Record<Direction, ReservedAnimalListHistory> {
@@ -92,5 +98,13 @@ export class ReservedAnimalMaps {
    */
   public getAnimalMapsLength(direction: Direction): number {
     return this.reservedAnimalMaps[direction].length;
+  }
+
+  public getReservedAnimalMapsHistoryState(): ReservedAnimalMapsHistoryState {
+    return {
+      reservedAnimalMaps: this.reservedAnimalMaps,
+      countSnapshot: this.countSnapshot,
+      indexSnapshot: this.indexSnapshot,
+    };
   }
 }

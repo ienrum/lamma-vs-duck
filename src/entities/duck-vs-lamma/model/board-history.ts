@@ -1,6 +1,6 @@
 import { Direction } from "../../cross-pad/model/types";
-import { ReservedAnimalMaps } from "./reserved-animal-maps";
-import { BoardType, ReservedAnimalList } from "./types";
+import { ReservedAnimalMapsHistory } from "./reserved-animal-maps";
+import { BoardType, ReservedAnimalList, ReservedAnimalMapsHistoryState } from "./types";
 
 
 /**
@@ -8,16 +8,26 @@ import { BoardType, ReservedAnimalList } from "./types";
  */
 export class BoardHistory {
   private history: BoardType[];
-  private reservedAnimalMaps: ReservedAnimalMaps;
+  private reservedAnimalMapsHistory: ReservedAnimalMapsHistory;
 
   /**
    * 게임 스냅샷 초기화
    * @param gameSnapshot 초기 게임 보드
    * @param reservedAnimalMaps 예약된 동물 맵
    */
-  constructor(gameSnapshot: BoardType, reservedAnimalMaps: ReservedAnimalMaps) {
+  constructor(gameSnapshot: BoardType, reservedAnimalMaps: ReservedAnimalMapsHistory) {
     this.history = [this.copyBoard(gameSnapshot)];
-    this.reservedAnimalMaps = reservedAnimalMaps;
+    this.reservedAnimalMapsHistory = reservedAnimalMaps;
+  }
+
+  /**
+   * 보드 history 상태 업데이트
+   * @param history 업데이트할 보드 history 상태  
+   * @param reservedAnimalMaps 업데이트할 예약된 동물 맵 상태
+   */
+  public updateBoard(history: BoardType[], reservedAnimalMaps: ReservedAnimalMapsHistoryState): void {
+    this.history = history;
+    this.reservedAnimalMapsHistory.updateReservedAnimalMaps(reservedAnimalMaps);
   }
 
   /**
@@ -40,7 +50,7 @@ export class BoardHistory {
    * @param direction 방향
    */
   public getCount(direction: Direction): number {
-    return this.reservedAnimalMaps.getCountSnapshot(direction);
+    return this.reservedAnimalMapsHistory.getCountSnapshot(direction);
   }
 
   /**
@@ -48,7 +58,7 @@ export class BoardHistory {
    * @param direction 방향
    */
   public getMaxCount(direction: Direction): number {
-    return this.reservedAnimalMaps.getAnimalMapsLength(direction);
+    return this.reservedAnimalMapsHistory.getAnimalMapsLength(direction);
   }
 
   /**
@@ -60,7 +70,7 @@ export class BoardHistory {
       return undefined;
     }
 
-    this.reservedAnimalMaps.backwardSnapshot();
+    this.reservedAnimalMapsHistory.backwardSnapshot();
     return this.history.pop();
   }
 
@@ -71,7 +81,7 @@ export class BoardHistory {
    */
   public forwardGame(board: BoardType, direction: Direction): void {
     this.history.push(this.copyBoard(board));
-    this.reservedAnimalMaps.forwardSnapshot(direction);
+    this.reservedAnimalMapsHistory.forwardSnapshot(direction);
   }
 
   /**
@@ -80,7 +90,11 @@ export class BoardHistory {
    */
   public getReservedAnimalMaps(direction: Direction): ReservedAnimalList {
     const currentIndex = this.getCurrentIndex(direction);
-    return this.reservedAnimalMaps.getAnimalMaps(direction)[currentIndex];
+    if (currentIndex < 0) {
+      return [];
+    }
+
+    return this.reservedAnimalMapsHistory.getAnimalMaps(direction)[currentIndex];
   }
 
   /**
@@ -88,10 +102,14 @@ export class BoardHistory {
    * @param direction 방향
    */
   private getCurrentIndex(direction: Direction): number {
-    const currentIndex = this.reservedAnimalMaps.getCountSnapshot(direction);
-    const maxLength = this.reservedAnimalMaps.getAnimalMapsLength(direction);
+    const currentIndex = this.reservedAnimalMapsHistory.getCountSnapshot(direction);
+    const maxLength = this.reservedAnimalMapsHistory.getAnimalMapsLength(direction);
 
-    return currentIndex >= maxLength ? maxLength - 1 : currentIndex;
+    if (currentIndex >= maxLength) {
+      return maxLength - 1;
+    }
+
+    return currentIndex;
   }
 
   /**
@@ -99,9 +117,16 @@ export class BoardHistory {
    * @param direction 방향
    */
   public isLastIndex(direction: Direction): boolean {
-    const count = this.reservedAnimalMaps.getCountSnapshot(direction);
-    const maxLength = this.reservedAnimalMaps.getAnimalMapsLength(direction);
+    const count = this.reservedAnimalMapsHistory.getCountSnapshot(direction);
+    const maxLength = this.reservedAnimalMapsHistory.getAnimalMapsLength(direction);
 
     return count === maxLength;
+  }
+
+  public getBoardHistoryState() {
+    return {
+      history: this.history,
+      reservedAnimalMapsHistory: this.reservedAnimalMapsHistory.getReservedAnimalMapsHistoryState(),
+    };
   }
 }

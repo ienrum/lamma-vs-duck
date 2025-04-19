@@ -1,9 +1,4 @@
-import { BoardCell } from "@/src/entities/duck-vs-lamma/model/constants";
-import { boardCellEmoji } from "@/src/entities/duck-vs-lamma/model/constants";
-
 const Cell = ({ cell, isAnimalCell }: { cell: string, isAnimalCell: boolean }) => {
-  const isVoid = cell === boardCellEmoji[BoardCell.Void]
-
   return (
     <>
       {isAnimalCell && (

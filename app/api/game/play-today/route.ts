@@ -2,20 +2,25 @@ import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { todayString } from "@/src/shared/config/today-string";
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
-import { mergeToday } from "@/src/app/utils/backend/db-today-utils";
 import { NextResponse } from "next/server";
+import { getSupabaseUser } from "@/src/app/config/get-supabase-user";
 
 export async function GET(request: Request) {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await getSupabaseUser(supabase)
 
   if (!user) {
     throw new Error('User not found');
   }
 
-  const { data: rankData, error: rankError } = await supabase.from('rank').select('id').eq('user_id', user.id).eq('today', mergeToday(todayString(), user.id)).single();
+  const today = todayString();
+
+  const { data: rankData, error: rankError } = await supabase.from('rank').select('id').eq('user_id', user.id)
+    .gte('end_time', `${today} 00:00:00`)
+    .lte('end_time', `${today} 23:59:59`)
+    .single();
 
   if (rankError) {
     console.error(rankError);

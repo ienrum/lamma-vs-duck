@@ -1,17 +1,14 @@
 import { GameEndRequestDto, GameEndResponseDto } from "@/src/features/game/model/dto/game-end.dto";
 import { useMutation } from "@tanstack/react-query";
 import { BaseResponseDto } from "@/src/app/model/backend/base-dto";
+import { BASE_URL } from "@/src/app/config/baseurl";
+import { customFetchJson } from "@/src/shared/util/fetch-utils";
 
 const postEnd = async (data: GameEndRequestDto): Promise<BaseResponseDto<GameEndResponseDto>> => {
-  const response = await fetch("/api/game/end", {
+  return await customFetchJson<BaseResponseDto<GameEndResponseDto>>(`${BASE_URL}/api/game/end`, {
     method: "POST",
     body: JSON.stringify(data),
   });
-  if (!response.ok) {
-    throw new Error("Failed to post game end");
-  }
-
-  return response.json();
 };
 
 const usePostEnd = () => {

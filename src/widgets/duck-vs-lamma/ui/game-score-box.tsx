@@ -10,10 +10,16 @@ interface GameInfo {
   playTime: () => number;
   lammaCount: () => number;
   duckCount: () => number;
+  whoIsWin: () => string;
 }
 
 const GameScoreBox = ({ gameInfo }: { gameInfo: GameInfo }) => {
   const [playTime, setPlayTime] = useState(0);
+
+  const winnerEmoji = {
+    lamma: boardCellEmoji[BoardCell.Lamma],
+    duck: boardCellEmoji[BoardCell.Duck]
+  }[gameInfo.whoIsWin()]
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -26,12 +32,10 @@ const GameScoreBox = ({ gameInfo }: { gameInfo: GameInfo }) => {
   return (
     <div className="flex flex-col items-center gap-4 justify-center">
       <div className="flex items-center gap-4 justify-center">
-        <label className="text-lg font-sans">
-          {formatTime(playTime)}
+        <label className="text-lg font-sans flex items-center gap-2 flex-col">
+          <span className="font-bold text-amber-600 text-2xl">Winner : {winnerEmoji}</span>
+          <span className="text-sm font-sans ">{formatTime(playTime)}</span>
         </label>
-        <span className="text-sm font-sans">
-          {boardCellEmoji[BoardCell.Lamma]} {gameInfo.lammaCount()} : {boardCellEmoji[BoardCell.Duck]} {gameInfo.duckCount()}
-        </span>
       </div>
       <div className="flex items-center gap-4 justify-center">
         {["down", "right", "left", "up"].map((direction) => (
