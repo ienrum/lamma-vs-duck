@@ -25,10 +25,12 @@ export interface BoardState {
   board: BoardType;
   boardSize: number;
   boardHistory: BoardHistory;
+  whoIsWin: string;
 }
 
 export interface BoardStateUpdate {
   board?: BoardType;
   boardSize?: number;
   boardHistory?: BoardHistoryState;
+  whoIsWin?: string;
 }

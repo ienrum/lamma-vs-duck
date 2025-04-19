@@ -13,7 +13,7 @@ interface GameState {
 
   board: Board | null;
   currentEmojiBoard: string[][] | null;
-  initGame: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>, playTimeOffset?: number, boardState?: BoardStateUpdate) => void;
+  initGame: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>, whoIsWin: string, playTimeOffset?: number, boardState?: BoardStateUpdate) => void;
   moveAnimalCells: (direction: Direction) => void;
   backwardGame: () => void;
   getReservedAnimalMaps: (direction: Direction) => string[];
@@ -34,11 +34,11 @@ export const useGameStore = create<GameState>((set, get) => ({
   score: 0,
   board: null,
   currentEmojiBoard: null,
-  initGame: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>, playTimeOffset?: number, boardState?: BoardStateUpdate) => {
+  initGame: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>, whoIsWin: string, playTimeOffset?: number, boardState?: BoardStateUpdate) => {
     const startTime = new Date();
     set({ startTime });
 
-    const board = new Board(initialBoard, initialReservedAnimalMaps);
+    const board = new Board(initialBoard, initialReservedAnimalMaps, whoIsWin);
 
     if (playTimeOffset) {
       set({ playTimeOffset });
@@ -95,6 +95,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { board } = get();
     if (!board) return false;
     return board.isWon();
+
   },
 
   getLammaCount: () => {

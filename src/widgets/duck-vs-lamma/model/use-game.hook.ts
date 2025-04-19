@@ -49,7 +49,8 @@ export const useGame = () => {
       lammaCount: getLammaCount,
       duckCount: getDuckCount,
       score,
-      boardState: getBoardState
+      boardState: getBoardState,
+      whoIsWin: () => getBoardState()?.whoIsWin || ""
     }
   };
 };

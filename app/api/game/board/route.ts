@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 
     // 오늘의 게임 데이터가 없는 경우 새로 생성
     if (!gameData) {
-      const generatedData = generateGameData(1);
+      const generatedData = generateGameData(5);
       const newGameData = {
         date: today,
         board: generatedData.board,
@@ -26,6 +26,7 @@ export async function GET(request: Request) {
           left: generatedData.reservedAnimalMaps.left,
           right: generatedData.reservedAnimalMaps.right,
         },
+        whoIsWin: generatedData.whoIsWin,
       };
       setDailyGameData(newGameData);
       gameData = newGameData;
@@ -37,6 +38,7 @@ export async function GET(request: Request) {
         data: {
           board: gameData.board,
           reservedAnimalMaps: gameData.reservedAnimalMaps,
+          whoIsWin: gameData.whoIsWin,
         },
       },
       { status: 200 }
