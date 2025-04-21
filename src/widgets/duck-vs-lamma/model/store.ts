@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { Board } from "@/src/entities/duck-vs-lamma/model/board";
-import { Direction } from "@/src/entities/cross-pad/model/types";
-import { BoardCell } from "@/src/entities/duck-vs-lamma/model/constants";
-import { BoardState, BoardStateUpdate } from "@/src/entities/duck-vs-lamma/model/types";
+import { Board } from '@/src/entities/duck-vs-lamma/model/board';
+import { Direction } from '@/src/entities/cross-pad/model/types';
+import { BoardCell } from '@/src/entities/duck-vs-lamma/model/constants';
+import { BoardState, BoardStateUpdate } from '@/src/entities/duck-vs-lamma/model/types';
 
 interface GameState {
   startTime: Date | null;
@@ -13,7 +13,13 @@ interface GameState {
 
   board: Board | null;
   currentEmojiBoard: string[][] | null;
-  initGame: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>, whoIsWin: string, playTimeOffset?: number, boardState?: BoardStateUpdate) => void;
+  initGame: (
+    initialBoard: string[][],
+    initialReservedAnimalMaps: Record<Direction, string[][]>,
+    whoIsWin: string,
+    playTimeOffset?: number,
+    boardState?: BoardStateUpdate
+  ) => void;
   moveAnimalCells: (direction: Direction) => void;
   backwardGame: () => void;
   getReservedAnimalMaps: (direction: Direction) => string[];
@@ -34,7 +40,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   score: 0,
   board: null,
   currentEmojiBoard: null,
-  initGame: (initialBoard: string[][], initialReservedAnimalMaps: Record<Direction, string[][]>, whoIsWin: string, playTimeOffset?: number, boardState?: BoardStateUpdate) => {
+  initGame: (
+    initialBoard: string[][],
+    initialReservedAnimalMaps: Record<Direction, string[][]>,
+    whoIsWin: string,
+    playTimeOffset?: number,
+    boardState?: BoardStateUpdate
+  ) => {
     const startTime = new Date();
     set({ startTime });
 
@@ -95,7 +107,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { board } = get();
     if (!board) return false;
     return board.isWon();
-
   },
 
   getLammaCount: () => {
@@ -122,4 +133,4 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (!board) return null;
     return board.getState();
   },
-})); 
+}));
