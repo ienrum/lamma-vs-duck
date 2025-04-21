@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { BoardCell, boardCellEmoji } from "./constants";
-import { Direction } from "../../cross-pad/model/types";
-import { BoardHistory } from "./board-history";
-import { ReservedAnimalMapsHistory } from "./reserved-animal-maps";
-import { BoardState, BoardStateUpdate, BoardType } from "./types";
+import { BoardCell, boardCellEmoji } from './constants';
+import { Direction } from '../../cross-pad/model/types';
+import { BoardHistory } from './board-history';
+import { ReservedAnimalMapsHistory } from './reserved-animal-maps';
+import { BoardState, BoardStateUpdate, BoardType } from './types';
 
 /**
  * 게임 보드를 관리하는 클래스
@@ -17,7 +17,7 @@ export class Board {
    * @param board 초기 보드 문자열 배열
    * @param reservedAnimalMaps 예약된 동물 맵
    */
-  constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>, whoIsWin: string = "lamma") {
+  constructor(board: string[][], reservedAnimalMaps: Record<Direction, string[][]>, whoIsWin: string = 'lamma') {
     const initialBoard = this.initializeBoard(board);
     const animalCellBoardSize = initialBoard.length;
 
@@ -28,7 +28,7 @@ export class Board {
       board: initialBoard,
       boardSize: animalCellBoardSize,
       boardHistory: animalBoardHistory,
-      whoIsWin: whoIsWin
+      whoIsWin: whoIsWin,
     };
   }
 
@@ -49,8 +49,8 @@ export class Board {
       board: this.state.board,
       boardSize: this.state.boardSize,
       boardHistory: this.state.boardHistory.getBoardHistoryState(),
-      whoIsWin: this.state.whoIsWin
-    }
+      whoIsWin: this.state.whoIsWin,
+    };
   }
 
   /**
@@ -58,9 +58,7 @@ export class Board {
    * @param board 초기 보드 문자열 배열
    */
   private initializeBoard(board: string[][]): BoardType {
-    return board.map((row) =>
-      row.map((cell) => cell as BoardCell)
-    );
+    return board.map((row) => row.map((cell) => cell as BoardCell));
   }
 
   /**
@@ -68,8 +66,7 @@ export class Board {
    * @param direction 방향
    */
   public getEmojiReservedAnimalMaps(direction: Direction): string[] {
-    return this.state.boardHistory.getReservedAnimalMaps(direction)
-      .map((cell: BoardCell) => boardCellEmoji[cell]);
+    return this.state.boardHistory.getReservedAnimalMaps(direction).map((cell: BoardCell) => boardCellEmoji[cell]);
   }
 
   /**
@@ -85,12 +82,12 @@ export class Board {
     let newAnimalBoard: BoardType;
 
     switch (direction) {
-      case "left":
-      case "right":
+      case 'left':
+      case 'right':
         newAnimalBoard = this.moveHorizontal(direction, reservedAnimals);
         break;
-      case "up":
-      case "down":
+      case 'up':
+      case 'down':
         newAnimalBoard = this.moveVertical(direction, reservedAnimals);
         break;
       default:
@@ -100,7 +97,7 @@ export class Board {
     this.state.boardHistory.forwardGame(this.copyBoard(newAnimalBoard), direction);
 
     this.updateState({
-      board: newAnimalBoard
+      board: newAnimalBoard,
     });
   }
 
@@ -109,8 +106,8 @@ export class Board {
    * @param direction 이동 방향 (left 또는 right)
    * @param reservedAnimals 예약된 동물 셀
    */
-  private moveHorizontal(direction: "left" | "right", reservedAnimals: BoardCell[]): BoardType {
-    const isLeft = direction === "left";
+  private moveHorizontal(direction: 'left' | 'right', reservedAnimals: BoardCell[]): BoardType {
+    const isLeft = direction === 'left';
     const startIndex = isLeft ? 1 : 0;
     const endIndex = isLeft ? this.state.boardSize : this.state.boardSize - 1;
 
@@ -118,9 +115,7 @@ export class Board {
       const reservedCell = reservedAnimals[index];
       const shiftedRow = row.slice(startIndex, endIndex);
 
-      return isLeft
-        ? [...shiftedRow, reservedCell]
-        : [reservedCell, ...shiftedRow];
+      return isLeft ? [...shiftedRow, reservedCell] : [reservedCell, ...shiftedRow];
     });
   }
 
@@ -129,15 +124,13 @@ export class Board {
    * @param direction 이동 방향 (up 또는 down)
    * @param reservedAnimals 예약된 동물 셀
    */
-  private moveVertical(direction: "up" | "down", reservedAnimals: BoardCell[]): BoardType {
-    const isUp = direction === "up";
+  private moveVertical(direction: 'up' | 'down', reservedAnimals: BoardCell[]): BoardType {
+    const isUp = direction === 'up';
     const startIndex = isUp ? 1 : 0;
     const endIndex = isUp ? this.state.boardSize : this.state.boardSize - 1;
 
     const movingRows = this.state.board.slice(startIndex, endIndex);
-    return isUp
-      ? [...movingRows, reservedAnimals]
-      : [reservedAnimals, ...movingRows];
+    return isUp ? [...movingRows, reservedAnimals] : [reservedAnimals, ...movingRows];
   }
 
   /**
@@ -156,7 +149,7 @@ export class Board {
 
     const lastSnapshot = this.state.boardHistory.getHistory()[this.state.boardHistory.getHistory().length - 1];
     this.updateState({
-      board: lastSnapshot
+      board: lastSnapshot,
     });
   }
 
@@ -164,9 +157,7 @@ export class Board {
    * 이모지로 변환된 보드 반환
    */
   public getEmojiBoard(): string[][] {
-    return this.state.board.map((row) =>
-      row.map((cell) => boardCellEmoji[cell])
-    );
+    return this.state.board.map((row) => row.map((cell) => boardCellEmoji[cell]));
   }
 
   /**
@@ -207,8 +198,8 @@ export class Board {
   public isWon(): boolean {
     const winnerCell = {
       lamma: BoardCell.Lamma,
-      duck: BoardCell.Duck
-    }[this.state.whoIsWin]
+      duck: BoardCell.Duck,
+    }[this.state.whoIsWin];
     const cellCount = this.state.board.flat().filter((cell) => cell === winnerCell).length;
     const fullOfAnimal = cellCount === this.state.boardSize * this.state.boardSize;
 

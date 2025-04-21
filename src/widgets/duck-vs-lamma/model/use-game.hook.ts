@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { useCrossPadStore } from "@/src/entities/cross-pad/model/store";
-import { useGameStore } from "./store";
-import { useEffect } from "react";
+import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';
+import { useGameStore } from './store';
+import { useEffect } from 'react';
 
 let previousCount = 0;
 
@@ -21,7 +21,7 @@ export const useGame = () => {
     moveAnimalCells,
     endGame,
     score,
-    getBoardState
+    getBoardState,
   } = useGameStore();
 
   const { currentDirection, count } = useCrossPadStore();
@@ -50,7 +50,7 @@ export const useGame = () => {
       duckCount: getDuckCount,
       score,
       boardState: getBoardState,
-      whoIsWin: () => getBoardState()?.whoIsWin || ""
-    }
+      whoIsWin: () => getBoardState()?.whoIsWin || '',
+    },
   };
 };

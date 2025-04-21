@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { useGame } from "../model/use-game.hook";
-import { useParams } from "next/navigation";
-import useGetGameBoard from "@/src/features/game/api/use-get-game-board";
-import Spinner from "@/src/shared/ui/spinner";
-import { useGamePersistence } from "../hooks/use-game-persistence";
-import { useGameSubmission } from "../hooks/use-game-submission";
-import { GameSubmissionForm } from "./GameSubmissionForm";
-import { GameBoardLayout } from "./GameBoardLayout";
-import { useRef } from "react";
+import { useGame } from '../model/use-game.hook';
+import { useParams } from 'next/navigation';
+import useGetGameBoard from '@/src/features/game/api/use-get-game-board';
+import Spinner from '@/src/shared/ui/spinner';
+import { useGamePersistence } from '../hooks/use-game-persistence';
+import { useGameSubmission } from '../hooks/use-game-submission';
+import { GameSubmissionForm } from './GameSubmissionForm';
+import { GameBoardLayout } from './GameBoardLayout';
+import { useRef } from 'react';
 
 const DuckVsLammaBoard = () => {
   const { currentEmojiBoard, gameInfo, reservedAnimalMaps, setBoard, endGame } = useGame();
@@ -24,7 +24,7 @@ const DuckVsLammaBoard = () => {
     boardData: data,
     onGameEnd: () => {
       gameEndRef.current?.requestSubmit();
-    }
+    },
   });
 
   // 게임 제출 로직 관리
