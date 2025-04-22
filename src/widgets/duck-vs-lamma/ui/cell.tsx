@@ -1,5 +1,17 @@
 import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';
 import { motion } from 'framer-motion';
+import { useGame } from '../model/use-game.hook';
+import { BoardType } from '@/src/entities/duck-vs-lamma/model/types';
+import { useEffect } from 'react';
+const positionMap = {
+  up: { x: 0, y: 40 },
+  down: { x: 0, y: -40 },
+  left: { x: 40, y: 0 },
+  right: { x: -40, y: 0 },
+};
+
+let boardHistoryCount = 0;
+let isSameBoardState = false;
 
 const Cell = ({
   cell,
@@ -8,45 +20,33 @@ const Cell = ({
 }: {
   cell: string;
   isAnimalCell: boolean;
-  cellContainerType: 'vertical' | 'horizontal' | 'board';
+  cellContainerType: 'uprow' | 'downrow' | 'leftcol' | 'rightcol' | 'board';
 }) => {
   const { count, currentDirection } = useCrossPadStore();
+  const { gameInfo } = useGame();
 
-  const initialPosition = {
-    up: {
-      x: 0,
-      y: 40,
-    },
-    down: {
-      x: 0,
-      y: -40,
-    },
-    left: {
-      x: 40,
-      y: 0,
-    },
-    right: {
-      x: -40,
-      y: 0,
-    },
-    initial: {
-      x: 0,
-      y: 0,
-    },
-  }[currentDirection || 'initial'];
+  const position = { x: 0, y: 0 };
 
-  const direction = {
-    up: 'vertical',
-    down: 'vertical',
-    left: 'horizontal',
-    right: 'horizontal',
-    initial: 'board',
-  }[currentDirection || 'initial'];
+  const isStucked = currentDirection ? gameInfo.count(currentDirection) === gameInfo.maxCount(currentDirection) : false;
 
-  if (cellContainerType === 'horizontal' && direction === 'vertical') {
-    initialPosition.y = 0;
-  } else if (cellContainerType === 'vertical' && direction === 'horizontal') {
-    initialPosition.x = 0;
+  if (isStucked) {
+    position.x = 0;
+    position.y = 0;
+  } else if (cellContainerType === 'board' && currentDirection) {
+    position.x = positionMap[currentDirection].x;
+    position.y = positionMap[currentDirection].y;
+  } else if (cellContainerType === 'uprow' && currentDirection === 'down') {
+    position.x = 0;
+    position.y = -40;
+  } else if (cellContainerType === 'downrow' && currentDirection === 'up') {
+    position.x = 0;
+    position.y = 40;
+  } else if (cellContainerType === 'leftcol' && currentDirection === 'right') {
+    position.x = -40;
+    position.y = 0;
+  } else if (cellContainerType === 'rightcol' && currentDirection === 'left') {
+    position.x = 40;
+    position.y = 0;
   }
 
   return (
@@ -57,8 +57,8 @@ const Cell = ({
             opacity: 1,
             scale: 1,
             rotate: 0,
-            x: initialPosition.x,
-            y: initialPosition.y,
+            x: position.x,
+            y: position.y,
           }}
           animate={{
             opacity: 1,
@@ -71,12 +71,12 @@ const Cell = ({
             type: 'spring',
             stiffness: 300,
             damping: 30,
-            duration: 0.5,
+            duration: 0.1,
           }}
           whileHover={{
             scale: 1.2,
             rotate: 0,
-            transition: { duration: 0.2 },
+            transition: { duration: 0.1 },
           }}
           key={`${count}-${currentDirection}`}
         >
