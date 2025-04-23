@@ -11,7 +11,9 @@ export async function GET(request: Request) {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
 
-  const { data: { user } } = await getSupabaseUser(supabase)
+  const {
+    data: { user },
+  } = await getSupabaseUser(supabase);
 
   const { searchParams } = new URL(request.url);
   const from = parseInt(searchParams.get('from') || '0');
@@ -20,22 +22,25 @@ export async function GET(request: Request) {
   try {
     let query = supabase
       .from('rank')
-      .select(`
+      .select(
+        `
         id,
         score,
         user_id,
         game_id,
         end_time,
-        user (
+        members (
           id,
-          raw_user_meta_data
+          avatar_url,
+          name,
+          email
         )
-      `)
+      `
+      )
       .range(from, to)
       .order('score', { ascending: true })
       .gte('end_time', `${todayString()} 00:00:00`)
-      .lte('end_time', `${todayString()} 23:59:59`)
-
+      .lte('end_time', `${todayString()} 23:59:59`);
 
     const { data, error } = await query;
 

@@ -24,7 +24,7 @@ const ProfileButton = () => {
     <Select>
       <SelectTrigger>
         <Button variant="ghost" size="icon" className="hover:bg-gray-100" type="button">
-          <Image src={user.user_metadata.avatar_url} alt="profile" width={32} height={32} className="rounded-full" />
+          <Image src={user!.avatar_url} alt="profile" width={32} height={32} className="rounded-full" />
         </Button>
       </SelectTrigger>
       <SelectContent align="end">
