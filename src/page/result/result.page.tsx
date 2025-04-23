@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { Suspense } from "react";
-import dynamic from "next/dynamic";
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 
-const DynamicLeaderBoard = dynamic(() => import("@/src/widgets/leader-board/ui/leader-board"), {
+const DynamicLeaderBoard = dynamic(() => import('@/src/widgets/leader-board/ui/leader-board'), {
   ssr: false,
 });
 
 const LeaderBoardFallback = () => (
-  <div className="w-full h-[60vh] bg-gray-100 animate-pulse rounded-lg flex items-center justify-center">
-    <p className="text-gray-500 font-medium">로딩 중...</p>
+  <div className="flex h-[60vh] w-full animate-pulse items-center justify-center rounded-lg bg-gray-100">
+    <p className="font-medium text-gray-500">로딩 중...</p>
   </div>
 );
 
 const ResultPage = () => {
   return (
-    <div className="flex flex-col gap-4 items-center justify-center w-full h-full p-4">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4">
       {/* <DeviationGraph /> */}
       <Suspense fallback={<LeaderBoardFallback />}>
         <DynamicLeaderBoard />

@@ -1,9 +1,9 @@
-import ResultPage from "@/src/page/result/result.page";
+import ResultPage from '@/src/page/result/result.page';
+
+export const dynamic = 'force-dynamic';
 
 const Page = () => {
-  return (
-    <ResultPage />
-  )
+  return <ResultPage />;
 };
 
 export default Page;
