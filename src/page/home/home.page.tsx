@@ -3,8 +3,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from '@/src/shared/ui/card';
 import { Button } from '@/src/shared/ui/button';
 import { useRouter } from 'next/navigation';
-import { useFocusStore } from '@/src/shared/model/focus.store';
-import { signInTooltipId } from '@/src/widgets/TopBar/ui/ProfileButton';
 import { useUser } from '@/src/shared/api/use-user';
 import useGetGameList from '@/src/features/game/api/use-get-game-list';
 import useGetPlayToday from '@/src/features/game/api/use-get-play-today';
@@ -12,14 +10,13 @@ import { HelpButton } from '@/src/widgets/TopBar/ui/HelpButton';
 
 const HomePage = () => {
   const router = useRouter();
-  const { focus } = useFocusStore();
   const { user } = useUser();
   const { data: gameList } = useGetGameList();
   const { data: isPlayedToday } = useGetPlayToday(!!user);
 
   const handleStartGame = (gameId: number) => {
     if (!user) {
-      focus(signInTooltipId, 'Sign in', 3000);
+      router.push('/signin');
       return;
     }
 
