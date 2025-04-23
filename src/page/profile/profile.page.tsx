@@ -6,6 +6,7 @@ import { Button } from '@/src/shared/ui/button';
 import { useUser } from '@/src/shared/api/use-user';
 import { Card, CardContent, CardHeader, CardTitle } from '@/src/shared/ui/card';
 import { useState } from 'react';
+import { BASE_URL } from '@/src/app/config/baseurl';
 
 const ProfilePage = () => {
   const { user, error } = useUser();
@@ -18,7 +19,7 @@ const ProfilePage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetch('/api/user', {
+    await fetch(`${BASE_URL}/api/user`, {
       method: 'PATCH',
       body: JSON.stringify({ name }),
     });
