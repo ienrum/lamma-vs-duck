@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/src/shared/ui/card';
 import { useState } from 'react';
 
 const ProfilePage = () => {
-  const { data: user, error } = useUser();
+  const { user, error } = useUser();
 
   if (error) {
     throw new Error(error.message);
@@ -18,11 +18,12 @@ const ProfilePage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetch('/api/game/member', {
+    await fetch('/api/user', {
       method: 'PATCH',
       body: JSON.stringify({ name }),
     });
   };
+
   return (
     <Card className="w-full">
       <CardHeader>

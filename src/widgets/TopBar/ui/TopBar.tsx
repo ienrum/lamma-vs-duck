@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { BackButton as BackButtonComponent } from './BackButton';
 import { ProfileLink as ProfileLinkComponent } from './ProfileLink';
 import { StatsLink as StatsLinkComponent } from './StatsLink';
+import ProfileButton from './ProfileButton';
 
 interface TopBarProps {
   children?: ReactNode;
@@ -42,7 +43,7 @@ const BackButton = ({ className }: TopBarChildProps) => {
 };
 
 const ProfileLink = ({ className }: TopBarChildProps) => {
-  return <ProfileLinkComponent />;
+  return <ProfileButton />;
 };
 
 const StatsLink = ({ className }: TopBarChildProps) => {

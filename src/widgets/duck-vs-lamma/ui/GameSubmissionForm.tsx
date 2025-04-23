@@ -1,5 +1,5 @@
 import React from 'react';
-import Spinner from "@/src/shared/ui/spinner";
+import Spinner from '@/src/shared/ui/spinner';
 
 interface GameSubmissionFormProps {
   gameEndRef: React.RefObject<HTMLFormElement | null>;
@@ -14,7 +14,7 @@ export const GameSubmissionForm: React.FC<GameSubmissionFormProps> = ({
   formAction,
   gameId,
   getGameScore,
-  isPending
+  isPending,
 }) => {
   return (
     <>
@@ -22,7 +22,6 @@ export const GameSubmissionForm: React.FC<GameSubmissionFormProps> = ({
         <input type="hidden" name="gameId" value={gameId} />
         <input type="hidden" name="score" value={getGameScore()} />
       </form>
-      {isPending && <Spinner size="lg" className="mx-auto" />}
     </>
   );
-}; 
+};

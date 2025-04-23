@@ -1,19 +1,22 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getSupabaseUser } from "@/src/app/config/get-supabase-user";
-import { createClient } from "@/utils/supabase/client";
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { getSupabaseUser } from '@/src/app/config/get-supabase-user';
+import { createClient } from '@/utils/supabase/client';
+import { BASE_URL } from '@/src/app/config/baseurl';
+import { Member } from '@/app/api/user/route';
+import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
 
 const getUser = async () => {
-  const supabase = createClient()
-  const { data } = await getSupabaseUser(supabase)
+  const response = await fetch(`${BASE_URL}/api/user`);
 
-  return data
+  return response.json() as Promise<BaseResponseDto<Member>>;
 };
 
 export const useUser = () => {
   const { data, isLoading, error } = useSuspenseQuery({
-    queryKey: ["user"],
+    queryKey: ['user'],
     queryFn: () => getUser(),
+    select: (data) => data.data,
   });
 
-  return data
+  return { user: data, isLoading, error };
 };

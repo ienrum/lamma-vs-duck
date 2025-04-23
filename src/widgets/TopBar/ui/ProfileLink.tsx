@@ -1,4 +1,3 @@
-
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import ProfileButton from './ProfileButton';
@@ -7,21 +6,18 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getSupabaseUser } from '@/src/app/config/get-supabase-user';
 
 export const ProfileLink = async () => {
-  const queryClient = getQueryClient()
+  const queryClient = getQueryClient();
+  const cookieStore = await cookies();
+  const supabase = await createClient(cookieStore);
+  const {
+    data: { user },
+  } = await getSupabaseUser(supabase);
 
-  await queryClient.prefetchQuery({
-    queryKey: ['user'],
-    queryFn: async () => {
-      const cookieStore = await cookies()
-      const supabase = await createClient(cookieStore)
-      const { data } = await getSupabaseUser(supabase)
-      return data
-    }
-  })
+  const { data } = await supabase.from('members').select('*').eq('id', user!.id).single();
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ProfileButton />
     </HydrationBoundary>
-  )
-}; 
+  );
+};
