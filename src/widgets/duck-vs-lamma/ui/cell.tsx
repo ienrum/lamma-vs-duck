@@ -1,17 +1,13 @@
 import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';
 import { motion } from 'framer-motion';
 import { useGame } from '../model/use-game.hook';
-import { BoardType } from '@/src/entities/duck-vs-lamma/model/types';
-import { useEffect } from 'react';
+
 const positionMap = {
   up: { x: 0, y: 40 },
   down: { x: 0, y: -40 },
   left: { x: 40, y: 0 },
   right: { x: -40, y: 0 },
 };
-
-let boardHistoryCount = 0;
-let isSameBoardState = false;
 
 const Cell = ({
   cell,

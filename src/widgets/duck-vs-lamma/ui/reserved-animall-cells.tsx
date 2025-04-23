@@ -16,12 +16,14 @@ const ReservedAnimalCells = ({
     direction === 'up' ? 'downrow' : direction === 'down' ? 'uprow' : direction === 'left' ? 'rightcol' : 'leftcol';
 
   return (
-    <div className={cn('flex rounded-md bg-gray-300', isHorizontal ? 'flex-col' : '')}>
-      {reservedAnimalList.map((cell, cellIndex) => (
-        <div key={cellIndex} className="flex h-12 w-12 flex-col items-center justify-evenly rounded-md">
-          <Cell cell={cell} isAnimalCell={animalEmojiCells.includes(cell)} cellContainerType={cellContainerType} />
-        </div>
-      ))}
+    <div className="flex w-full items-center justify-center p-2">
+      <div className={cn('flex w-fit rounded-md bg-gray-300', isHorizontal ? 'flex-col' : '')}>
+        {reservedAnimalList.map((cell, cellIndex) => (
+          <div key={cellIndex} className="flex h-12 w-12 flex-col items-center justify-evenly rounded-md">
+            <Cell cell={cell} isAnimalCell={animalEmojiCells.includes(cell)} cellContainerType={cellContainerType} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
