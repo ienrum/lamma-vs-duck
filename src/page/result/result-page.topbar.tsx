@@ -1,4 +1,4 @@
-import { TopBar } from "@/src/widgets/TopBar/ui/TopBar";
+import { TopBar } from '@/src/widgets/TopBar/ui/TopBar';
 import { RESULT_TITLE } from './constants/result';
 
 const ResultPageTopbar = () => {
@@ -11,7 +11,6 @@ const ResultPageTopbar = () => {
         <TopBar.Title text={RESULT_TITLE} />
       </TopBar.Center>
       <TopBar.Right>
-        <TopBar.HelpButton />
         <TopBar.ProfileLink />
       </TopBar.Right>
     </TopBar>

@@ -1,4 +1,4 @@
-import { TopBar } from "@/src/widgets/TopBar/ui/TopBar";
+import { TopBar } from '@/src/widgets/TopBar/ui/TopBar';
 import { GAME_TITLE } from './constants/game';
 
 const LammaVsDuckTopbar = () => {
@@ -11,7 +11,6 @@ const LammaVsDuckTopbar = () => {
         <TopBar.Title text={GAME_TITLE} />
       </TopBar.Center>
       <TopBar.Right>
-        <TopBar.HelpButton />
         <TopBar.StatsLink />
         <TopBar.ProfileLink />
       </TopBar.Right>

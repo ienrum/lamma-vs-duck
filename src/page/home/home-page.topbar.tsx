@@ -1,5 +1,5 @@
-import { TopBar } from "@/src/widgets/TopBar/ui/TopBar";
-import { TOPBAR_TITLE } from "./constants/topbar";
+import { TopBar } from '@/src/widgets/TopBar/ui/TopBar';
+import { TOPBAR_TITLE } from './constants/topbar';
 
 const HomePageTopbar = () => {
   return (
@@ -8,7 +8,6 @@ const HomePageTopbar = () => {
         <TopBar.Title text={TOPBAR_TITLE} />
       </TopBar.Center>
       <TopBar.Right>
-        <TopBar.HelpButton />
         <TopBar.StatsLink />
         <TopBar.ProfileLink />
       </TopBar.Right>

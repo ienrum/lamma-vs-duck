@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export const BackButton = ({ className, path = '/home' }: { className?: string, path?: string }) => {
+export const BackButton = ({ className, path = '/home' }: { className?: string; path?: string }) => {
   const router = useRouter();
 
   return (
@@ -18,4 +18,4 @@ export const BackButton = ({ className, path = '/home' }: { className?: string, 
       <ArrowLeft className="h-5 w-5" />
     </Button>
   );
-}; 
+};
