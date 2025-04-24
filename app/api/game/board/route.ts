@@ -8,7 +8,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const gameId = searchParams.get('gameId');
 
-    const gameData = generateGameData(6);
+    const gameData = generateGameData(1);
 
     return NextResponse.json<BaseResponseDto<GameBoardResponseDto>>(
       {

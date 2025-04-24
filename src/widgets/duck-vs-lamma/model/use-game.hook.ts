@@ -22,9 +22,14 @@ export const useGame = () => {
     endGame,
     score,
     getBoardState,
+    resetGame,
   } = useGameStore();
 
   const { currentDirection, count } = useCrossPadStore();
+
+  useEffect(() => {
+    resetGame();
+  }, []);
 
   useEffect(() => {
     if (currentDirection && count == previousCount + 1) {

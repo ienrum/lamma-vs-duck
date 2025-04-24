@@ -9,8 +9,10 @@ import { useGameSubmission } from '../hooks/use-game-submission';
 import { GameSubmissionForm } from './GameSubmissionForm';
 import { GameBoardLayout } from './GameBoardLayout';
 import { Suspense, useRef } from 'react';
+import ScoreResult from '../../score-result/score-result';
+import { getQueryClient } from '@/src/app/utils/get-query-client';
 
-const DuckVsLammaBoard = () => {
+const DuckVsLammaBoard = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   const { currentEmojiBoard, gameInfo, reservedAnimalMaps, setBoard, endGame } = useGame();
   const gameId = Number(useParams().gameId);
   const gameEndRef = useRef<HTMLFormElement>(null);
@@ -18,12 +20,17 @@ const DuckVsLammaBoard = () => {
 
   // 게임 상태 지속성 관리
   const { getGameScore } = useGamePersistence({
+    isAuthenticated,
     gameInfo,
     endGame,
     setBoard,
     boardData: data,
     onGameEnd: () => {
+      if (!isAuthenticated) {
+        return;
+      }
       gameEndRef.current?.requestSubmit();
+      getQueryClient().invalidateQueries({ queryKey: ['gameBoard', gameId] });
     },
   });
 
@@ -32,31 +39,24 @@ const DuckVsLammaBoard = () => {
     gameId,
     getGameScore,
   });
-
-  if (!currentEmojiBoard) {
-    return <Spinner size="lg" className="mx-auto" />;
-  }
-
   if (error) {
     return <div>{error}</div>;
   }
 
   return (
-    <Suspense fallback={<Spinner size="lg" className="mx-auto" />}>
-      <GameSubmissionForm
-        gameEndRef={gameEndRef}
-        formAction={formAction}
-        gameId={gameId}
-        getGameScore={getGameScore}
-        isPending={isPending}
-      />
+    <>
+      <ScoreResult isAuthenticated={isAuthenticated} open={gameInfo.isWon() && !isAuthenticated} />
 
-      <GameBoardLayout
-        currentEmojiBoard={currentEmojiBoard}
-        gameInfo={gameInfo}
-        reservedAnimalMaps={reservedAnimalMaps}
-      />
-    </Suspense>
+      <GameSubmissionForm gameEndRef={gameEndRef} formAction={formAction} gameId={gameId} getGameScore={getGameScore} />
+      <Spinner size="lg" className={currentEmojiBoard && !isPending ? 'hidden' : ''} />
+      {currentEmojiBoard && (
+        <GameBoardLayout
+          currentEmojiBoard={currentEmojiBoard}
+          gameInfo={gameInfo}
+          reservedAnimalMaps={reservedAnimalMaps}
+        />
+      )}
+    </>
   );
 };
 

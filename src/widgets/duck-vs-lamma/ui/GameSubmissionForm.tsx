@@ -6,7 +6,6 @@ interface GameSubmissionFormProps {
   formAction: (formData: FormData) => void;
   gameId: number;
   getGameScore: () => string;
-  isPending: boolean;
 }
 
 export const GameSubmissionForm: React.FC<GameSubmissionFormProps> = ({
@@ -14,7 +13,6 @@ export const GameSubmissionForm: React.FC<GameSubmissionFormProps> = ({
   formAction,
   gameId,
   getGameScore,
-  isPending,
 }) => {
   return (
     <>

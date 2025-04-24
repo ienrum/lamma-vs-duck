@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -9,14 +11,14 @@ export interface SpinnerProps {
 const sizeClasses = {
   sm: 'w-4 h-4',
   md: 'w-8 h-8',
-  lg: 'w-12 h-12'
+  lg: 'w-12 h-12',
 };
 
 export const Spinner: FC<SpinnerProps> = ({ size = 'md', className }) => {
   return (
     <div
       className={twMerge(
-        'animate-spin rounded-full border-4 border-primary-DEFAULT border-t-transparent',
+        'border-primary-DEFAULT animate-spin rounded-full border-4 border-t-transparent',
         sizeClasses[size],
         className
       )}

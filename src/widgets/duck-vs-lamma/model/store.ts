@@ -31,6 +31,8 @@ interface GameState {
   getDuckCount: () => number;
   endGame: (endTime: Date) => void;
   getBoardState: () => BoardStateUpdate | null;
+  // 게임 초기화
+  resetGame: () => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -132,5 +134,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { board } = get();
     if (!board) return null;
     return board.getState();
+  },
+
+  resetGame: () => {
+    set({ startTime: new Date(), endTime: null, playTimeOffset: 0, score: 0 });
   },
 }));

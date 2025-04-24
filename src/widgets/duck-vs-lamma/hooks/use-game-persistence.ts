@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { BoardStateUpdate } from "@/src/entities/duck-vs-lamma/model/types";
-import { getLocalStorage, removeLocalStorage, setLocalStorage } from "@/src/shared/util/localstorage-utils";
+import { useEffect, useRef } from 'react';
+import { BoardStateUpdate } from '@/src/entities/duck-vs-lamma/model/types';
+import { getLocalStorage, removeLocalStorage, setLocalStorage } from '@/src/shared/util/localstorage-utils';
 
 export interface GameState {
   score: number;
@@ -8,6 +8,7 @@ export interface GameState {
 }
 
 interface UseGamePersistenceProps {
+  isAuthenticated: boolean;
   gameInfo: {
     playTime: () => number;
     boardState: () => BoardStateUpdate | null;
@@ -19,7 +20,7 @@ interface UseGamePersistenceProps {
     reservedAnimalMaps: any,
     whoIsWin: string,
     score?: number,
-    boardState?: BoardStateUpdate,
+    boardState?: BoardStateUpdate
   ) => void;
   boardData: {
     board: any;
@@ -34,15 +35,14 @@ interface UseGamePersistenceReturn {
   clearGameState: () => void;
 }
 
-let persistenceTimer: NodeJS.Timeout;
-
 export const useGamePersistence = ({
   gameInfo,
   endGame,
   setBoard,
   boardData,
-  onGameEnd
+  onGameEnd,
 }: UseGamePersistenceProps): UseGamePersistenceReturn => {
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // 게임 상태 초기 로드
   useEffect(() => {
@@ -51,9 +51,9 @@ export const useGamePersistence = ({
       setBoard(
         boardData.board,
         boardData.reservedAnimalMaps,
-        gameState.boardState.whoIsWin || "lamma",
+        gameState.boardState.whoIsWin || 'lamma',
         Number(gameState.score),
-        gameState.boardState,
+        gameState.boardState
       );
     } else {
       setBoard(boardData.board, boardData.reservedAnimalMaps, boardData.whoIsWin);
@@ -62,7 +62,7 @@ export const useGamePersistence = ({
 
   // 게임 상태 주기적 저장
   useEffect(() => {
-    persistenceTimer = setInterval(() => {
+    const timer = setInterval(() => {
       const playTime = gameInfo.playTime();
       const boardState = gameInfo.boardState();
 
@@ -73,9 +73,15 @@ export const useGamePersistence = ({
         });
       }
     }, 1000);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    timerRef.current = timer;
 
     return () => {
-      clearInterval(persistenceTimer);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     };
   }, []);
 
@@ -83,11 +89,19 @@ export const useGamePersistence = ({
   // 게임 승리 시 처리
   useEffect(() => {
     if (isWon) {
-      clearInterval(persistenceTimer);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
       endGame(new Date());
       removeLocalStorage('gameState');
       onGameEnd();
     }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
   }, [isWon]);
 
   // 게임 점수 가져오기
@@ -102,6 +116,6 @@ export const useGamePersistence = ({
 
   return {
     getGameScore,
-    clearGameState
+    clearGameState,
   };
-}; 
+};
