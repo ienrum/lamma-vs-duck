@@ -5,23 +5,16 @@ import { Button } from '@/src/shared/ui/button';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/src/shared/api/use-user';
 import useGetGameList from '@/src/features/game/api/use-get-game-list';
-import useGetPlayToday from '@/src/features/game/api/use-get-play-today';
 import { HelpButton } from '@/src/widgets/TopBar/ui/HelpButton';
 
 const HomePage = () => {
   const router = useRouter();
   const { user } = useUser();
   const { data: gameList } = useGetGameList();
-  const { data: isPlayedToday } = useGetPlayToday(!!user);
 
   const handleStartGame = (gameId: number) => {
     if (!user) {
       router.push('/signin');
-      return;
-    }
-
-    if (isPlayedToday) {
-      router.push('/result');
       return;
     }
 
