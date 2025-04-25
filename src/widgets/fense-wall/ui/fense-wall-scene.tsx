@@ -7,6 +7,7 @@ import { width, height } from '../config/constants';
 import { Button } from '@/components/ui/button';
 import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';
 import { CrossPad } from '@/src/features/cross-pad/ui/CrossPad';
+
 export interface IRefPhaserGame {
   game: Game | null;
   scene: Scene | null;
