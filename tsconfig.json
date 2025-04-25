@@ -22,6 +22,9 @@
       "@/*": ["./*"]
     }
   },
+  "lib": ["es6", "dom", "dom.iterable", "scripthost"],
+  "typeRoots": ["./node_modules/phaser/types"],
+  "types": ["Phaser"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
