@@ -8,7 +8,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {/* Google tag (gtag.js) event */}
       <Script id="gtag-event">
         {`
-        gtag('event', 'ads_conversion__https_lamma_vs_duck_ve_2', {
+        gtag('event', 'homepage', {
           // <event_parameters>
         });
       `}
