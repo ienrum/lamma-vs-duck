@@ -1,18 +1,9 @@
-
-
-export const timeData = [
-  { time: 1, value: 1 },
-  { time: 2, value: 2 },
-  { time: 3, value: 33 },
-  { time: 4, value: 4 },
-  { time: 5, value: 70 },
-  { time: 6, value: 60 },
-  { time: 7, value: 7 },
-  { time: 8, value: 8 },
-  { time: 9, value: 90 },
-  { time: 10, value: 10 },
+export const sortedScoreData = [
+  1000, 1300, 1699, 2000, 2300, 2699, 3000, 3300, 3699, 4000, 4300, 4699, 5000, 5300, 5699, 6000, 6300,
 ];
 
-export const myTime = 3;
-
-export const totalPlayers = timeData.reduce((acc, curr) => acc + curr.value, 0);
+export const myTime = 2000;
+const totalPlayers = sortedScoreData.length;
+const lowerScorePlayersThenMe = sortedScoreData.filter((score) => score > myTime).length;
+const sameScorePlayers = sortedScoreData.filter((score) => score === myTime).length;
+export const myPercentage = ((lowerScorePlayersThenMe + 0.5 * sameScorePlayers) / totalPlayers) * 100;

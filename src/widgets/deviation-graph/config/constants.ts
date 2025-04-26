@@ -1,1 +1,1 @@
-export const PERCENTAGE_SENTENCE = "You are in the top";
+export const PERCENTAGE_SENTENCE = 'Today, you are in the TOP';
