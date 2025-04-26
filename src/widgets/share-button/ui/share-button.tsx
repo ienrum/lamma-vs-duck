@@ -34,7 +34,7 @@ export const ShareButton = ({ targetRef }: ShareButtonProps) => {
       if (navigator.share) {
         await navigator.share({
           files: [new File([blob], 'deviation-graph.png', { type: 'image/png' })],
-          title: `Today&apos;s Result
+          title: `Today's Best Result
             https://lamma-vs-duck.vercel.app/game/1
           `,
         });
