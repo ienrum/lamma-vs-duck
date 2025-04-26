@@ -21,7 +21,6 @@ const ResultPage = () => {
   const graphRef = useRef<HTMLDivElement>(null);
   const queryClient = getQueryClient();
   queryClient.invalidateQueries({ queryKey: ['deviation'] });
-  queryClient.prefetchQuery({ queryKey: ['deviation'] });
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4">
