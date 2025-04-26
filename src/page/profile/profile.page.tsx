@@ -7,9 +7,12 @@ import { useUser } from '@/src/shared/api/use-user';
 import { Card, CardContent, CardHeader, CardTitle } from '@/src/shared/ui/card';
 import { useState } from 'react';
 import { BASE_URL } from '@/src/app/config/baseurl';
+import { getQueryClient } from '@/src/app/utils/get-query-client';
+import { useUpdateName } from './api/use-update-name';
 
 const ProfilePage = () => {
   const { user, error } = useUser();
+  const { mutate, isPending, error: updateNameError } = useUpdateName();
 
   if (error) {
     throw new Error(error.message);
@@ -19,10 +22,7 @@ const ProfilePage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetch(`${BASE_URL}/api/user`, {
-      method: 'PATCH',
-      body: JSON.stringify({ name }),
-    });
+    mutate(name);
   };
 
   return (
@@ -36,7 +36,9 @@ const ProfilePage = () => {
             <Label htmlFor="name">Name</Label>
             <div className="flex gap-2">
               <Input type="text" className="w-full" value={name} onChange={(e) => setName(e.target.value)} />
-              <Button type="submit">Save</Button>
+              <Button type="submit" disabled={isPending}>
+                {isPending ? 'Saving...' : 'Save'}
+              </Button>
             </div>
           </div>
         </form>

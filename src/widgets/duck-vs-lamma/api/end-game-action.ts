@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { todayString } from '@/src/shared/config/today-string';
 import { redirect } from 'next/navigation';
+import { getQueryClient } from '@/src/app/utils/get-query-client';
 
 export async function endGameAction(prevState: any, formData: FormData) {
   const gameId = formData.get('gameId')?.toString();
@@ -62,6 +63,8 @@ export async function endGameAction(prevState: any, formData: FormData) {
       return { error: 'Rank insert failed' };
     }
   }
+
+  getQueryClient().invalidateQueries({ queryKey: ['deviation'] });
 
   redirect('/result');
 }

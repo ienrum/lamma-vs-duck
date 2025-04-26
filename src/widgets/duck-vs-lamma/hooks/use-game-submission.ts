@@ -1,6 +1,6 @@
-import { useRef } from "react";
-import { useActionState } from "react";
-import { endGameAction } from "../api/end-game-action";
+import { useRef } from 'react';
+import { useActionState } from 'react';
+import { endGameAction } from '../api/end-game-action';
 
 interface UseGameSubmissionProps {
   gameId: number;
@@ -13,10 +13,7 @@ interface UseGameSubmissionReturn {
   error: string | null;
 }
 
-export const useGameSubmission = ({
-  gameId,
-  getGameScore
-}: UseGameSubmissionProps): UseGameSubmissionReturn => {
+export const useGameSubmission = ({ gameId, getGameScore }: UseGameSubmissionProps): UseGameSubmissionReturn => {
   const [state, formAction, isPending] = useActionState(endGameAction, null);
 
   const error = state?.error || null;
@@ -24,6 +21,6 @@ export const useGameSubmission = ({
   return {
     formAction,
     isPending,
-    error
+    error,
   };
-}; 
+};
