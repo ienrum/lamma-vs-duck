@@ -1,10 +1,11 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import DeviationGraph from '@/src/widgets/deviation-graph/ui/standard-deviation-graph';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/src/app/utils/get-query-client';
+import { ShareButton } from '@/src/widgets/share-button/ui/share-button';
 
 const DynamicLeaderBoard = dynamic(() => import('@/src/widgets/leader-board/ui/leader-board'), {
   ssr: false,
@@ -17,6 +18,7 @@ const LeaderBoardFallback = () => (
 );
 
 const ResultPage = () => {
+  const graphRef = useRef<HTMLDivElement>(null);
   const queryClient = getQueryClient();
   queryClient.invalidateQueries({ queryKey: ['deviation'] });
   queryClient.prefetchQuery({ queryKey: ['deviation'] });
@@ -24,9 +26,14 @@ const ResultPage = () => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <Suspense fallback={<LeaderBoardFallback />}>
-          <DeviationGraph />
-        </Suspense>
+        <div className="relative w-full">
+          <div ref={graphRef} className="rounded-lg bg-white p-4">
+            <Suspense fallback={<LeaderBoardFallback />}>
+              <DeviationGraph />
+            </Suspense>
+          </div>
+          <ShareButton targetRef={graphRef} />
+        </div>
       </HydrationBoundary>
     </div>
   );

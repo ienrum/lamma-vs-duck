@@ -73,8 +73,8 @@ const DeviationGraph = () => {
   const userPoint = chartData[userPointIndex];
 
   return (
-    <Card>
-      <CardContent>
+    <Card className="bg-white shadow-lg">
+      <CardContent className="p-6">
         <ChartContainer config={{}}>
           <LineChart
             data={chartData}
@@ -85,14 +85,35 @@ const DeviationGraph = () => {
               bottom: 20,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="x" domain={[0, 100]} tickFormatter={(value) => value.toFixed(1)} />
-            <YAxis tickFormatter={(value) => value.toFixed(1)} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
+            <XAxis
+              dataKey="x"
+              domain={[0, 100]}
+              tickFormatter={(value) => value.toFixed(1)}
+              stroke="#9ca3af"
+              strokeWidth={1}
+              tick={{ fontSize: 12, fontWeight: 400 }}
+            />
+            <YAxis
+              tickFormatter={(value) => value.toFixed(1)}
+              stroke="#9ca3af"
+              strokeWidth={1}
+              tick={{ fontSize: 12, fontWeight: 400 }}
+            />
             <Tooltip
               formatter={(value: number) => [value.toFixed(1), 'Density']}
               labelFormatter={(label) => `Score: ${label.toFixed(1)}`}
+              contentStyle={{
+                backgroundColor: 'white',
+                border: '1px solid #e5e7eb',
+                borderRadius: '6px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                padding: '8px 12px',
+                fontSize: '13px',
+                fontWeight: 400,
+              }}
             />
-            <Line type="monotone" dataKey="y" stroke="#8884d8" dot={false} />
+            <Line type="monotone" dataKey="y" stroke="#4b5563" strokeWidth={2} dot={false} activeDot={{ r: 6 }} />
             <Line
               type="monotone"
               dataKey="y"
@@ -101,8 +122,18 @@ const DeviationGraph = () => {
                 if (index === userPointIndex) {
                   return (
                     <g>
-                      <circle cx={cx} cy={cy} r={6} fill="red" />
-                      <text x={cx} y={cy - 10} textAnchor="middle" fill="red" style={{ fontWeight: 'bold' }}>
+                      <circle cx={cx} cy={cy} r={6} fill="#374151" stroke="white" strokeWidth={1.5} />
+                      <text
+                        x={cx}
+                        y={cy - 14}
+                        textAnchor="middle"
+                        fill="#374151"
+                        style={{
+                          fontWeight: 500,
+                          fontSize: '13px',
+                          textShadow: '0 1px 2px rgba(255,255,255,0.8)',
+                        }}
+                      >
                         You
                       </text>
                     </g>
@@ -114,9 +145,10 @@ const DeviationGraph = () => {
           </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          {PERCENTAGE_SENTENCE} {data?.myPercentage.toFixed(1)}% <TrendingUp className="h-4 w-4" />
+      <CardFooter className="border-t p-6">
+        <div className="flex items-center gap-2 text-base font-medium text-gray-700">
+          {PERCENTAGE_SENTENCE} <span className="text-gray-900">{data?.myPercentage.toFixed(1)}%</span>
+          <TrendingUp className="h-5 w-5 text-gray-600" />
         </div>
       </CardFooter>
     </Card>
