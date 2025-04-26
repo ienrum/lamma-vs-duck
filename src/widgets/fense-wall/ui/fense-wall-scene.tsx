@@ -7,6 +7,8 @@ import { width, height } from '../config/constants';
 import { Button } from '@/components/ui/button';
 import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';
 import { CrossPad } from '@/src/features/cross-pad/ui/CrossPad';
+import HealthBar from '@/src/features/health-bar/health-bar';
+import { cn } from '@/lib/utils';
 
 export interface IRefPhaserGame {
   game: Game | null;
@@ -21,6 +23,8 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
   const game = useRef<Game | null>(null);
   const [count, setCount] = useState(0);
   const { currentDirection } = useCrossPadStore();
+  const [health, setHealth] = useState({ health: 100, maxHealth: 100 });
+  const fenseWallScene = game.current?.scene.getScene('FenseWall') as FenseWall;
 
   useEffect(() => {
     if (game.current === null) {
@@ -55,10 +59,9 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
         game.current = null;
       }
     };
-  }, [ref, count]);
+  }, [ref, count, fenseWallScene]);
 
   useEffect(() => {
-    console.log(currentDirection);
     if (game.current) {
       if (currentDirection === 'left') {
         (game.current.scene.getScene('FenseWall') as FenseWall).moveLeft();
@@ -72,6 +75,15 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
     }
   }, [currentDirection]);
 
+  useEffect(() => {
+    console.log(fenseWallScene);
+    if (fenseWallScene) {
+      fenseWallScene.onHealthChange((health, maxHealth) => {
+        setHealth({ health, maxHealth });
+      });
+    }
+  }, [fenseWallScene]);
+
   return (
     <>
       <Button
@@ -82,7 +94,13 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
         reload
       </Button>
       <div className="flex flex-col items-center justify-center gap-8">
-        <div className="flex flex-col items-center justify-center">
+        <HealthBar health={health.health} maxHealth={health.maxHealth} />
+        {/**블러 처리 게임 오버시 */}
+        <div
+          className={cn('flex flex-col items-center justify-center', {
+            blur: fenseWallScene?.isGameOver(), // 게임 오버 상태일 때 블러 처리
+          })}
+        >
           <div
             id="fense-wall-game"
             style={{ width: width + 2, height: height + 2 }}

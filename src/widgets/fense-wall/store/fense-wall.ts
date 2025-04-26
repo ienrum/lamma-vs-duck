@@ -38,6 +38,7 @@ export class FenseWall extends Scene {
   private enemySpawnIndicators: GameObjects.Group = new GameObjects.Group(this);
   private nextEnemySpawns: { position: { x: number; y: number }; type: 'duck' | 'lamma'; time: number }[] = [];
   private spawnIndicatorDuration: number = 2000; // 2초 동안 표시
+  private healthChangeHandler: ((health: number, maxHealth: number) => void) | null = null;
 
   constructor() {
     super({ key: 'FenseWall' });
@@ -80,7 +81,6 @@ export class FenseWall extends Scene {
 
     // 체력바 생성
     this.healthBar = this.add.graphics();
-    this.updateHealthBar();
 
     // 적 스폰 인디케이터 그룹 생성
     this.enemySpawnIndicators = this.add.group();
@@ -206,29 +206,15 @@ export class FenseWall extends Scene {
     b.body.setVelocity(bVectorX * this.collisionForce, bVectorY * this.collisionForce);
   }
 
-  private updateHealthBar() {
-    this.healthBar.clear();
-
-    // 배경 (빨간색)
-    this.healthBar.fillStyle(0xff0000);
-    this.healthBar.fillRect(this.healthBarX, this.healthBarY, this.healthBarWidth, this.healthBarHeight);
-
-    // 체력 (초록색)
-    this.healthBar.fillStyle(0x00ff00);
-    this.healthBar.fillRect(
-      this.healthBarX,
-      this.healthBarY,
-      (this.health / this.maxHealth) * this.healthBarWidth,
-      this.healthBarHeight
-    );
-  }
-
   private handlePlayerDuckCollision(player: any, duck: any) {
     // 플레이어와 오리 충돌 처리
     console.log('플레이어와 오리 충돌!');
     this.health -= 10;
-    this.updateHealthBar();
     this.handleCollision(player, duck);
+
+    if (this.healthChangeHandler) {
+      this.healthChangeHandler(this.health, this.maxHealth);
+    }
 
     if (this.health <= 0) {
       console.log('게임 오버!');
@@ -240,8 +226,11 @@ export class FenseWall extends Scene {
     // 플레이어와 라마 충돌 처리
     console.log('플레이어와 라마 충돌!');
     this.health -= 10;
-    this.updateHealthBar();
     this.handleCollision(player, lamma);
+
+    if (this.healthChangeHandler) {
+      this.healthChangeHandler(this.health, this.maxHealth);
+    }
 
     if (this.health <= 0) {
       this.gameOver = true;
@@ -278,14 +267,12 @@ export class FenseWall extends Scene {
 
     // 체력 회복
     this.health = Math.min(this.health + 5, this.maxHealth);
-    this.updateHealthBar();
   }
 
   private handleHeartCollision(player: any, heart: any) {
     // 하트와 플레이어 충돌 처리
     console.log('하트와 플레이어 충돌!');
     this.health = Math.min(this.health + 10, this.maxHealth);
-    this.updateHealthBar();
     heart.destroy();
   }
 
@@ -420,15 +407,12 @@ export class FenseWall extends Scene {
     return this.gameOver;
   }
 
-  public getHealth() {
-    return {
-      health: this.health,
-      maxHealth: this.maxHealth,
-    };
+  public onHealthChange(cb: (health: number, maxHealth: number) => void) {
+    this.healthChangeHandler = cb;
   }
 
   // 씬이 파괴될 때 정리 작업
-  destroy() {
+  public destroy() {
     // 모든 이벤트 리스너 제거
     if (this.input.keyboard) {
       this.input.keyboard.removeAllKeys();
@@ -448,5 +432,9 @@ export class FenseWall extends Scene {
     // 스폰 인디케이터 제거
     this.enemySpawnIndicators.getChildren().forEach((indicator) => indicator.destroy());
     this.enemySpawnIndicators = this.add.group();
+
+    this.healthChangeHandler = null;
+    this.health = 100;
+    this.maxHealth = 100;
   }
 }
