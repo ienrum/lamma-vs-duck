@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter } from '@/src/shared/ui/card';
 import { ChartContainer } from '@/components/ui/chart';
 import { PERCENTAGE_SENTENCE } from '../config/constants';
 import { useGetDeviation } from '../api/use-get-deviation';
+import Spinner from '@/src/shared/ui/spinner';
 
 // 정규분포 데이터 생성 함수
 const generateNormalDistribution = (mean: number, stdDev: number, points: number) => {
@@ -25,7 +26,13 @@ const generateNormalDistribution = (mean: number, stdDev: number, points: number
 const DeviationGraph = () => {
   const { data, isLoading, error } = useGetDeviation();
 
-  console.log(error);
+  if (isLoading) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
   if (error?.message === 'Failed to get rank') {
     return (
       <div className="flex h-full w-full items-center justify-center">
