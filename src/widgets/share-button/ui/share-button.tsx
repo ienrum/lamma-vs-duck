@@ -34,7 +34,9 @@ export const ShareButton = ({ targetRef }: ShareButtonProps) => {
       if (navigator.share) {
         await navigator.share({
           files: [new File([blob], 'deviation-graph.png', { type: 'image/png' })],
-          title: '내 성과 공유하기',
+          title: `Today&apos;s Result
+            https://lamma-vs-duck.vercel.app/game/1
+          `,
         });
       } else {
         // 공유 API를 지원하지 않는 경우 다운로드
