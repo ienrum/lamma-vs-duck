@@ -23,7 +23,6 @@ export const useGetDeviation = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['deviation'],
     queryFn: () => getDeviation(),
-    retry: false,
   });
 
   return {
