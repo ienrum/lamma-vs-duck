@@ -35,6 +35,7 @@ export async function endGameAction(prevState: any, formData: FormData) {
     .eq('user_id', user.id)
     .gte('end_time', `${today} 00:00:00`)
     .lte('end_time', `${today} 23:59:59`)
+    .eq('game_id', gameId)
     .single();
 
   let compareScore = false;

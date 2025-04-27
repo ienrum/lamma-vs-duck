@@ -19,7 +19,7 @@ export const HorizontalPad = ({ className }: HorizontalPadProps) => {
   };
 
   return (
-    <div className={cn('flex h-12 w-24 gap-2', className)}>
+    <div className={cn('flex h-12 w-full justify-center gap-16', className)}>
       <Button
         color="crossPad"
         onClick={handleButtonClick('left')}
