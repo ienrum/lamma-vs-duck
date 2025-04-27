@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';
 import { CrossPad } from '@/src/features/cross-pad/ui/CrossPad';
 import HealthBar from '@/src/features/health-bar/health-bar';
+import ScoreBoard from '@/src/features/score-board/score-board';
 import { cn } from '@/lib/utils';
 
 export interface IRefPhaserGame {
@@ -24,7 +25,8 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
   const [count, setCount] = useState(0);
   const { currentDirection } = useCrossPadStore();
   const [health, setHealth] = useState({ health: 100, maxHealth: 100 });
-  const fenseWallScene = game.current?.scene.getScene('FenseWall') as FenseWall;
+  const [score, setScore] = useState({ score: 0, highScore: 0 });
+  const [isGameReady, setIsGameReady] = useState(false);
 
   useEffect(() => {
     if (game.current === null) {
@@ -46,6 +48,22 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
 
       game.current = new Game(config);
 
+      game.current.events.once('ready', () => {
+        const scene = game.current?.scene.getScene('FenseWall') as FenseWall;
+        if (scene) {
+          console.log('게임 씬 초기화 완료');
+          scene.onHealthChange((health, maxHealth) => {
+            console.log('체력 변경 감지:', { health, maxHealth });
+            setHealth({ health, maxHealth });
+          });
+          scene.onScoreChange((score, highScore) => {
+            console.log('점수 변경 감지:', { score, highScore });
+            setScore({ score, highScore });
+          });
+          setIsGameReady(true);
+        }
+      });
+
       if (typeof ref === 'function') {
         ref({ game: game.current, scene: null });
       } else if (ref) {
@@ -59,30 +77,22 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
         game.current = null;
       }
     };
-  }, [ref, count, fenseWallScene]);
+  }, [ref, count]);
 
   useEffect(() => {
-    if (game.current) {
+    if (game.current && isGameReady) {
+      const scene = game.current.scene.getScene('FenseWall') as FenseWall;
       if (currentDirection === 'left') {
-        (game.current.scene.getScene('FenseWall') as FenseWall).moveLeft();
+        scene.moveLeft();
       } else if (currentDirection === 'right') {
-        (game.current.scene.getScene('FenseWall') as FenseWall).moveRight();
+        scene.moveRight();
       } else if (currentDirection === 'up') {
-        (game.current.scene.getScene('FenseWall') as FenseWall).moveUp();
+        scene.moveUp();
       } else if (currentDirection === 'down') {
-        (game.current.scene.getScene('FenseWall') as FenseWall).moveDown();
+        scene.moveDown();
       }
     }
-  }, [currentDirection]);
-
-  useEffect(() => {
-    console.log(fenseWallScene);
-    if (fenseWallScene) {
-      fenseWallScene.onHealthChange((health, maxHealth) => {
-        setHealth({ health, maxHealth });
-      });
-    }
-  }, [fenseWallScene]);
+  }, [currentDirection, isGameReady]);
 
   return (
     <>
@@ -94,13 +104,12 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
         reload
       </Button>
       <div className="flex flex-col items-center justify-center gap-8">
-        <HealthBar health={health.health} maxHealth={health.maxHealth} />
+        <div className="flex flex-col gap-4">
+          <ScoreBoard score={score.score} highScore={score.highScore} />
+          <HealthBar health={health.health} maxHealth={health.maxHealth} />
+        </div>
         {/**블러 처리 게임 오버시 */}
-        <div
-          className={cn('flex flex-col items-center justify-center', {
-            blur: fenseWallScene?.isGameOver(), // 게임 오버 상태일 때 블러 처리
-          })}
-        >
+        <div className={cn('flex flex-col items-center justify-center')}>
           <div
             id="fense-wall-game"
             style={{ width: width + 2, height: height + 2 }}
