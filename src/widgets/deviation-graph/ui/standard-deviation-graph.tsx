@@ -8,6 +8,7 @@ import { ChartContainer } from '@/components/ui/chart';
 import { PERCENTAGE_SENTENCE } from '../config/constants';
 import { useGetDeviation } from '../api/use-get-deviation';
 import Spinner from '@/src/shared/ui/spinner';
+import formatTime from '@/src/shared/util/format-time';
 
 // 정규분포 데이터 생성 함수
 const generateNormalDistribution = (mean: number, stdDev: number, points: number) => {
@@ -154,7 +155,7 @@ const DeviationGraph = () => {
       </CardContent>
       <CardFooter className="border-t p-6">
         <div className="flex items-center gap-2 text-base font-medium text-gray-700">
-          <span className="text-gray-900">today&apos;s best score: {data?.myScore}</span>
+          <span className="text-gray-900">today&apos;s best score: {formatTime(data?.myScore)}</span>
           {PERCENTAGE_SENTENCE} <span className="text-gray-900">{data?.myPercentage.toFixed(1)}%</span>
           <TrendingUp className="h-5 w-5 text-gray-600" />
         </div>
