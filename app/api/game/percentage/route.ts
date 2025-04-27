@@ -9,6 +9,8 @@ import { NextResponse } from 'next/server';
 export const GET = async (req: Request) => {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
+  const { searchParams } = new URL(req.url);
+  const gameId = searchParams.get('gameId') || '';
 
   const {
     data: { user },
@@ -26,11 +28,16 @@ export const GET = async (req: Request) => {
 
   const today = todayString();
 
-  const { data, error } = await supabase.from('rank').select('score').order('score', { ascending: false });
+  const { data, error } = await supabase
+    .from('rank')
+    .select('score')
+    .eq('game_id', gameId)
+    .order('score', { ascending: false });
   const { data: myScore, error: myScoreError } = await supabase
     .from('rank')
     .select('score')
     .eq('user_id', user.id)
+    .eq('game_id', gameId)
     .lte('end_time', `${today} 23:59:59`)
     .gte('end_time', `${today} 00:00:00`)
     .single();
@@ -55,8 +62,17 @@ export const GET = async (req: Request) => {
     );
   }
 
+  const orderBy = gameId === '1' ? 'asc' : gameId === '2' ? 'desc' : 'desc';
+
   const totalPlayers = data?.length ?? 0;
-  const lowerScorePlayersThenMe = data?.filter(({ score }) => score > myScore.score).length ?? 0;
+  const lowerScorePlayersThenMe =
+    data?.filter(({ score }) => {
+      if (orderBy === 'desc') {
+        return score < myScore.score;
+      } else {
+        return score > myScore.score;
+      }
+    }).length ?? 0;
   const sameScorePlayers = data?.filter(({ score }) => score === myScore.score).length ?? 0;
   const myPercentage = ((lowerScorePlayersThenMe + 0.5 * sameScorePlayers) / totalPlayers) * 100;
 

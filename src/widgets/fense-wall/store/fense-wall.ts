@@ -40,7 +40,7 @@ export class FenseWall extends Scene {
   private spawnIndicatorDuration: number = 2000;
   private healthChangeHandler: ((health: number, maxHealth: number) => void) | null = null;
   private rotationSpeed: number = 4;
-  private isRotatingLeft: boolean = true;
+  private isRotatingLeft: boolean = false;
   private isRotatingRight: boolean = false;
   private playerPath: { x: number; y: number }[] = [];
   private maxPathLength: number = 15;
@@ -424,11 +424,11 @@ export class FenseWall extends Scene {
     }
     if (this.collidedEnemies.has(enemy)) {
       this.collidedEnemies.delete(enemy);
+      this.score = Math.max(0, this.score - 10);
     }
     this.playDeathAnimation(enemy);
     stone.destroy();
 
-    this.score = Math.max(0, this.score - 10);
     this.updateScore();
   }
 

@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { DeviationGraphResponseDto } from '../model/dto';
 import { BASE_URL } from '@/src/app/config/baseurl';
 
-const getDeviation = async (): Promise<DeviationGraphResponseDto> => {
+const getDeviation = async (gameId: string): Promise<DeviationGraphResponseDto> => {
   try {
-    const response = await fetch(`${BASE_URL}/api/game/percentage`);
+    const response = await fetch(`${BASE_URL}/api/game/percentage?gameId=${gameId}`);
 
     if (!response.ok) {
       const data = await response.json();
@@ -19,10 +19,10 @@ const getDeviation = async (): Promise<DeviationGraphResponseDto> => {
   }
 };
 
-export const useGetDeviation = () => {
+export const useGetDeviation = (gameId: string) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['deviation'],
-    queryFn: () => getDeviation(),
+    queryKey: ['deviation', gameId],
+    queryFn: () => getDeviation(gameId),
   });
 
   return {

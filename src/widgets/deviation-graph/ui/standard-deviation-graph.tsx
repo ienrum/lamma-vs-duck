@@ -9,6 +9,7 @@ import { PERCENTAGE_SENTENCE } from '../config/constants';
 import { useGetDeviation } from '../api/use-get-deviation';
 import Spinner from '@/src/shared/ui/spinner';
 import formatTime from '@/src/shared/util/format-time';
+import { useParams } from 'next/navigation';
 
 // 정규분포 데이터 생성 함수
 const generateNormalDistribution = (mean: number, stdDev: number, points: number) => {
@@ -25,7 +26,8 @@ const generateNormalDistribution = (mean: number, stdDev: number, points: number
 };
 
 const DeviationGraph = () => {
-  const { data, isLoading, error } = useGetDeviation();
+  const { gameId } = useParams();
+  const { data, isLoading, error } = useGetDeviation(gameId as string);
 
   if (isLoading) {
     return (

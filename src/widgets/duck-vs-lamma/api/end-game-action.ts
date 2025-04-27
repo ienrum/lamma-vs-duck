@@ -37,8 +37,15 @@ export async function endGameAction(prevState: any, formData: FormData) {
     .lte('end_time', `${today} 23:59:59`)
     .single();
 
+  let compareScore = false;
+  if (gameId === '1') {
+    compareScore = Number(score) < Number(rankData?.score);
+  } else if (gameId === '2') {
+    compareScore = Number(score) > Number(rankData?.score);
+  }
+
   if (rankData) {
-    if (Number(score) < Number(rankData.score)) {
+    if (compareScore) {
       const { error } = await supabase
         .from('rank')
         .update({
@@ -66,5 +73,5 @@ export async function endGameAction(prevState: any, formData: FormData) {
 
   getQueryClient().invalidateQueries({ queryKey: ['deviation'] });
 
-  redirect('/result');
+  redirect(`/result/${gameId}`);
 }

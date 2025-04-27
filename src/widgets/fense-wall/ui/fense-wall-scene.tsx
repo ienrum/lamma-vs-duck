@@ -11,6 +11,10 @@ import { HorizontalPad } from '@/src/features/horizontal-pad/ui/HorizontalPad';
 import HealthBar from '@/src/features/health-bar/health-bar';
 import ScoreBoard from '@/src/features/score-board/score-board';
 import { cn } from '@/lib/utils';
+import { endGameAction } from '@/src/widgets/duck-vs-lamma/api/end-game-action';
+import { useFormState } from 'react-dom';
+import { useParams } from 'next/navigation';
+import { GameSubmissionForm } from '../../duck-vs-lamma/ui/GameSubmissionForm';
 
 export interface IRefPhaserGame {
   game: Game | null;
@@ -22,13 +26,16 @@ interface IProps {
 }
 
 const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScene({ currentActiveScene }, ref) {
+  const { gameId } = useParams();
+
   const game = useRef<Game | null>(null);
   const [count, setCount] = useState(0);
   const { currentDirection } = useCrossPadStore();
   const [health, setHealth] = useState({ health: 100, maxHealth: 100 });
   const [score, setScore] = useState({ score: 0, highScore: 0 });
   const [isGameReady, setIsGameReady] = useState(false);
-
+  const [state, formAction] = useFormState(endGameAction, null);
+  const gameEndRef = useRef<HTMLFormElement>(null);
   useEffect(() => {
     if (game.current === null) {
       const config: Types.Core.GameConfig = {
@@ -78,7 +85,16 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
         game.current = null;
       }
     };
-  }, [ref, count]);
+  }, [ref, count, formAction]);
+
+  useEffect(() => {
+    if (game.current && isGameReady) {
+      const scene = game.current?.scene.getScene('FenseWall') as FenseWall;
+      if (scene && scene.isGameOver()) {
+        gameEndRef.current?.requestSubmit();
+      }
+    }
+  }, [score.highScore, game.current, health.health]);
 
   useEffect(() => {
     if (game.current && isGameReady) {
@@ -118,6 +134,12 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
           />
         </div>
         <HorizontalPad />
+        <GameSubmissionForm
+          gameEndRef={gameEndRef}
+          formAction={formAction}
+          gameId={Number(gameId)}
+          getGameScore={() => score.highScore.toString()}
+        />
       </div>
     </>
   );
