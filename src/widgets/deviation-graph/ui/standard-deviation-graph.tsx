@@ -87,10 +87,7 @@ const DeviationGraph = () => {
           <LineChart
             data={chartData}
             margin={{
-              top: 20,
-              right: 30,
-              left: 20,
-              bottom: 20,
+              top: 10,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
