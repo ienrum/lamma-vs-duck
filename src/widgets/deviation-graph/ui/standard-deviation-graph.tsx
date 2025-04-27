@@ -26,7 +26,7 @@ const generateNormalDistribution = (mean: number, stdDev: number, points: number
 const DeviationGraph = () => {
   const { data, isLoading, error } = useGetDeviation();
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <Spinner />
@@ -45,6 +45,12 @@ const DeviationGraph = () => {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <p className="text-center text-sm font-medium text-gray-500">No today&apos;s data</p>
+      </div>
+    );
+  } else if (!data) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <p className="text-center text-sm font-medium text-gray-500">No data</p>
       </div>
     );
   }
