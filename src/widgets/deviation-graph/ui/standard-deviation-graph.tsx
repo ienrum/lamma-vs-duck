@@ -154,6 +154,7 @@ const DeviationGraph = () => {
       </CardContent>
       <CardFooter className="border-t p-6">
         <div className="flex items-center gap-2 text-base font-medium text-gray-700">
+          <span className="text-gray-900">today&apos;s best score: {data?.myScore}</span>
           {PERCENTAGE_SENTENCE} <span className="text-gray-900">{data?.myPercentage.toFixed(1)}%</span>
           <TrendingUp className="h-5 w-5 text-gray-600" />
         </div>

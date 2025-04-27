@@ -60,13 +60,12 @@ export const GET = async (req: Request) => {
   const sameScorePlayers = data?.filter(({ score }) => score === myScore.score).length ?? 0;
   const myPercentage = ((lowerScorePlayersThenMe + 0.5 * sameScorePlayers) / totalPlayers) * 100;
 
-  console.log(myScore);
-
   return NextResponse.json<BaseResponseDto<DeviationGraphResponseDto>>(
     {
       message: 'Success',
       data: {
         myPercentage,
+        myScore: myScore.score,
       },
     },
     { status: 200 }
