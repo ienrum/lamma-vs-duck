@@ -7,6 +7,7 @@ import { width, height } from '../config/constants';
 import { Button } from '@/components/ui/button';
 import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';
 import { CrossPad } from '@/src/features/cross-pad/ui/CrossPad';
+import { HorizontalPad } from '@/src/features/horizontal-pad/ui/HorizontalPad';
 import HealthBar from '@/src/features/health-bar/health-bar';
 import ScoreBoard from '@/src/features/score-board/score-board';
 import { cn } from '@/lib/utils';
@@ -116,7 +117,7 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
             className="rounded-sm border-8 border-gray-400"
           />
         </div>
-        <CrossPad />
+        <HorizontalPad />
       </div>
     </>
   );
