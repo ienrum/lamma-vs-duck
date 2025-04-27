@@ -23,9 +23,9 @@ export class FenseWall extends Scene {
   private healthBarHeight: number = 20;
   private healthBarX: number = 20;
   private healthBarY: number = 20;
-  private constantSpeed: number = 120;
-  private initialSpeed: number = 120;
-  private maxSpeed: number = 150;
+  private constantSpeed: number = 150;
+  private initialSpeed: number = 150;
+  private maxSpeed: number = 170;
   private speedIncrease: number = 2;
   private lastEnemyTime: number = 0;
   private enemyInterval: number = 7000;
@@ -179,9 +179,10 @@ export class FenseWall extends Scene {
     this.stones = this.add.group();
     this.stoneIndicators = this.add.group();
 
-    this.player = this.add.text(width / 2, height / 2, '🦔', { fontSize: '32px' });
+    this.player = this.add.text(width / 2, height / 2, '🐝', { fontSize: '28px' });
     this.player.setOrigin(0.5);
     this.player.setDepth(2);
+    this.player.setPadding(1, 1, 1, 1);
 
     this.physics.world.enable(this.player);
     this.player.setFlipX(true);
