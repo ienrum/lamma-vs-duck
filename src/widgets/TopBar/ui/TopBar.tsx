@@ -1,8 +1,6 @@
 import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
 import { BackButton as BackButtonComponent } from './BackButton';
-import { ProfileLink as ProfileLinkComponent } from './ProfileLink';
-import { StatsLink as StatsLinkComponent } from './StatsLink';
 import ProfileButton from './ProfileButton';
 
 interface TopBarProps {
@@ -46,14 +44,9 @@ const ProfileLink = ({ className }: TopBarChildProps) => {
   return <ProfileButton />;
 };
 
-const StatsLink = ({ className }: TopBarChildProps) => {
-  return <StatsLinkComponent className={cn('flex items-center', className)} />;
-};
-
 TopBar.Left = Left;
 TopBar.Right = Right;
 TopBar.Center = Center;
 TopBar.Title = Title;
 TopBar.BackButton = BackButton;
 TopBar.ProfileLink = ProfileLink;
-TopBar.StatsLink = StatsLink;
