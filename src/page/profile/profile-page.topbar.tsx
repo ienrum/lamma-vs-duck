@@ -10,9 +10,7 @@ const ProfilePageTopbar = () => {
       <TopBar.Center>
         <TopBar.Title text={TOPBAR_TITLE} />
       </TopBar.Center>
-      <TopBar.Right>
-        <TopBar.StatsLink />
-      </TopBar.Right>
+      <TopBar.Right></TopBar.Right>
     </TopBar>
   );
 };

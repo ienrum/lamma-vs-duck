@@ -11,7 +11,6 @@ const LammaVsDuckTopbar = () => {
         <TopBar.Title text={GAME_TITLE} />
       </TopBar.Center>
       <TopBar.Right>
-        <TopBar.StatsLink />
         <TopBar.ProfileLink />
       </TopBar.Right>
     </TopBar>
