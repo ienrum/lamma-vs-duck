@@ -5,6 +5,7 @@ import { Button } from '@/src/shared/ui/button';
 import { useRouter } from 'next/navigation';
 import useGetGameList from '@/src/features/game/api/use-get-game-list';
 import { HelpButton } from '@/src/widgets/TopBar/ui/HelpButton';
+import { StatsLink } from '@/src/widgets/TopBar/ui/StatsLink';
 
 const HomePage = () => {
   const router = useRouter();
@@ -31,7 +32,8 @@ const HomePage = () => {
               >
                 PLAY NOW
               </Button>
-              <HelpButton />
+              <HelpButton gameRuleTitle={game.ruleTitle} gameRuleScript={game.ruleScript} />
+              <StatsLink gameId={game.id.toString()} />
             </div>
           </CardContent>
         </Card>

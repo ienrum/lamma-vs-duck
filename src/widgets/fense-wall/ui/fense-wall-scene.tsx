@@ -15,6 +15,7 @@ import { endGameAction } from '@/src/widgets/duck-vs-lamma/api/end-game-action';
 import { useFormState } from 'react-dom';
 import { useParams } from 'next/navigation';
 import { GameSubmissionForm } from '../../duck-vs-lamma/ui/GameSubmissionForm';
+import ScoreResult from '../../score-result/score-result';
 
 export interface IRefPhaserGame {
   game: Game | null;
@@ -23,9 +24,13 @@ export interface IRefPhaserGame {
 
 interface IProps {
   currentActiveScene?: (scene_instance: Scene) => void;
+  isAuthenticated: boolean;
 }
 
-const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScene({ currentActiveScene }, ref) {
+const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScene(
+  { currentActiveScene, isAuthenticated },
+  ref
+) {
   const { gameId } = useParams();
 
   const game = useRef<Game | null>(null);
@@ -113,13 +118,11 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
 
   return (
     <>
-      <Button
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        reload
-      </Button>
+      <ScoreResult
+        isAuthenticated={isAuthenticated}
+        open={(game.current?.scene.getScene('FenseWall') as FenseWall)?.isGameOver() && !isAuthenticated}
+      />
+
       <div className="flex flex-col items-center justify-center gap-8">
         <div className="flex flex-col gap-4">
           <ScoreBoard score={score.score} highScore={score.highScore} />

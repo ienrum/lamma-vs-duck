@@ -8,7 +8,6 @@ const HomePageTopbar = () => {
         <TopBar.Title text={TOPBAR_TITLE} />
       </TopBar.Center>
       <TopBar.Right>
-        <TopBar.StatsLink />
         <TopBar.ProfileLink />
       </TopBar.Right>
     </TopBar>
