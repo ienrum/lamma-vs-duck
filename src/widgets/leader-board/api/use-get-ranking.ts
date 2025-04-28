@@ -16,7 +16,7 @@ const getRanking = (gameId: string, pageParam: number, order: 'asc' | 'desc') =>
 
 const useGetRanking = (gameId: string, order: 'asc' | 'desc') => {
   const { data, isLoading, error, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery({
-    queryKey: ['ranking', gameId],
+    queryKey: ['ranking', gameId, order],
     queryFn: async ({ pageParam = 0 }) => {
       const result = await getRanking(gameId, pageParam, order);
       return result;
