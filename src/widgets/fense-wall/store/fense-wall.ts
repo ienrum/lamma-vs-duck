@@ -12,8 +12,6 @@ export class FenseWall extends Scene {
   private player!: GameObjects.Text;
   private coins: GameObjects.Group = new GameObjects.Group(this);
   private plantBombs: GameObjects.Group = new GameObjects.Group(this);
-  private stones: GameObjects.Group = new GameObjects.Group(this);
-  private stoneIndicators: GameObjects.Group = new GameObjects.Group(this);
   private healthBar!: GameObjects.Graphics;
   private health: number = 100;
   private maxHealth: number = 100;
@@ -64,18 +62,6 @@ export class FenseWall extends Scene {
   private lastCollisionTime: number = 0;
   private collisionCooldown: number = 1000;
   private tailDamage: number = 10;
-  private lastStoneTime: number = 0;
-  private stoneInterval: number = 3000;
-  private initialStoneInterval: number = 3000;
-  private minStoneInterval: number = 2500;
-  private stoneIntervalDecrease: number = 10;
-  private stoneSpeed: number = 100;
-  private initialStoneSpeed: number = 100;
-  private maxStoneSpeed: number = 200;
-  private stoneSpeedIncrease: number = 2;
-  private stoneDamage: number = 20;
-  private stoneIndicatorDuration: number = 1000;
-  private deathAnimationDuration: number = 1000;
   private gameStartTime: number = 0;
   private scoreChangeHandler: ((score: number, highScore: number) => void) | null = null;
   private backgroundTiles: GameObjects.Group = new GameObjects.Group(this);
@@ -176,8 +162,6 @@ export class FenseWall extends Scene {
 
     this.healthBar = this.add.graphics();
     this.enemySpawnIndicators = this.add.group();
-    this.stones = this.add.group();
-    this.stoneIndicators = this.add.group();
 
     this.player = this.add.text(width / 2, height / 2, '🐝', { fontSize: '28px' });
     this.player.setOrigin(0.5);
@@ -197,8 +181,6 @@ export class FenseWall extends Scene {
 
     this.physics.add.overlap(this.player, this.coins, this.handlePlayerCoinCollision, undefined, this);
     this.physics.add.overlap(this.player, this.hearts, this.handleHeartCollision, undefined, this);
-    this.physics.add.overlap(this.player, this.stones, this.handleStoneCollision, undefined, this);
-    this.physics.add.overlap(this.coins, this.stones, this.handleEnemyStoneCollision, undefined, this);
   }
 
   private createHeart(position: { x: number; y: number }) {
@@ -339,112 +321,6 @@ export class FenseWall extends Scene {
     }
   }
 
-  private createStoneIndicator(x: number, y: number, velocityX: number, velocityY: number) {
-    const indicator = this.add.text(x, y, '⚠️', { fontSize: '24px' });
-    indicator.setOrigin(0.5);
-    indicator.setAlpha(0.5);
-    this.stoneIndicators.add(indicator);
-
-    this.tweens.add({
-      targets: indicator,
-      alpha: 0.2,
-      duration: this.stoneIndicatorDuration,
-      ease: 'Linear',
-      onComplete: () => {
-        indicator.destroy();
-      },
-    });
-  }
-
-  private createStone() {
-    let x = 0,
-      y = 0,
-      velocityX = 0,
-      velocityY = 0;
-    const side = Math.floor(Math.random() * 4);
-
-    switch (side) {
-      case 0:
-        x = Math.random() * width;
-        y = 0;
-        velocityX = (Math.random() - 0.5) * this.stoneSpeed;
-        velocityY = this.stoneSpeed;
-        break;
-      case 1:
-        x = width;
-        y = Math.random() * height;
-        velocityX = -this.stoneSpeed;
-        velocityY = (Math.random() - 0.5) * this.stoneSpeed;
-        break;
-      case 2:
-        x = Math.random() * width;
-        y = height;
-        velocityX = (Math.random() - 0.5) * this.stoneSpeed;
-        velocityY = -this.stoneSpeed;
-        break;
-      case 3:
-        x = 0;
-        y = Math.random() * height;
-        velocityX = this.stoneSpeed;
-        velocityY = (Math.random() - 0.5) * this.stoneSpeed;
-        break;
-    }
-
-    this.createStoneIndicator(x, y, velocityX, velocityY);
-
-    this.time.delayedCall(this.stoneIndicatorDuration, () => {
-      const stone = this.add.text(x, y, '🪨', { fontSize: '16px' });
-      stone.setOrigin(0.5);
-      this.physics.world.enable(stone);
-      const stoneBody = stone.body as Physics.Arcade.Body;
-      stoneBody.setVelocity(velocityX, velocityY);
-      stoneBody.setCollideWorldBounds(false);
-      this.stones.add(stone);
-    });
-  }
-
-  private handleStoneCollision(player: any, stone: any) {
-    console.log('플레이어가 돌에 맞음!');
-    this.health -= this.stoneDamage;
-    if (this.healthChangeHandler) {
-      this.healthChangeHandler(this.health, this.maxHealth);
-    }
-    stone.destroy();
-    this.createEarthquakeEffect();
-    if (this.health <= 0) {
-      this.gameOver = true;
-      this.playDeathAnimation(player);
-    }
-  }
-
-  private handleEnemyStoneCollision(enemy: any, stone: any) {
-    console.log('적이 돌에 맞음!');
-    if (this.fixedEnemies.has(enemy)) {
-      this.fixedEnemies.delete(enemy);
-    }
-    if (this.collidedEnemies.has(enemy)) {
-      this.collidedEnemies.delete(enemy);
-      this.score = Math.max(0, this.score - 10);
-    }
-    this.playDeathAnimation(enemy);
-    stone.destroy();
-
-    this.updateScore();
-  }
-
-  private playDeathAnimation(object: any) {
-    this.tweens.add({
-      targets: object,
-      scale: 0,
-      alpha: 0,
-      duration: this.deathAnimationDuration,
-      ease: 'Power2',
-      onComplete: () => {
-        object.destroy();
-      },
-    });
-  }
-
   update() {
     if (this.gameOver) return;
 
@@ -453,20 +329,10 @@ export class FenseWall extends Scene {
 
     this.constantSpeed = Math.min(this.maxSpeed, this.initialSpeed + difficultyLevel * this.speedIncrease);
     this.enemySpeed = Math.min(this.maxEnemySpeed, this.initialEnemySpeed + difficultyLevel * this.enemySpeedIncrease);
-    this.stoneSpeed = Math.min(this.maxStoneSpeed, this.initialStoneSpeed + difficultyLevel * this.stoneSpeedIncrease);
-    this.stoneInterval = Math.max(
-      this.minStoneInterval,
-      this.initialStoneInterval - difficultyLevel * this.stoneIntervalDecrease
-    );
     this.enemyInterval = Math.max(
       this.minEnemyInterval,
       this.initialEnemyInterval - difficultyLevel * this.enemyIntervalDecrease
     );
-
-    if (this.time.now - this.lastStoneTime > this.stoneInterval) {
-      this.createStone();
-      this.lastStoneTime = this.time.now;
-    }
 
     this.transitionEnemies.forEach((startTime, enemy) => {
       if (this.time.now - startTime >= this.transitionDuration) {
