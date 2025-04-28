@@ -31,6 +31,7 @@
     "google-one-tap": "^1.0.6",
     "lucide-react": "^0.483.0",
     "next": "15.2.4",
+    "next-share": "^0.27.0",
     "phaser": "^3.88.2",
     "powerglitch": "^2.4.0",
     "react": "^19.1.0",

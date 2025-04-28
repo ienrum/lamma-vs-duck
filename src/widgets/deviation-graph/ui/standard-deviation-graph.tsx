@@ -9,6 +9,7 @@ import { PERCENTAGE_SENTENCE } from '../config/constants';
 import { useGetDeviation } from '../api/use-get-deviation';
 import Spinner from '@/components/ui/spinner';
 import { useParams } from 'next/navigation';
+import { ShareButtons } from '@/src/shared/ui/share-buttons';
 
 // 정규분포 데이터 생성 함수
 const generateNormalDistribution = (mean: number, stdDev: number, points: number) => {
@@ -152,12 +153,15 @@ const DeviationGraph = ({ scoreFormatter }: { scoreFormatter: (score: number) =>
         </ChartContainer>
       </CardContent>
       <CardFooter className="border-t p-6">
-        <div className="flex flex-col items-center gap-2 text-base font-medium text-gray-700">
-          <span className="text-gray-900">today&apos;s best score: {scoreFormatter(data?.myScore)}</span>
-          <div className="flex items-center gap-2">
-            {PERCENTAGE_SENTENCE} <span className="text-gray-900">{data?.myPercentage.toFixed(1)}%</span>
-            <TrendingUp className="h-5 w-5 text-gray-600" />
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-2 text-base font-medium text-gray-700">
+            <span className="text-gray-900">today&apos;s best score: {scoreFormatter(data?.myScore)}</span>
+            <div className="flex items-center gap-2">
+              {PERCENTAGE_SENTENCE} <span className="text-gray-900">{data?.myPercentage.toFixed(1)}%</span>
+              <TrendingUp className="h-5 w-5 text-gray-600" />
+            </div>
           </div>
+          <ShareButtons gameTitle="Lamma vs Duck" score={scoreFormatter(data?.myScore)} />
         </div>
       </CardFooter>
     </Card>
