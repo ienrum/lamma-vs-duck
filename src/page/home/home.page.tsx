@@ -8,6 +8,7 @@ import { HelpButton } from '@/src/widgets/TopBar/ui/HelpButton';
 import { StatsLink } from '@/src/widgets/TopBar/ui/StatsLink';
 import { DuckLammaAnimation } from '@/src/shared/ui/game-animations/DuckLammaAnimation';
 import { GreedyBeeAnimation } from '@/src/shared/ui/game-animations/GreedyBeeAnimation';
+import OneTapComponent from '@/src/shared/ui/google-one-tap';
 
 const HomePage = () => {
   const router = useRouter();
@@ -30,6 +31,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col gap-4 p-4">
+      <OneTapComponent />
       {gameList.map((game) => (
         <Card key={game.id} className="pearl-hover">
           <CardHeader className="flex flex-row items-center justify-between">
