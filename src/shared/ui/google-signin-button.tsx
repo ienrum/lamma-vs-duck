@@ -7,12 +7,11 @@ interface GoogleSignInButtonProps extends ButtonHTMLAttributes<HTMLButtonElement
 export const GoogleSignInButton = ({ className = '', ...props }: GoogleSignInButtonProps) => {
   return (
     <button
-      className={`relative h-10 w-auto max-w-[400px] min-w-min cursor-pointer appearance-none overflow-hidden rounded border border-[#747775] bg-white px-3 text-center align-middle font-['Roboto'] text-sm tracking-[0.25px] whitespace-nowrap text-[#1f1f1f] transition-all duration-[0.218s] outline-none select-none hover:shadow-[0_1px_2px_0_rgba(60,64,67,0.3),0_1px_3px_1px_rgba(60,64,67,0.15)] disabled:cursor-default disabled:border-[#1f1f1f1f] disabled:bg-[#ffffff61] disabled:opacity-38 ${className} `}
+      className={`relative h-12 w-auto max-w-[400px] min-w-min cursor-pointer appearance-none overflow-hidden rounded-lg border border-gray-200 bg-white px-4 text-center align-middle font-['Roboto'] text-sm font-medium tracking-wide text-gray-700 outline outline-1 outline-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:outline-gray-300 focus:outline-2 focus:outline-blue-500 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
       {...props}
     >
-      <div className="absolute inset-0 bg-[#303030] opacity-0 transition-opacity duration-[0.218s] group-hover:opacity-8 group-focus:opacity-12 group-active:opacity-12" />
-      <div className="relative flex h-full w-full items-center justify-between">
-        <div className="mr-3 h-5 w-5 min-w-5">
+      <div className="relative flex h-full w-full items-center justify-center gap-3">
+        <div className="h-5 w-5">
           <svg
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
@@ -39,10 +38,7 @@ export const GoogleSignInButton = ({ className = '', ...props }: GoogleSignInBut
             <path fill="none" d="M0 0h48v48H0z" />
           </svg>
         </div>
-        <span className="flex-grow overflow-hidden align-top font-['Roboto'] font-medium text-ellipsis">
-          Sign in with Google
-        </span>
-        <span className="hidden">Sign in with Google</span>
+        <span className="text-sm font-medium">Continue with Google</span>
       </div>
     </button>
   );
