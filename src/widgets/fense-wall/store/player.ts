@@ -1,4 +1,4 @@
-import { Scene, GameObjects, Physics } from 'phaser';
+import { Scene, GameObjects, Physics, Input, Tweens } from 'phaser';
 import { GAME_CONSTANTS } from './constants';
 
 export class Player {
@@ -7,8 +7,40 @@ export class Player {
   private isRotatingRight: boolean = false;
   private playerPath: { x: number; y: number }[] = [];
   private lastPathUpdate: number = 0;
+  private touchPointer: Input.Pointer | null = null;
+  private isInvincible: boolean = false;
+  private invincibleTween: Tweens.Tween | null = null;
+  private onInvincibleEnd: (() => void) | null = null;
 
-  constructor(private scene: Scene) {}
+  constructor(private scene: Scene) {
+    this.setupTouchEvents();
+  }
+
+  private setupTouchEvents() {
+    this.scene.input.on('pointerdown', (pointer: Input.Pointer) => {
+      this.touchPointer = pointer;
+    });
+
+    this.scene.input.on('pointerup', () => {
+      this.touchPointer = null;
+      this.stopRotation();
+    });
+
+    this.scene.input.on('pointermove', (pointer: Input.Pointer) => {
+      if (this.touchPointer) {
+        const angle = Phaser.Math.Angle.Between(this.player.x, this.player.y, pointer.x, pointer.y);
+        const targetAngle = Phaser.Math.RadToDeg(angle);
+        const currentAngle = this.player.angle;
+        const angleDiff = Phaser.Math.Angle.ShortestBetween(currentAngle, targetAngle);
+
+        if (angleDiff > 0) {
+          this.moveRight();
+        } else if (angleDiff < 0) {
+          this.moveLeft();
+        }
+      }
+    });
+  }
 
   public create() {
     this.player = this.scene.add.text(this.scene.cameras.main.width / 2, this.scene.cameras.main.height / 2, '🐝', {
@@ -105,7 +137,39 @@ export class Player {
     return this.player;
   }
 
+  public makeInvincible(onEnd: () => void) {
+    if (this.isInvincible) return;
+
+    this.isInvincible = true;
+    this.onInvincibleEnd = onEnd;
+
+    // 깜빡임 효과
+    this.invincibleTween = this.scene.tweens.add({
+      targets: this.player,
+      alpha: 0.5,
+      duration: 100,
+      yoyo: true,
+      repeat: 5,
+      onComplete: () => {
+        this.player.setAlpha(1);
+        this.isInvincible = false;
+        if (this.onInvincibleEnd) {
+          this.onInvincibleEnd();
+          this.onInvincibleEnd = null;
+        }
+        this.invincibleTween = null;
+      },
+    });
+  }
+
+  public isPlayerInvincible(): boolean {
+    return this.isInvincible;
+  }
+
   public destroy() {
+    if (this.invincibleTween) {
+      this.invincibleTween.stop();
+    }
     this.player.destroy();
   }
 }

@@ -7,11 +7,11 @@ export class EnemyManager {
   private ducksOrLammas: GameObjects.Group;
   private enemySpawnIndicators: GameObjects.Group;
   private collidedEnemies: Set<GameObjects.GameObject> = new Set();
-  private fixedEnemies: Set<GameObjects.GameObject> = new Set();
   private transitionEnemies: Map<GameObjects.GameObject, number> = new Map();
   private lastEnemyTime: number = 0;
   private enemyInterval: number = GAME_CONSTANTS.ENEMY_SPAWN.INITIAL_INTERVAL;
   private enemySpeed: number = GAME_CONSTANTS.ENEMY_SPEED.INITIAL;
+  private canTakeDamage: boolean = true;
 
   constructor(private scene: FenseWall) {
     this.ducksOrLammas = this.scene.add.group();
@@ -22,10 +22,24 @@ export class EnemyManager {
     this.scene.physics.add.overlap(
       this.scene.getPlayer().getPlayer(),
       this.ducksOrLammas,
-      this.handlePlayerEnemyCollision,
+      this.handleCollision.bind(this),
       undefined,
       this
     );
+  }
+
+  private handleCollision(player: any, enemy: any) {
+    console.log('player', player);
+    if (this.collidedEnemies.has(enemy) && !this.scene.getPlayer().isPlayerInvincible() && this.canTakeDamage) {
+      this.scene.decreaseHealth(GAME_CONSTANTS.HEALTH.TAIL_DAMAGE);
+      this.canTakeDamage = false;
+      this.scene.getPlayer().makeInvincible(() => {
+        this.canTakeDamage = true;
+      });
+
+      // 화면 진동 효과
+      this.scene.cameras.main.shake(GAME_CONSTANTS.EARTHQUAKE.DURATION, GAME_CONSTANTS.EARTHQUAKE.INTENSITY / 100);
+    }
   }
 
   private createEnemy(position: { x: number; y: number }) {
@@ -35,14 +49,15 @@ export class EnemyManager {
     });
     enemy.setOrigin(0.5);
     enemy.setDepth(2);
-    enemy.setPadding(10, 10, 10, 10);
+    enemy.setPadding(2, 2, 2, 2);
     this.scene.physics.world.enable(enemy);
     const enemyBody = enemy.body as Physics.Arcade.Body;
     enemyBody.setImmovable(true);
-    enemyBody.setCollideWorldBounds(true);
     enemyBody.setMaxVelocity(this.enemySpeed);
     this.ducksOrLammas.add(enemy);
-    this.fixedEnemies.add(enemy);
+    this.collidedEnemies.add(enemy);
+    this.transitionEnemies.set(enemy, this.scene.time.now);
+    enemyBody.setVelocity(0, 0);
   }
 
   private createEnemySpawnIndicator(position: { x: number; y: number }, type: EnemyType) {
@@ -58,22 +73,6 @@ export class EnemyManager {
       indicator.destroy();
       this.createEnemy(position);
     });
-  }
-
-  private handlePlayerEnemyCollision(player: any, enemy: any) {
-    if (this.fixedEnemies.has(enemy) && !this.transitionEnemies.has(enemy)) {
-      console.log('플레이어와 적 충돌!');
-
-      this.collidedEnemies.add(enemy);
-      this.fixedEnemies.delete(enemy);
-      this.transitionEnemies.set(enemy, this.scene.time.now);
-
-      const enemyBody = enemy.body as Physics.Arcade.Body;
-      enemyBody.setImmovable(false);
-      enemyBody.setVelocity(0, 0);
-
-      this.scene.increaseScore(GAME_CONSTANTS.SCORE.COLLISION_POINTS);
-    }
   }
 
   public update() {
@@ -99,10 +98,6 @@ export class EnemyManager {
     collidedEnemies.forEach((enemy, index) => {
       const enemyText = enemy as GameObjects.Text;
       const enemyBody = enemy.body as Physics.Arcade.Body;
-
-      if (this.fixedEnemies.has(enemy)) {
-        return;
-      }
 
       const playerPath = this.scene.getPlayer().getPlayerPath();
       const targetIndex = Math.max(0, playerPath.length - 1 - index);

@@ -24,10 +24,10 @@ export const GAME_CONSTANTS = {
   ENEMY_FOLLOW: {
     DISTANCE: 20,
     SMOOTH_FACTOR: 0.05,
-    MIN_DISTANCE: 10,
+    MIN_DISTANCE: 20,
   },
   ENEMY_EMOJI: {
-    SIZE: '28px',
+    SIZE: '24px',
   },
 
   // 게임 상태 관련
@@ -43,8 +43,8 @@ export const GAME_CONSTANTS = {
 
   // 기타
   EARTHQUAKE: {
-    INTENSITY: 5,
-    DURATION: 200,
+    DURATION: 200, // 진동 지속 시간 (밀리초)
+    INTENSITY: 5, // 진동 강도 (0-100)
   },
   TRANSITION_DURATION: 500,
   COLLISION_COOLDOWN: 1000,

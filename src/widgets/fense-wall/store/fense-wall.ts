@@ -124,4 +124,8 @@ export class FenseWall extends Scene {
   public increaseScore(points: number) {
     this.gameState.increaseScore(points);
   }
+
+  public decreaseHealth(amount: number) {
+    this.gameState.decreaseHealth(amount);
+  }
 }

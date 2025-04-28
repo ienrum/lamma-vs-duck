@@ -4,10 +4,7 @@ import { forwardRef, useEffect, useRef, useState } from 'react';
 import { Game, Scene, AUTO, Types } from 'phaser';
 import { FenseWall } from '../store/fense-wall';
 import { width, height } from '../config/constants';
-import { Button } from '@/components/ui/button';
 import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';
-import { CrossPad } from '@/src/features/cross-pad/ui/CrossPad';
-import { HorizontalPad } from '@/src/features/horizontal-pad/ui/HorizontalPad';
 import HealthBar from '@/src/features/health-bar/health-bar';
 import ScoreBoard from '@/src/features/score-board/score-board';
 import { cn } from '@/lib/utils';
@@ -35,7 +32,6 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
 
   const game = useRef<Game | null>(null);
   const [count, setCount] = useState(0);
-  const { currentDirection } = useCrossPadStore();
   const [health, setHealth] = useState({ health: 100, maxHealth: 100 });
   const [score, setScore] = useState({ score: 0, highScore: 0 });
   const [isGameReady, setIsGameReady] = useState(false);
@@ -101,21 +97,6 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
     }
   }, [score.highScore, game.current, health.health]);
 
-  useEffect(() => {
-    if (game.current && isGameReady) {
-      const scene = game.current.scene.getScene('FenseWall') as FenseWall;
-      if (currentDirection === 'left') {
-        scene.moveLeft();
-      } else if (currentDirection === 'right') {
-        scene.moveRight();
-      } else if (currentDirection === 'up') {
-        scene.moveUp();
-      } else if (currentDirection === 'down') {
-        scene.moveDown();
-      }
-    }
-  }, [currentDirection, isGameReady]);
-
   return (
     <>
       <ScoreResult
@@ -136,7 +117,6 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
             className="rounded-sm border-8 border-gray-400"
           />
         </div>
-        <HorizontalPad />
         <GameSubmissionForm
           gameEndRef={gameEndRef}
           formAction={formAction}
