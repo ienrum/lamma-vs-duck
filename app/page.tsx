@@ -4,24 +4,18 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 export default function Page() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-blue-50 to-white">
-      <div className="max-w-4xl w-full space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-6xl font-bold text-gray-900">
-            🦙 Lamma vs Duck 🦆
-          </h1>
-          <p className="text-xl text-gray-600">
-            Match the animals and test your skills!
-          </p>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white p-4">
+      <div className="w-full max-w-4xl space-y-8">
+        <div className="space-y-4 text-center">
+          <h1 className="text-6xl font-bold text-gray-900">🦙 Lamma vs Duck 🦆</h1>
+          <p className="text-xl text-gray-600">Match the animals and test your skills!</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <Card className="bg-white shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl">Game Rules</CardTitle>
-              <CardDescription>
-                Match the number of 🦙lamas and 🦆ducks on the board!
-              </CardDescription>
+              <CardDescription>Match the number of 🦙lamas and 🦆ducks on the board!</CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2 text-gray-600">
@@ -32,9 +26,7 @@ export default function Page() {
             </CardContent>
             <CardFooter>
               <Link href="/home" className="w-full">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                  Start Game
-                </Button>
+                <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">Start Game</Button>
               </Link>
             </CardFooter>
           </Card>
@@ -42,17 +34,13 @@ export default function Page() {
           <Card className="bg-white shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl">Leaderboard</CardTitle>
-              <CardDescription>
-                Check out the top players!
-              </CardDescription>
+              <CardDescription>Check out the top players!</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">
-                Compete with other players and see who can match the animals the fastest!
-              </p>
+              <p className="text-gray-600">Compete with other players and see who can match the animals the fastest!</p>
             </CardContent>
             <CardFooter>
-              <Link href="/result" className="w-full">
+              <Link href="/result/1" className="w-full">
                 <Button variant="outline" className="w-full">
                   View Leaderboard
                 </Button>
@@ -61,7 +49,7 @@ export default function Page() {
           </Card>
         </div>
 
-        <div className="text-center text-gray-500 text-sm">
+        <div className="text-center text-sm text-gray-500">
           <p>Can you match the animals? Let&apos;s find out!</p>
         </div>
       </div>
