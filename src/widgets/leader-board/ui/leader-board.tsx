@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/src/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useGetRanking from '../api/use-get-ranking';
 import { cn } from '@/lib/utils';
 import useInView from '@/src/shared/hook/use-intersection';

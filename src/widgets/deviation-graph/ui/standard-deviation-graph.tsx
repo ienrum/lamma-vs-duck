@@ -3,12 +3,11 @@
 import { TrendingUp } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, XAxis, YAxis, Tooltip } from 'recharts';
 
-import { Card, CardContent, CardFooter } from '@/src/shared/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { ChartContainer } from '@/components/ui/chart';
 import { PERCENTAGE_SENTENCE } from '../config/constants';
 import { useGetDeviation } from '../api/use-get-deviation';
-import Spinner from '@/src/shared/ui/spinner';
-import formatTime from '@/src/shared/util/format-time';
+import Spinner from '@/components/ui/spinner';
 import { useParams } from 'next/navigation';
 
 // 정규분포 데이터 생성 함수

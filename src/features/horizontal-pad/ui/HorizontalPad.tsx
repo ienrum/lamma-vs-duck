@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/src/shared/ui/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';

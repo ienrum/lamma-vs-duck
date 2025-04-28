@@ -3,7 +3,7 @@
 import { useGame } from '../model/use-game.hook';
 import { useParams } from 'next/navigation';
 import useGetGameBoard from '@/src/features/game/api/use-get-game-board';
-import Spinner from '@/src/shared/ui/spinner';
+import Spinner from '@/components/ui/spinner';
 import { useGamePersistence } from '../hooks/use-game-persistence';
 import { useGameSubmission } from '../hooks/use-game-submission';
 import { GameSubmissionForm } from './GameSubmissionForm';

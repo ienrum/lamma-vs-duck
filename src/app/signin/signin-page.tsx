@@ -1,5 +1,5 @@
 import { signinAction } from '@/src/shared/api/actions/signin-action';
-import { Card, CardContent, CardHeader, CardTitle } from '@/src/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GoogleSignInButton } from '@/src/shared/ui/google-signin-button';
 
 export default function SignInPage() {

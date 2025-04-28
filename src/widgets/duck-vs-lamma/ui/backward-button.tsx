@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/src/shared/ui/button';
+import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useGame } from '../model/use-game.hook';
 import { useBackButtonStore } from '@/src/entities/back-button/model/store';

@@ -2,9 +2,9 @@
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/src/shared/ui/button';
+import { Button } from '@/components/ui/button';
 import { useUser } from '@/src/shared/api/use-user';
-import { Card, CardContent, CardHeader, CardTitle } from '@/src/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useState } from 'react';
 import { BASE_URL } from '@/src/app/config/baseurl';
 import { getQueryClient } from '@/src/app/utils/get-query-client';

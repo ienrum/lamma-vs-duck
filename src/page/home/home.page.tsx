@@ -1,7 +1,7 @@
 'use client';
 
-import { Card, CardHeader, CardTitle, CardContent } from '@/src/shared/ui/card';
-import { Button } from '@/src/shared/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import useGetGameList from '@/src/features/game/api/use-get-game-list';
 import { HelpButton } from '@/src/widgets/TopBar/ui/HelpButton';
@@ -32,8 +32,10 @@ const HomePage = () => {
               >
                 PLAY NOW
               </Button>
-              <HelpButton gameRuleTitle={game.ruleTitle} gameRuleScript={game.ruleScript} />
-              <StatsLink gameId={game.id.toString()} />
+              <div className="flex gap-2">
+                <HelpButton gameRuleTitle={game.ruleTitle} gameRuleScript={game.ruleScript} />
+                <StatsLink gameId={game.id.toString()} />
+              </div>
             </div>
           </CardContent>
         </Card>

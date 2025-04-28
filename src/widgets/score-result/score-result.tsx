@@ -1,7 +1,7 @@
 'use client';
 
-import { Dialog } from '@/src/shared/ui/Dialog';
-import { Button } from '@/src/shared/ui/button';
+import { Dialog } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { DialogTrigger } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
 const title = 'Record your score';
