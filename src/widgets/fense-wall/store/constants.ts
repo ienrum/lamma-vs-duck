@@ -60,4 +60,10 @@ export const GAME_CONSTANTS = {
   BACKGROUND: {
     PATTERN_SIZE: '40px',
   },
+  COIN: {
+    SPAWN_INTERVAL: 5000, // 코인 생성 간격 (밀리초)
+    POINTS: 5, // 코인 획득 시 점수
+    EMOJI: '💰', // 코인 이모지
+    SIZE: '24px', // 코인 크기
+  },
 } as const;

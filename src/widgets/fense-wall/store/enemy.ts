@@ -6,9 +6,11 @@ import { FenseWall } from './fense-wall';
 export class EnemyManager {
   private ducksOrLammas: GameObjects.Group;
   private enemySpawnIndicators: GameObjects.Group;
+  private coins: GameObjects.Group;
   private collidedEnemies: Set<GameObjects.GameObject> = new Set();
   private transitionEnemies: Map<GameObjects.GameObject, number> = new Map();
   private lastEnemyTime: number = 0;
+  private lastCoinTime: number = 0;
   private enemyInterval: number = GAME_CONSTANTS.ENEMY_SPAWN.INITIAL_INTERVAL;
   private enemySpeed: number = GAME_CONSTANTS.ENEMY_SPEED.INITIAL;
   private canTakeDamage: boolean = true;
@@ -16,6 +18,7 @@ export class EnemyManager {
   constructor(private scene: FenseWall) {
     this.ducksOrLammas = this.scene.add.group();
     this.enemySpawnIndicators = this.scene.add.group();
+    this.coins = this.scene.add.group();
   }
 
   public create() {
@@ -23,6 +26,15 @@ export class EnemyManager {
       this.scene.getPlayer().getPlayer(),
       this.ducksOrLammas,
       this.handleCollision.bind(this),
+      undefined,
+      this
+    );
+
+    // 코인과 플레이어의 충돌 처리
+    this.scene.physics.add.overlap(
+      this.scene.getPlayer().getPlayer(),
+      this.coins,
+      this.handleCoinCollision.bind(this),
       undefined,
       this
     );
@@ -40,6 +52,11 @@ export class EnemyManager {
       // 화면 진동 효과
       this.scene.cameras.main.shake(GAME_CONSTANTS.EARTHQUAKE.DURATION, GAME_CONSTANTS.EARTHQUAKE.INTENSITY / 100);
     }
+  }
+
+  private handleCoinCollision(player: any, coin: any) {
+    coin.destroy();
+    this.scene.increaseScore(GAME_CONSTANTS.COIN.POINTS);
   }
 
   private createEnemy(position: { x: number; y: number }) {
@@ -73,6 +90,20 @@ export class EnemyManager {
       indicator.destroy();
       this.createEnemy(position);
     });
+  }
+
+  private createCoin() {
+    const x = Math.random() * this.scene.cameras.main.width;
+    const y = Math.random() * this.scene.cameras.main.height;
+
+    const coin = this.scene.add.text(x, y, GAME_CONSTANTS.COIN.EMOJI, {
+      fontSize: GAME_CONSTANTS.COIN.SIZE,
+    });
+    coin.setOrigin(0.5);
+    coin.setDepth(2);
+    coin.setPadding(2, 2, 2, 2);
+    this.scene.physics.world.enable(coin);
+    this.coins.add(coin);
   }
 
   public update() {
@@ -156,6 +187,12 @@ export class EnemyManager {
         this.enemyInterval = 1000;
       }
     }
+
+    // 코인 생성
+    if (this.scene.time.now - this.lastCoinTime > GAME_CONSTANTS.COIN.SPAWN_INTERVAL) {
+      this.createCoin();
+      this.lastCoinTime = this.scene.time.now;
+    }
   }
 
   public getEnemyPositions(): EnemyPosition[] {
@@ -176,5 +213,7 @@ export class EnemyManager {
     this.ducksOrLammas = this.scene.add.group();
     this.enemySpawnIndicators.getChildren().forEach((indicator) => indicator.destroy());
     this.enemySpawnIndicators = this.scene.add.group();
+    this.coins.getChildren().forEach((coin) => coin.destroy());
+    this.coins = this.scene.add.group();
   }
 }
