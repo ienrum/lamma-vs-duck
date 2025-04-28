@@ -53,10 +53,10 @@ export class FenseWall extends Scene {
   private collidedEnemies: Set<GameObjects.GameObject> = new Set();
   private enemyPositions: { x: number; y: number; type: 'coin' }[] = [];
   private fixedEnemies: Set<GameObjects.GameObject> = new Set();
-  private followDistance: number = 30;
+  private followDistance: number = 20;
   private smoothFactor: number = 0.05;
-  private minEnemyDistance: number = 30;
-  private earthquakeIntensity: number = 10;
+  private minEnemyDistance: number = 10;
+  private earthquakeIntensity: number = 5;
   private earthquakeDuration: number = 200;
   private lastEarthquakeTime: number = 0;
   private transitionEnemies: Map<GameObjects.GameObject, number> = new Map();
@@ -67,8 +67,8 @@ export class FenseWall extends Scene {
   private lastStoneTime: number = 0;
   private stoneInterval: number = 3000;
   private initialStoneInterval: number = 3000;
-  private minStoneInterval: number = 1000;
-  private stoneIntervalDecrease: number = 200;
+  private minStoneInterval: number = 2500;
+  private stoneIntervalDecrease: number = 10;
   private stoneSpeed: number = 100;
   private initialStoneSpeed: number = 100;
   private maxStoneSpeed: number = 200;
