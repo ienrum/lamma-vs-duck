@@ -204,3 +204,70 @@
     transform: rotate(360deg);
   }
 }
+
+/* Game Animations */
+@keyframes slide-left {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-right {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bee-fly {
+  0% {
+    transform: translate(0, -50%) rotate(0deg);
+  }
+  25% {
+    transform: translate(25%, -50%) rotate(5deg);
+  }
+  50% {
+    transform: translate(50%, -50%) rotate(0deg);
+  }
+  75% {
+    transform: translate(75%, -50%) rotate(-5deg);
+  }
+  100% {
+    transform: translate(100%, -50%) rotate(0deg);
+  }
+}
+
+@keyframes bee-wing {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes chase {
+  0% {
+    transform: translate(0, -50%);
+  }
+  50% {
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    transform: translate(-100%, -50%);
+  }
+}
