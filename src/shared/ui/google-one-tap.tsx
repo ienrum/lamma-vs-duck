@@ -102,6 +102,9 @@ const OneTapComponent: React.FC<OneTapComponentProps> = ({ onLoginSuccess, onLog
 
             // 로그인 성공 시 콜백 호출
             onLoginSuccess?.(data.user);
+
+            // 페이지 새로고침
+            window.location.reload();
           } catch (error) {
             console.error('Error logging in with Google One Tap', error);
             onLoginError?.(error);
