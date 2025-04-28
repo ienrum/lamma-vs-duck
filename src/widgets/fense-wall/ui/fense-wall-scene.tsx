@@ -10,9 +10,10 @@ import ScoreBoard from '@/src/features/score-board/score-board';
 import { cn } from '@/lib/utils';
 import { endGameAction } from '@/src/widgets/duck-vs-lamma/api/end-game-action';
 import { useFormState } from 'react-dom';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { GameSubmissionForm } from '../../duck-vs-lamma/ui/GameSubmissionForm';
 import ScoreResult from '../../score-result/score-result';
+import Spinner from '@/components/ui/spinner';
 
 export interface IRefPhaserGame {
   game: Game | null;
@@ -37,6 +38,9 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
   const [isGameReady, setIsGameReady] = useState(false);
   const [state, formAction] = useFormState(endGameAction, null);
   const gameEndRef = useRef<HTMLFormElement>(null);
+
+  const router = useRouter();
+
   useEffect(() => {
     if (game.current === null) {
       const config: Types.Core.GameConfig = {
@@ -92,24 +96,29 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
     if (game.current && isGameReady) {
       const scene = game.current?.scene.getScene('FenseWall') as FenseWall;
       if (scene && scene.isGameOver()) {
+        if (!isAuthenticated) {
+          router.push(`/result/${gameId}`);
+          return;
+        }
         gameEndRef.current?.requestSubmit();
       }
     }
   }, [score.highScore, game.current, health.health]);
 
   return (
-    <>
-      <ScoreResult
-        isAuthenticated={isAuthenticated}
-        open={(game.current?.scene.getScene('FenseWall') as FenseWall)?.isGameOver() && !isAuthenticated}
-      />
-
-      <div className="flex flex-col items-center justify-center gap-8">
+    <div className="flex flex-col items-center justify-center gap-8">
+      {!isGameReady && <Spinner />}
+      <div
+        className={cn('flex flex-col items-center justify-center gap-8', {
+          'opacity-50': !isGameReady,
+          'pointer-events-none': !isGameReady,
+          hidden: !isGameReady,
+        })}
+      >
         <div className="flex flex-col gap-4">
           <ScoreBoard score={score.score} highScore={score.highScore} />
           <HealthBar health={health.health} maxHealth={health.maxHealth} />
         </div>
-        {/**블러 처리 게임 오버시 */}
         <div className={cn('flex flex-col items-center justify-center')}>
           <div
             id="fense-wall-game"
@@ -124,7 +133,7 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
           getGameScore={() => score.highScore.toString()}
         />
       </div>
-    </>
+    </div>
   );
 });
 

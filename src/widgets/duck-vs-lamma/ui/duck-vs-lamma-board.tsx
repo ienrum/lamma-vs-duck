@@ -1,7 +1,7 @@
 'use client';
 
 import { useGame } from '../model/use-game.hook';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import useGetGameBoard from '@/src/features/game/api/use-get-game-board';
 import Spinner from '@/components/ui/spinner';
 import { useGamePersistence } from '../hooks/use-game-persistence';
@@ -16,6 +16,7 @@ const DuckVsLammaBoard = ({ isAuthenticated }: { isAuthenticated: boolean }) => 
   const { currentEmojiBoard, gameInfo, reservedAnimalMaps, setBoard, endGame } = useGame();
   const gameId = Number(useParams().gameId);
   const gameEndRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
   const { data } = useGetGameBoard(gameId);
 
   // 게임 상태 지속성 관리
@@ -27,6 +28,7 @@ const DuckVsLammaBoard = ({ isAuthenticated }: { isAuthenticated: boolean }) => 
     boardData: data,
     onGameEnd: () => {
       if (!isAuthenticated) {
+        router.push(`/result/${gameId}`);
         return;
       }
       gameEndRef.current?.requestSubmit();
