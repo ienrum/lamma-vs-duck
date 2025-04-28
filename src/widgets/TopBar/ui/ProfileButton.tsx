@@ -6,49 +6,65 @@ import Image from 'next/image';
 import { useUser } from '@/src/shared/api/use-user';
 import { signoutAction } from '@/src/shared/api/actions/signout-action';
 import { useRouter } from 'next/navigation';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
-const ProfileButton = () => {
+interface ProfileButtonProps {
+  className?: string;
+}
+
+const ProfileButton = ({ className }: ProfileButtonProps) => {
   const { user } = useUser();
   const router = useRouter();
 
   if (!user) {
     return (
-      <Button variant="ghost" size="icon" className="hover:bg-gray-100" onClick={() => router.push('/signin')}>
+      <Button
+        variant="ghost"
+        size="icon"
+        className={cn('hover:bg-gray-100', className)}
+        onClick={() => router.push('/signin')}
+        aria-label="Sign in"
+      >
         <User className="h-5 w-5" />
       </Button>
     );
   }
 
-  const handleValueChange = (value: string) => {
-    if (value === 'profile') {
-      router.push('/profile');
-    } else if (value === 'signout') {
-      signoutAction();
-      if (typeof window !== 'undefined') {
-        window.location.href = '/home';
-      }
+  const handleProfileClick = () => {
+    router.push('/profile');
+  };
+
+  const handleSignOut = () => {
+    signoutAction();
+    if (typeof window !== 'undefined') {
+      window.location.href = '/home';
     }
   };
 
   return (
-    <Select onValueChange={handleValueChange}>
-      <SelectTrigger>
-        <Button variant="ghost" size="icon" className="hover:bg-gray-100" type="button">
-          <Image src={user!.avatar_url} alt="profile" width={32} height={32} className="rounded-full" />
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className={cn('hover:bg-gray-100', className)} aria-label="Profile menu">
+          <Image src={user.avatar_url} alt="Profile" width={32} height={32} className="rounded-full" />
         </Button>
-      </SelectTrigger>
-      <SelectContent align="end">
-        <SelectItem value="profile" className="flex items-center gap-2">
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuItem onClick={handleProfileClick} className="cursor-pointer">
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
-        </SelectItem>
-        <SelectItem value="signout" className="flex items-center gap-2">
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sign out</span>
-        </SelectItem>
-      </SelectContent>
-    </Select>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
