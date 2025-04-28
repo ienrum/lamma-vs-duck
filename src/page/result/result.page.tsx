@@ -9,6 +9,7 @@ import { ShareButton } from '@/src/widgets/share-button/ui/share-button';
 import { useUser } from '@/src/shared/api/use-user';
 import formatTime from '@/src/shared/util/format-time';
 import { useParams } from 'next/navigation';
+import LeaderBoard from '@/src/widgets/leader-board/ui/leader-board';
 
 const DynamicLeaderBoard = dynamic(() => import('@/src/widgets/leader-board/ui/leader-board'), {
   ssr: false,
@@ -27,10 +28,13 @@ const ResultPage = () => {
   const queryClient = getQueryClient();
   queryClient.invalidateQueries({ queryKey: ['deviation'] });
 
+  const gameTitle = gameId === '1' ? 'Lamma vs Duck' : 'Greedy Bee';
+
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <div className="relative w-full">
+        <div className="relative flex w-full flex-col items-center justify-center gap-4">
+          <p className="text-sm text-gray-500">{gameTitle}</p>
           <div ref={graphRef} className="rounded-lg bg-white p-4">
             {!user && <p className="text-gray-500">sign in to see your result</p>}
             {!!user && (
@@ -40,6 +44,7 @@ const ResultPage = () => {
             )}
           </div>
           {!!user && <ShareButton targetRef={graphRef} />}
+          <LeaderBoard />
         </div>
       </HydrationBoundary>
     </div>

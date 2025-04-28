@@ -30,13 +30,15 @@ const HomePage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4 p-4 md:flex-row md:justify-center">
       <OneTapComponent />
       {gameList.map((game) => (
-        <Card key={game.id} className="pearl-hover">
+        <Card key={game.id} className="pearl-hover md:w-1/2">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>{game.title}</CardTitle>
-            {getGameAnimation(game.id)}
+            <div className="flex flex-row items-center justify-center gap-2 rounded-lg bg-gray-200">
+              {getGameAnimation(game.id)}
+            </div>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div key={game.id} className="flex justify-between gap-2">
@@ -46,6 +48,7 @@ const HomePage = () => {
                 onClick={() => handleStartGame(game.id)}
                 containerClassName="w-full"
                 className="pearl-hover"
+                variant="outline"
               >
                 PLAY NOW
               </Button>

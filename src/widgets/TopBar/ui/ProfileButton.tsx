@@ -39,11 +39,11 @@ const ProfileButton = () => {
         </Button>
       </SelectTrigger>
       <SelectContent align="end">
-        <SelectItem value="profile">
+        <SelectItem value="profile" className="flex items-center gap-2">
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
         </SelectItem>
-        <SelectItem value="signout">
+        <SelectItem value="signout" className="flex items-center gap-2">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sign out</span>
         </SelectItem>
