@@ -2,7 +2,6 @@
 
 import { getQueryClient } from '@/src/app/utils/get-query-client';
 import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
 export const signoutAction = async () => {
@@ -16,5 +15,4 @@ export const signoutAction = async () => {
   }
 
   queryClient.clear();
-  redirect('/home');
 };
