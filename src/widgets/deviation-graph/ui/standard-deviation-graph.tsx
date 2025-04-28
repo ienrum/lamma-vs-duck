@@ -25,7 +25,7 @@ const generateNormalDistribution = (mean: number, stdDev: number, points: number
   return data;
 };
 
-const DeviationGraph = () => {
+const DeviationGraph = ({ scoreFormatter }: { scoreFormatter: (score: number) => string }) => {
   const { gameId } = useParams();
   const { data, isLoading, error } = useGetDeviation(gameId as string);
 
@@ -154,7 +154,7 @@ const DeviationGraph = () => {
       </CardContent>
       <CardFooter className="border-t p-6">
         <div className="flex flex-col items-center gap-2 text-base font-medium text-gray-700">
-          <span className="text-gray-900">today&apos;s best score: {formatTime(data?.myScore)}</span>
+          <span className="text-gray-900">today&apos;s best score: {scoreFormatter(data?.myScore)}</span>
           <div className="flex items-center gap-2">
             {PERCENTAGE_SENTENCE} <span className="text-gray-900">{data?.myPercentage.toFixed(1)}%</span>
             <TrendingUp className="h-5 w-5 text-gray-600" />

@@ -7,6 +7,8 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/src/app/utils/get-query-client';
 import { ShareButton } from '@/src/widgets/share-button/ui/share-button';
 import { useUser } from '@/src/shared/api/use-user';
+import formatTime from '@/src/shared/util/format-time';
+import { useParams } from 'next/navigation';
 
 const DynamicLeaderBoard = dynamic(() => import('@/src/widgets/leader-board/ui/leader-board'), {
   ssr: false,
@@ -19,6 +21,7 @@ const LeaderBoardFallback = () => (
 );
 
 const ResultPage = () => {
+  const { gameId } = useParams();
   const graphRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
   const queryClient = getQueryClient();
@@ -32,7 +35,7 @@ const ResultPage = () => {
             {!user && <p className="text-gray-500">sign in to see your result</p>}
             {!!user && (
               <Suspense fallback={<LeaderBoardFallback />}>
-                <DeviationGraph />
+                <DeviationGraph scoreFormatter={gameId === '1' ? formatTime : (score: number) => score.toString()} />
               </Suspense>
             )}
           </div>
