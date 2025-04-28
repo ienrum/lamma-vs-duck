@@ -22,13 +22,15 @@ const LeaderBoardFallback = () => (
 );
 
 const ResultPage = () => {
-  const { gameId } = useParams();
+  const { gameId } = useParams<{ gameId: string }>();
   const graphRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
   const queryClient = getQueryClient();
   queryClient.invalidateQueries({ queryKey: ['deviation'] });
 
   const gameTitle = gameId === '1' ? 'Lamma vs Duck' : 'Greedy Bee';
+  const scoreFormatter = gameId === '1' ? formatTime : (score: number) => score.toString();
+  const order = gameId === '1' ? 'asc' : 'desc';
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4">
@@ -39,12 +41,12 @@ const ResultPage = () => {
             {!user && <p className="text-gray-500">sign in to see your result</p>}
             {!!user && (
               <Suspense fallback={<LeaderBoardFallback />}>
-                <DeviationGraph scoreFormatter={gameId === '1' ? formatTime : (score: number) => score.toString()} />
+                <DeviationGraph scoreFormatter={scoreFormatter} />
               </Suspense>
             )}
           </div>
           {!!user && <ShareButton targetRef={graphRef} />}
-          <LeaderBoard />
+          <LeaderBoard gameId={gameId} scoreFormatter={scoreFormatter} order={order} />
         </div>
       </HydrationBoundary>
     </div>

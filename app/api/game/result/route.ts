@@ -14,15 +14,18 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const from = parseInt(searchParams.get('from') || '0');
   const to = parseInt(searchParams.get('to') || '0');
+  const gameId = searchParams.get('gameId') || '1';
+  const order = searchParams.get('order') || 'asc';
 
   try {
     const { data, error } = await supabase
       .from('rank_with_users')
       .select('*')
       .range(from, to)
-      .order('score', { ascending: true })
+      .order('score', { ascending: order === 'asc' })
       .gte('end_time', `${todayString()} 00:00:00`)
-      .lte('end_time', `${todayString()} 23:59:59`);
+      .lte('end_time', `${todayString()} 23:59:59`)
+      .eq('game_id', gameId);
 
     if (error) {
       throw new Error(error.message);

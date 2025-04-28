@@ -14,8 +14,16 @@ import {
 } from '../config/constants';
 import formatTime from '@/src/shared/util/format-time';
 
-const LeaderBoard = () => {
-  const { rankList, fetchNextPage } = useGetRanking('1');
+const LeaderBoard = ({
+  gameId,
+  scoreFormatter,
+  order,
+}: {
+  gameId: string;
+  scoreFormatter: (score: number) => string;
+  order: 'asc' | 'desc';
+}) => {
+  const { rankList, fetchNextPage } = useGetRanking(gameId, order);
   const { ref, isInView } = useInView();
 
   const today = new Date();
@@ -49,7 +57,7 @@ const LeaderBoard = () => {
             >
               <div className="font-bold text-gray-700">{index + 1}</div>
               <div className="text-gray-800">{item.name}</div>
-              <div className="text-gray-600">{formatTime(item.score)}</div>
+              <div className="text-gray-600">{scoreFormatter(item.score)}</div>
             </div>
           ))}
           <div ref={ref as React.RefObject<HTMLDivElement>}></div>

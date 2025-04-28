@@ -8,17 +8,17 @@ import { customFetchJson } from '@/src/shared/util/fetch-utils';
 
 const PAGE_COUNT = 10;
 
-const getRanking = (gameId: string, pageParam: number) => {
+const getRanking = (gameId: string, pageParam: number, order: 'asc' | 'desc') => {
   return customFetchJson<BaseResponseDto<RankResponseDto>>(
-    `${BASE_URL}/api/game/result?gameId=${gameId}&from=${pageParam}&to=${pageParam + PAGE_COUNT}`
+    `${BASE_URL}/api/game/result?gameId=${gameId}&from=${pageParam}&to=${pageParam + PAGE_COUNT}&order=${order}`
   );
 };
 
-const useGetRanking = (gameId: string) => {
+const useGetRanking = (gameId: string, order: 'asc' | 'desc') => {
   const { data, isLoading, error, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery({
     queryKey: ['ranking', gameId],
     queryFn: async ({ pageParam = 0 }) => {
-      const result = await getRanking(gameId, pageParam);
+      const result = await getRanking(gameId, pageParam, order);
       return result;
     },
     getNextPageParam: (lastPage, pages) => {
