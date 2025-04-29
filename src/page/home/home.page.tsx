@@ -30,36 +30,41 @@ const HomePage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 md:flex-row md:justify-center">
-      <OneTapComponent />
-      {gameList.map((game) => (
-        <Card key={game.id} className="pearl-hover md:w-1/2">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>{game.title}</CardTitle>
-            <div className="flex flex-row items-center justify-center gap-2 rounded-lg bg-gray-200">
-              {getGameAnimation(game.id)}
-            </div>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <div key={game.id} className="flex justify-between gap-2">
-              <Button
-                key={game.id}
-                color="secondary"
-                onClick={() => handleStartGame(game.id)}
-                containerClassName="w-full"
-                className="pearl-hover"
-                variant="outline"
-              >
-                PLAY NOW
-              </Button>
-              <div className="flex gap-2">
-                <HelpButton gameRuleTitle={game.ruleTitle} gameRuleScript={game.ruleScript} />
-                <StatsLink gameId={game.id.toString()} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+    <div className="from-background to-secondary/30 min-h-screen bg-gradient-to-b py-12">
+      <div className="pearl-container">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <OneTapComponent />
+          {gameList.map((game) => (
+            <Card key={game.id} className="pearl-hover glass-effect overflow-hidden rounded-2xl">
+              <CardHeader className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-2xl font-bold">{game.title}</CardTitle>
+                  <div className="bg-primary/10 rounded-full p-3">{getGameAnimation(game.id)}</div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <p className="text-muted-foreground">{game.ruleTitle}</p>
+                <div className="flex items-center gap-4">
+                  <Button
+                    onClick={() => handleStartGame(game.id)}
+                    className="pearl-hover bg-primary flex-1 rounded-xl font-semibold"
+                  >
+                    PLAY NOW
+                  </Button>
+                  <div className="flex gap-2">
+                    <HelpButton
+                      gameRuleTitle={game.ruleTitle}
+                      gameRuleScript={game.ruleScript}
+                      className="rounded-xl"
+                    />
+                    <StatsLink gameId={game.id.toString()} className="rounded-xl" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

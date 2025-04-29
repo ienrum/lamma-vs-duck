@@ -12,7 +12,6 @@ import {
   LEADER_BOARD_NAME_TITLE,
   LEADER_BOARD_SCORE_TITLE,
 } from '../config/constants';
-import formatTime from '@/src/shared/util/format-time';
 
 const LeaderBoard = ({
   gameId,
@@ -25,7 +24,6 @@ const LeaderBoard = ({
 }) => {
   const { rankList, fetchNextPage } = useGetRanking(gameId, order);
   const { ref, isInView } = useInView();
-
   const today = new Date();
   const formattedDate = formatDate(today);
 
@@ -36,34 +34,46 @@ const LeaderBoard = ({
   }, [isInView, fetchNextPage]);
 
   return (
-    <>
-      <Card className="w-full rounded-lg bg-white p-6 shadow-lg">
-        <CardHeader>
-          <h1 className="text-center text-3xl font-bold text-gray-800">{LEADER_BOARD_TITLE}</h1>
-        </CardHeader>
-        <CardTitle className="text-center text-gray-800">
-          <div className="text-gray-800">{formattedDate}</div>
-        </CardTitle>
-        <CardContent className="h-[60vh] overflow-y-scroll">
-          <div className="grid w-full grid-cols-3 gap-4 rounded-lg p-4 font-semibold text-gray-700">
-            <div>{LEADER_BOARD_RANK_TITLE}</div>
-            <div>{LEADER_BOARD_NAME_TITLE}</div>
-            <div>{LEADER_BOARD_SCORE_TITLE}</div>
-          </div>
+    <Card className="glass-effect pearl-shadow overflow-hidden rounded-2xl border-none">
+      <CardHeader className="bg-primary/5 space-y-2 border-b px-6 py-8">
+        <CardTitle className="text-center text-3xl font-bold">{LEADER_BOARD_TITLE}</CardTitle>
+        <p className="text-muted-foreground text-center">{formattedDate}</p>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="bg-secondary/5 text-muted-foreground grid grid-cols-3 gap-4 border-b p-4 text-sm font-semibold">
+          <div>{LEADER_BOARD_RANK_TITLE}</div>
+          <div>{LEADER_BOARD_NAME_TITLE}</div>
+          <div>{LEADER_BOARD_SCORE_TITLE}</div>
+        </div>
+        <div className="h-[60vh] overflow-y-auto">
           {rankList.map((item, index) => (
             <div
               key={item.id}
-              className={cn('grid w-full grid-cols-3 gap-4 rounded-lg p-4 transition-all hover:bg-gray-50')}
+              className={cn(
+                'grid grid-cols-3 gap-4 p-4 transition-all',
+                'hover:bg-secondary/5',
+                index === 0 && 'bg-primary/5 font-bold',
+                index === 1 && 'bg-primary/3 font-semibold',
+                index === 2 && 'bg-primary/2'
+              )}
             >
-              <div className="font-bold text-gray-700">{index + 1}</div>
-              <div className="text-gray-800">{item.name}</div>
-              <div className="text-gray-600">{scoreFormatter(item.score)}</div>
+              <div className="flex items-center gap-2">
+                {index < 3 ? (
+                  <span className="bg-primary/10 text-primary flex h-6 w-6 items-center justify-center rounded-full">
+                    {index + 1}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground">{index + 1}</span>
+                )}
+              </div>
+              <div className="truncate">{item.name}</div>
+              <div className="text-muted-foreground">{scoreFormatter(item.score)}</div>
             </div>
           ))}
-          <div ref={ref as React.RefObject<HTMLDivElement>}></div>
-        </CardContent>
-      </Card>
-    </>
+          <div ref={ref as React.RefObject<HTMLDivElement>} />
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -40,8 +40,8 @@ const ProfileButton = ({ className }: ProfileButtonProps) => {
     router.push('/profile');
   };
 
-  const handleSignOut = () => {
-    signoutAction();
+  const handleSignOut = async () => {
+    await signoutAction();
     if (typeof window !== 'undefined') {
       window.location.href = '/home';
     }

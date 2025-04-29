@@ -31,39 +31,35 @@ const DeviationGraph = ({ scoreFormatter }: { scoreFormatter: (score: number) =>
 
   if (isLoading) {
     return (
-      <div className="flex h-full w-full items-center justify-center">
-        <Spinner />
+      <div className="flex h-64 items-center justify-center">
+        <Spinner className="text-primary h-8 w-8" />
       </div>
     );
   }
+
   if (error?.message === 'Failed to get rank') {
     return (
-      <div className="flex h-full w-full items-center justify-center">
-        <p className="text-center text-sm font-medium text-gray-500">
+      <div className="flex h-64 items-center justify-center">
+        <p className="text-muted-foreground text-center text-sm font-medium">
           If you want to record your score, please sign in.
         </p>
       </div>
     );
-  } else if (error?.message === 'No data') {
+  }
+
+  if (error?.message === 'No data' || !data) {
     return (
-      <div className="flex h-full w-full items-center justify-center">
-        <p className="text-center text-sm font-medium text-gray-500">No today&apos;s data</p>
-      </div>
-    );
-  } else if (!data) {
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <p className="text-center text-sm font-medium text-gray-500">No data</p>
+      <div className="flex h-64 items-center justify-center">
+        <p className="text-muted-foreground text-center text-sm font-medium">
+          {error?.message === 'No data' ? "No today's data" : 'No data'}
+        </p>
       </div>
     );
   }
 
-  // 정규분포 데이터 생성 (평균 50, 표준편차 15)
   const chartData = generateNormalDistribution(50, 15, 100);
-
-  // 사용자의 위치 계산 (백분위를 IQ 스케일로 변환)
   const userPosition = data?.myPercentage;
-  // 사용자 위치에 가장 가까운 데이터 포인트 찾기
+
   const findClosestPoint = () => {
     let closestIndex = 0;
     let minDiff = Infinity;
@@ -80,47 +76,47 @@ const DeviationGraph = ({ scoreFormatter }: { scoreFormatter: (score: number) =>
   };
 
   const userPointIndex = findClosestPoint();
-  const userPoint = chartData[userPointIndex];
 
   return (
-    <Card className="bg-white shadow-lg">
-      <CardContent>
-        <ChartContainer config={{}}>
-          <LineChart
-            data={chartData}
-            margin={{
-              top: 10,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" vertical={false} />
+    <Card className="glass-effect pearl-shadow overflow-hidden rounded-2xl border-none">
+      <CardContent className="space-y-6 p-6">
+        <ChartContainer config={{ className: 'min-h-[300px]' }}>
+          <LineChart data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
             <XAxis
               dataKey="x"
               domain={[0, 100]}
               tickFormatter={(value) => value.toFixed(1)}
-              stroke="#9ca3af"
+              stroke="var(--muted-foreground)"
               strokeWidth={1}
-              tick={{ fontSize: 12, fontWeight: 400 }}
+              tick={{ fontSize: 12, fontWeight: 500 }}
             />
             <YAxis
-              tickFormatter={(value) => value.toFixed(1)}
-              stroke="#9ca3af"
+              tickFormatter={(value) => value.toFixed(2)}
+              stroke="var(--muted-foreground)"
               strokeWidth={1}
-              tick={{ fontSize: 12, fontWeight: 400 }}
+              tick={{ fontSize: 12, fontWeight: 500 }}
             />
             <Tooltip
-              formatter={(value: number) => [value.toFixed(1), 'Density']}
-              labelFormatter={(label) => `Score: ${label.toFixed(1)}`}
+              formatter={(value: number) => [value.toFixed(3), 'Density']}
+              labelFormatter={(label) => `Percentile: ${label.toFixed(1)}`}
               contentStyle={{
-                backgroundColor: 'white',
-                border: '1px solid #e5e7eb',
-                borderRadius: '6px',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-                padding: '8px 12px',
-                fontSize: '13px',
-                fontWeight: 400,
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius)',
+                padding: '0.75rem 1rem',
+                fontSize: '0.875rem',
+                fontWeight: 500,
               }}
             />
-            <Line type="monotone" dataKey="y" stroke="#4b5563" strokeWidth={2} dot={false} activeDot={{ r: 6 }} />
+            <Line
+              type="monotone"
+              dataKey="y"
+              stroke="var(--primary)"
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 6, fill: 'var(--primary)' }}
+            />
             <Line
               type="monotone"
               dataKey="y"
@@ -129,40 +125,38 @@ const DeviationGraph = ({ scoreFormatter }: { scoreFormatter: (score: number) =>
                 if (index === userPointIndex) {
                   return (
                     <g>
-                      <circle cx={cx} cy={cy} r={6} fill="#374151" stroke="white" strokeWidth={1.5} />
-                      <text
-                        x={cx}
-                        y={cy - 14}
-                        textAnchor="middle"
-                        fill="#374151"
-                        style={{
-                          fontWeight: 500,
-                          fontSize: '13px',
-                          textShadow: '0 1px 2px rgba(255,255,255,0.8)',
-                        }}
-                      >
+                      <circle
+                        cx={cx}
+                        cy={cy}
+                        r={6}
+                        fill="var(--primary)"
+                        stroke="var(--card)"
+                        strokeWidth={2}
+                        className="animate-pulse-slow"
+                      />
+                      <text x={cx} y={cy - 16} textAnchor="middle" fill="var(--primary)" className="text-sm font-bold">
                         You
                       </text>
                     </g>
                   );
                 }
-                return <g />;
+                return null;
               }}
             />
           </LineChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="border-t p-6">
-        <div className="flex flex-col items-center gap-4">
-          <div className="flex flex-col items-center gap-2 text-base font-medium text-gray-700">
-            <span className="text-gray-900">today&apos;s best score: {scoreFormatter(data?.myScore)}</span>
-            <div className="flex items-center gap-2">
-              {PERCENTAGE_SENTENCE} <span className="text-gray-900">{data?.myPercentage.toFixed(1)}%</span>
-              <TrendingUp className="h-5 w-5 text-gray-600" />
-            </div>
+      <CardFooter className="bg-secondary/5 flex flex-col gap-6 border-t px-6 py-8">
+        <div className="flex flex-col items-center gap-3 text-center">
+          <h3 className="text-xl font-bold">Today's Best Score</h3>
+          <p className="text-primary text-2xl font-bold">{scoreFormatter(data?.myScore)}</p>
+          <div className="text-muted-foreground flex items-center gap-2">
+            <span>{PERCENTAGE_SENTENCE}</span>
+            <span className="text-foreground font-bold">{data?.myPercentage.toFixed(1)}%</span>
+            <TrendingUp className="text-primary h-5 w-5" />
           </div>
-          <ShareButtons gameTitle="Lamma vs Duck" score={scoreFormatter(data?.myScore)} />
         </div>
+        <ShareButtons gameTitle="Lamma vs Duck" score={scoreFormatter(data?.myScore)} className="w-full" />
       </CardFooter>
     </Card>
   );

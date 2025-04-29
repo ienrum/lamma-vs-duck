@@ -5,7 +5,14 @@ import { cn } from '@/lib/utils';
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('bg-card text-card-foreground pearl-hover relative overflow-hidden rounded-2xl shadow-sm', className)}
+    className={cn(
+      'bg-card text-card-foreground relative overflow-hidden rounded-2xl shadow-sm',
+      'border-border/40 dark:border-border/60 border',
+      'hover:border-primary/20 dark:hover:border-primary/40',
+      'transition-all duration-300',
+      'pearl-hover',
+      className
+    )}
     {...props}
   />
 ));

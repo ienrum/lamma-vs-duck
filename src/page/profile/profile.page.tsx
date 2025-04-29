@@ -6,8 +6,6 @@ import { Button } from '@/components/ui/button';
 import { useUser } from '@/src/shared/api/use-user';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useState } from 'react';
-import { BASE_URL } from '@/src/app/config/baseurl';
-import { getQueryClient } from '@/src/app/utils/get-query-client';
 import { useUpdateName } from './api/use-update-name';
 
 const ProfilePage = () => {
@@ -26,24 +24,43 @@ const ProfilePage = () => {
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Profile</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form className="flex w-full flex-col gap-4 md:flex-row" onSubmit={handleSubmit}>
-          <div className="flex w-full flex-col gap-2">
-            <Label htmlFor="name">Name</Label>
-            <div className="flex gap-2">
-              <Input type="text" className="w-full" value={name} onChange={(e) => setName(e.target.value)} />
-              <Button type="submit" disabled={isPending}>
-                {isPending ? 'Saving...' : 'Save'}
-              </Button>
-            </div>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+    <div className="from-background to-secondary/30 min-h-screen bg-gradient-to-b py-12">
+      <div className="pearl-container max-w-2xl">
+        <Card className="glass-effect pearl-shadow overflow-hidden rounded-2xl border-none">
+          <CardHeader className="bg-primary/5 space-y-2 border-b px-6 py-8">
+            <CardTitle className="text-3xl font-bold">Profile Settings</CardTitle>
+            <p className="text-muted-foreground">Manage your account settings and preferences.</p>
+          </CardHeader>
+          <CardContent className="space-y-8 p-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="space-y-4">
+                <Label htmlFor="name" className="text-lg font-medium">
+                  Display Name
+                </Label>
+                <div className="flex gap-4">
+                  <Input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="flex-1 rounded-xl text-lg"
+                    placeholder="Enter your display name"
+                  />
+                  <Button
+                    type="submit"
+                    disabled={isPending}
+                    className="pearl-hover bg-primary rounded-xl px-8 font-semibold"
+                  >
+                    {isPending ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                </div>
+                {updateNameError && <p className="text-destructive text-sm">{updateNameError.message}</p>}
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 

@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes } from 'react';
+import { cn } from '@/lib/utils';
 
 interface GoogleSignInButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
@@ -7,7 +8,15 @@ interface GoogleSignInButtonProps extends ButtonHTMLAttributes<HTMLButtonElement
 export const GoogleSignInButton = ({ className = '', ...props }: GoogleSignInButtonProps) => {
   return (
     <button
-      className={`relative h-12 w-auto max-w-[400px] min-w-min cursor-pointer appearance-none overflow-hidden rounded-lg border border-gray-200 bg-white px-4 text-center align-middle font-['Roboto'] text-sm font-medium tracking-wide text-gray-700 outline outline-1 outline-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:outline-gray-300 focus:outline-2 focus:outline-blue-500 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+      className={cn(
+        'relative h-12 w-auto min-w-min overflow-hidden rounded-xl border',
+        'bg-card text-card-foreground border-border',
+        'transition-all duration-200 ease-in-out',
+        'hover:scale-[1.02] hover:shadow-md',
+        'focus:ring-primary focus:ring-2 focus:ring-offset-2 focus:outline-none',
+        'disabled:cursor-not-allowed disabled:opacity-50',
+        className
+      )}
       {...props}
     >
       <div className="relative flex h-full w-full items-center justify-center gap-3">

@@ -15,11 +15,11 @@ export const Logo = ({ className, size = 'md' }: LogoProps) => {
 
   return (
     <div className={cn('flex items-center gap-2', className)}>
-      <div className={cn('relative rounded-full border-2', sizeClasses[size])}>
+      <div className={cn('border-primary/30 relative rounded-full border-2 bg-white', sizeClasses[size])}>
         <Image src="/favicon.ico" alt="Lamma vs Duck Logo" fill className="object-contain" />
       </div>
       <span
-        className={cn('font-bold text-gray-900', {
+        className={cn('text-foreground font-bold', {
           'text-lg': size === 'sm',
           'text-xl': size === 'md',
           'text-2xl': size === 'lg',

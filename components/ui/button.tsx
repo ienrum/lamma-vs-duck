@@ -8,18 +8,23 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:opacity-90 hover:shadow-lg transform hover:-translate-y-0.5',
-        destructive: 'bg-destructive text-destructive-foreground hover:opacity-90 hover:shadow-lg',
-        outline: 'border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-md',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+        default:
+          'bg-primary text-primary-foreground hover:opacity-90 hover:shadow-lg transform hover:-translate-y-0.5 [&>svg]:hover:scale-110 [&>svg]:transition-transform',
+        destructive:
+          'bg-destructive text-destructive-foreground hover:opacity-90 hover:shadow-lg [&>svg]:hover:scale-110 [&>svg]:transition-transform',
+        outline:
+          'border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground [&>svg]:hover:text-primary [&>svg]:hover:scale-110 [&>svg]:transition-all',
+        secondary:
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-md [&>svg]:hover:scale-110 [&>svg]:transition-transform',
+        ghost:
+          'hover:bg-accent hover:text-accent-foreground [&>svg]:hover:text-primary [&>svg]:hover:scale-110 [&>svg]:transition-all',
+        link: 'text-primary underline-offset-4 hover:underline [&>svg]:hover:scale-110 [&>svg]:transition-transform',
       },
       size: {
         default: 'h-11 px-6 text-base',
         sm: 'h-9 px-4 text-sm',
         lg: 'h-14 px-8 text-lg',
-        icon: 'h-10 w-10',
+        icon: 'h-10 w-10 [&>svg]:h-5 [&>svg]:w-5 hover:[&>svg]:h-[22px] hover:[&>svg]:w-[22px] [&>svg]:transition-all',
       },
     },
     defaultVariants: {

@@ -44,81 +44,58 @@
 }
 
 :root {
-  --radius: 0.5rem;
-  --background: oklch(0.98 0.02 100); /* 공책 배경색 */
-  --foreground: oklch(0 0 0);
+  --radius: 0.75rem;
+
+  /* Light mode colors */
+  --background: oklch(0.98 0.005 240);
+  --foreground: oklch(0.2 0.02 240);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0 0 0);
+  --card-foreground: oklch(0.2 0.02 240);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0 0 0);
-  --primary: oklch(0.98 0.02 100);
-  --primary-foreground: oklch(0 0 0);
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.45 0 0);
-  --accent: oklch(0.96 0 0);
-  --accent-foreground: oklch(0 0 0);
-  --destructive: oklch(0.84 0.2 0);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.9 0 0);
-  --ring: oklch(0 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0.002 247.839);
-  --sidebar-foreground: oklch(0.13 0.028 261.692);
-  --sidebar-primary: oklch(0.21 0.034 264.665);
-  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-accent: oklch(0.967 0.003 264.542);
-  --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
-  --sidebar-border: oklch(0.928 0.006 264.531);
-  --sidebar-ring: oklch(0.707 0.022 261.325);
-  --pearl-white: #ffffff;
-  --pearl-black: #000000;
-  --pearl-gray-50: #f9fafb;
-  --pearl-gray-100: #f3f4f6;
-  --pearl-gray-200: #e5e7eb;
-  --pearl-gray-300: #d1d5db;
-  --pearl-gray-400: #9ca3af;
-  --pearl-gray-500: #6b7280;
-  --pearl-gray-600: #4b5563;
-  --pearl-gray-700: #374151;
-  --pearl-gray-800: #1f2937;
-  --pearl-gray-900: #111827;
-  --pearl-primary: #3b82f6;
-  --pearl-primary-dark: #2563eb;
-  --pearl-secondary: #10b981;
-  --pearl-accent: #f59e0b;
-  --pearl-danger: #ef4444;
-  --pearl-success: #10b981;
-  --pearl-warning: #f59e0b;
-  --pearl-info: #3b82f6;
+  --popover-foreground: oklch(0.2 0.02 240);
+  --primary: oklch(0.5 0.2 240);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.02 240);
+  --secondary-foreground: oklch(0.2 0.02 240);
+  --muted: oklch(0.95 0.02 240);
+  --muted-foreground: oklch(0.6 0.02 240);
+  --accent: oklch(0.95 0.02 240);
+  --accent-foreground: oklch(0.2 0.02 240);
+  --destructive: oklch(0.7 0.3 30);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9 0.02 240);
+  --input: oklch(0.9 0.02 240);
+  --ring: oklch(0.5 0.2 240);
+
+  /* Animation settings */
+  --animation-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dark {
-  --background: oklch(0 0 0);
-  --foreground: oklch(1 0 0);
-  --card: oklch(0 0 0);
-  --card-foreground: oklch(1 0 0);
-  --popover: oklch(0 0 0);
-  --popover-foreground: oklch(1 0 0);
-  --primary: oklch(1 0 0);
-  --primary-foreground: oklch(0 0 0);
-  --secondary: oklch(0.15 0 0);
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.15 0 0);
-  --muted-foreground: oklch(0.64 0 0);
-  --accent: oklch(0.15 0 0);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.63 0.2 0);
+/* 기본 테마를 다크모드로 설정 */
+:root {
+  color-scheme: dark;
+
+  /* Dark mode colors */
+  --background: oklch(0.1 0.02 240);
+  --foreground: oklch(0.95 0.02 240);
+  --card: oklch(0.15 0.02 240);
+  --card-foreground: oklch(0.95 0.02 240);
+  --popover: oklch(0.15 0.02 240);
+  --popover-foreground: oklch(0.95 0.02 240);
+  --primary: oklch(0.7 0.2 240);
+  --primary-foreground: oklch(0.1 0.02 240);
+  --secondary: oklch(0.2 0.02 240);
+  --secondary-foreground: oklch(0.95 0.02 240);
+  --muted: oklch(0.2 0.02 240);
+  --muted-foreground: oklch(0.7 0.02 240);
+  --accent: oklch(0.2 0.02 240);
+  --accent-foreground: oklch(0.95 0.02 240);
+  --destructive: oklch(0.6 0.3 30);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.15 0 0);
-  --input: oklch(0.15 0 0);
-  --ring: oklch(0.83 0 0);
+  --border: oklch(0.2 0.02 240);
+  --input: oklch(0.2 0.02 240);
+  --ring: oklch(0.7 0.2 240);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -144,14 +121,50 @@
   --pearl-gray-700: #f3f4f6;
   --pearl-gray-800: #f9fafb;
   --pearl-gray-900: #ffffff;
+  --pearl-primary: #3b82f6;
+  --pearl-primary-dark: #2563eb;
+  --pearl-secondary: #10b981;
+  --pearl-accent: #f59e0b;
+  --pearl-danger: #ef4444;
+  --pearl-success: #10b981;
+  --pearl-warning: #f59e0b;
+  --pearl-info: #3b82f6;
+}
+
+/* Light mode 클래스 추가 */
+.light {
+  color-scheme: light;
+
+  --background: oklch(0.98 0.005 240);
+  --foreground: oklch(0.2 0.02 240);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.02 240);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.02 240);
+  --primary: oklch(0.5 0.2 240);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.02 240);
+  --secondary-foreground: oklch(0.2 0.02 240);
+  --muted: oklch(0.95 0.02 240);
+  --muted-foreground: oklch(0.6 0.02 240);
+  --accent: oklch(0.95 0.02 240);
+  --accent-foreground: oklch(0.2 0.02 240);
+  --destructive: oklch(0.7 0.3 30);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9 0.02 240);
+  --input: oklch(0.9 0.02 240);
+  --ring: oklch(0.5 0.2 240);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
   }
 }
 
@@ -161,19 +174,15 @@
   }
 
   .pearl-gradient {
-    @apply from-primary to-primary-foreground bg-gradient-to-r;
+    @apply from-primary to-primary/80 bg-gradient-to-r;
   }
 
   .pearl-shadow {
-    @apply shadow-[0_4px_12px_rgba(0,0,0,0.1)];
+    @apply shadow-primary/10 shadow-lg;
   }
 
   .pearl-shadow-lg {
-    @apply shadow-[0_8px_24px_rgba(0,0,0,0.15)];
-  }
-
-  .pearl-shadow-xl {
-    @apply shadow-[0_12px_36px_rgba(0,0,0,0.2)];
+    @apply shadow-primary/20 shadow-xl;
   }
 
   .pearl-transition {
@@ -181,15 +190,15 @@
   }
 
   .pearl-hover {
-    @apply hover:scale-105 hover:shadow-lg;
-  }
-
-  .pearl-focus {
-    @apply focus:ring-primary focus:ring-2 focus:ring-offset-2 focus:outline-none;
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg;
   }
 
   .pearl-active {
-    @apply transition-all duration-200 ease-in-out active:scale-95;
+    @apply transition-all duration-200 active:scale-95;
+  }
+
+  .glass-effect {
+    @apply bg-white/5 backdrop-blur-md dark:bg-black/5;
   }
 }
 
@@ -287,4 +296,37 @@
   100% {
     transform: translate(-100%, -50%);
   }
+}
+
+/* 새로운 애니메이션 */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s ease-in-out infinite;
 }
