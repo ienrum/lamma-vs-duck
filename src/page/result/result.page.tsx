@@ -37,7 +37,7 @@ const ResultPage = () => {
       <HydrationBoundary state={dehydrate(queryClient)}>
         <div className="relative flex w-full flex-col items-center justify-center gap-4">
           <p className="text-sm text-gray-500">{gameTitle}</p>
-          <div ref={graphRef} className="rounded-lg bg-white p-4">
+          <div ref={graphRef}>
             {!user && <p className="text-gray-500">sign in to see your result</p>}
             {!!user && (
               <Suspense fallback={<LeaderBoardFallback />}>
@@ -45,7 +45,6 @@ const ResultPage = () => {
               </Suspense>
             )}
           </div>
-          {!!user && <ShareButton targetRef={graphRef} />}
           <LeaderBoard gameId={gameId} scoreFormatter={scoreFormatter} order={order} />
         </div>
       </HydrationBoundary>
