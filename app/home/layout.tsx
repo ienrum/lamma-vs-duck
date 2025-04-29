@@ -1,5 +1,4 @@
 import HomePageTopbar from '@/src/page/home/home-page.topbar';
-import Head from 'next/head';
 import Script from 'next/script';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -13,7 +12,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         });
       `}
       </Script>
-
       <HomePageTopbar />
       <div className="mx-auto flex max-w-screen-lg flex-col gap-4">{children}</div>
     </>

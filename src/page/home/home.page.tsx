@@ -9,6 +9,7 @@ import { StatsLink } from '@/src/widgets/TopBar/ui/StatsLink';
 import { DuckLammaAnimation } from '@/src/shared/ui/game-animations/DuckLammaAnimation';
 import { GreedyBeeAnimation } from '@/src/shared/ui/game-animations/GreedyBeeAnimation';
 import OneTapComponent from '@/src/shared/ui/google-one-tap';
+import ProductHuntButton from '@/src/shared/ui/product-hunt-button';
 
 const HomePage = () => {
   const router = useRouter();
@@ -65,6 +66,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+      <ProductHuntButton />
     </div>
   );
 };

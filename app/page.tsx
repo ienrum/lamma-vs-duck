@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import ProductHuntButton from '@/src/shared/ui/product-hunt-button';
 
 export default function Page() {
   return (
@@ -59,6 +60,7 @@ export default function Page() {
             </Card>
           </section>
         </div>
+        <ProductHuntButton />
 
         <footer className="text-muted-foreground mt-24 py-8 text-sm">
           © 2024 Lamma vs Duck. All rights reserved.
