@@ -7,6 +7,7 @@ import { useUser } from '@/src/shared/api/use-user';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useState } from 'react';
 import { useUpdateName } from './api/use-update-name';
+import AccountDeletionButton from '@/src/widgets/account-deletion-button';
 
 const ProfilePage = () => {
   const { user, error } = useUser();
@@ -57,6 +58,7 @@ const ProfilePage = () => {
                 {updateNameError && <p className="text-destructive text-sm">{updateNameError.message}</p>}
               </div>
             </form>
+            <AccountDeletionButton />
           </CardContent>
         </Card>
       </div>
