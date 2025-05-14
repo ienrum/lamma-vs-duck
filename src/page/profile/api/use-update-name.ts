@@ -20,6 +20,7 @@ export const useUpdateName = () => {
     mutationFn: (name: string) => updateName(name),
     onSuccess: () => {
       getQueryClient().invalidateQueries({ queryKey: ['user'] });
+      getQueryClient().invalidateQueries({ queryKey: ['ranking'] });
     },
   });
 

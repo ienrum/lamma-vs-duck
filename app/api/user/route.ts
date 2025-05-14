@@ -4,10 +4,9 @@ import { NextResponse } from 'next/server';
 import { getSupabaseUser } from '@/src/app/config/get-supabase-user';
 import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
 
-export interface Member {
+export interface Profile {
   id: string;
-  name: string;
-  email: string;
+  full_name: string;
   avatar_url: string;
 }
 
@@ -23,16 +22,16 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
-  const { data: member } = await supabase.from('members').select('*').eq('id', user.id).single();
+  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
 
-  if (!member) {
-    return NextResponse.json({ error: 'Member not found' }, { status: 404 });
+  if (!profile) {
+    return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
   }
 
-  return NextResponse.json<BaseResponseDto<Member>>(
+  return NextResponse.json<BaseResponseDto<Profile>>(
     {
-      message: 'Member fetched successfully',
-      data: member,
+      message: 'Profile fetched successfully',
+      data: profile,
     },
     { status: 200 }
   );
@@ -52,15 +51,24 @@ export async function PATCH(request: Request) {
 
   const body = await request.json();
 
-  const { data: member } = await supabase.auth.updateUser({
-    data: {
-      name: body.name,
-    },
-  });
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .update({
+      full_name: body.name,
+    })
+    .eq('id', user.id)
+    .select('*')
+    .single();
+
+  console.log(body, user.id);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 
   return NextResponse.json<BaseResponseDto<null>>(
     {
-      message: 'Member updated successfully',
+      message: 'Profile updated successfully',
       data: null,
     },
     { status: 200 }

@@ -51,7 +51,7 @@ const ProfileButton = ({ className }: ProfileButtonProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className={cn('hover:bg-gray-100', className)} aria-label="Profile menu">
-          <Image src={user.avatar_url} alt="Profile" width={32} height={32} className="rounded-full" />
+          <img src={user.avatar_url} alt="Profile" width={32} height={32} className="rounded-full" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">

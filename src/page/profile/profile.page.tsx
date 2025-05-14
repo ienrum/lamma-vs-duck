@@ -17,7 +17,7 @@ const ProfilePage = () => {
     throw new Error(error.message);
   }
 
-  const [name, setName] = useState(user.name);
+  const [name, setName] = useState(user.full_name);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

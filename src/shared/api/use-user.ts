@@ -2,13 +2,13 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { getSupabaseUser } from '@/src/app/config/get-supabase-user';
 import { createClient } from '@/utils/supabase/client';
 import { BASE_URL } from '@/src/app/config/baseurl';
-import { Member } from '@/app/api/user/route';
+import { Profile } from '@/app/api/user/route';
 import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
 
 const getUser = async () => {
   const response = await fetch(`${BASE_URL}/api/user`);
 
-  return response.json() as Promise<BaseResponseDto<Member>>;
+  return response.json() as Promise<BaseResponseDto<Profile>>;
 };
 
 export const useUser = () => {
