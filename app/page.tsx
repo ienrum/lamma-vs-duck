@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import ProductHuntButton from '@/src/shared/ui/product-hunt-button';
 import { ChevronRight, Users, Trophy, Clock, Sparkles, Star, Menu } from 'lucide-react';
+import { posthog } from 'posthog-js';
 
 export default function Page() {
   return (
@@ -37,6 +38,9 @@ export default function Page() {
                     <Button
                       size="default"
                       className="pearl-hover rounded-full px-4 py-2 text-sm font-medium sm:px-8 sm:py-7 sm:text-lg"
+                      onClick={() => {
+                        posthog.capture('go_home');
+                      }}
                     >
                       Get Started <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                     </Button>
@@ -202,10 +206,13 @@ export default function Page() {
             <p className="text-muted-foreground mx-auto max-w-2xl text-base sm:text-lg md:text-xl">
               The ultimate matching game experience awaits you
             </p>
-            <Link href="/home">
+            <Link href="/game/1">
               <Button
                 size="lg"
                 className="pearl-hover mt-4 rounded-full px-6 py-5 text-base font-medium sm:mt-6 sm:px-10 sm:py-7 sm:text-lg"
+                onClick={() => {
+                  posthog.capture('play_game');
+                }}
               >
                 Play For Free <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>

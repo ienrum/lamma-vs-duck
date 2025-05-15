@@ -14,7 +14,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { GameSubmissionForm } from '../../duck-vs-lamma/ui/GameSubmissionForm';
 import ScoreResult from '../../score-result/score-result';
 import Spinner from '@/components/ui/spinner';
-
+import { posthog } from 'posthog-js';
 export interface IRefPhaserGame {
   game: Game | null;
   scene: Scene | null;
@@ -100,6 +100,7 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
           router.push(`/result/${gameId}`);
           return;
         }
+        posthog.capture(`game_end_${gameId}`);
         gameEndRef.current?.requestSubmit();
       }
     }

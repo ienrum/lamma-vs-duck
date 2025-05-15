@@ -11,7 +11,7 @@ import { GameBoardLayout } from './GameBoardLayout';
 import { Suspense, useRef } from 'react';
 import ScoreResult from '../../score-result/score-result';
 import { getQueryClient } from '@/src/app/utils/get-query-client';
-
+import { posthog } from 'posthog-js';
 const DuckVsLammaBoard = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   const { currentEmojiBoard, gameInfo, reservedAnimalMaps, setBoard, endGame } = useGame();
   const gameId = Number(useParams().gameId);
@@ -31,6 +31,7 @@ const DuckVsLammaBoard = ({ isAuthenticated }: { isAuthenticated: boolean }) => 
         router.push(`/result/${gameId}`);
         return;
       }
+      posthog.capture(`game_end_${gameId}`);
       gameEndRef.current?.requestSubmit();
       getQueryClient().invalidateQueries({ queryKey: ['gameBoard', gameId] });
     },

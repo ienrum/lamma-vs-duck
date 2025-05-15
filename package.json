@@ -33,6 +33,8 @@
     "next": "15.2.4",
     "next-share": "^0.27.0",
     "phaser": "^3.88.2",
+    "posthog-js": "^1.242.1",
+    "posthog-node": "^4.17.1",
     "powerglitch": "^2.4.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

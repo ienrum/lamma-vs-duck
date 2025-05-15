@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import Providers from '@/src/app/provider/tanstack-query.provider';
+import { PostHogProvider } from '@/app/provider/posthog.provider';
 // GeistSans is already imported from next/font/google above
 import { ThemeProvider } from '@/src/shared/context/theme-provider';
 
@@ -66,7 +67,9 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider defaultTheme="dark" storageKey="app-theme">
-          <Providers>{children}</Providers>
+          <PostHogProvider>
+            <Providers>{children}</Providers>
+          </PostHogProvider>
         </ThemeProvider>
       </body>
     </html>
