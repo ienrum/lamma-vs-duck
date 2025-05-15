@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useActionState, useEffect, useRef, useState } from 'react';
 import { Game, Scene, AUTO, Types } from 'phaser';
 import { FenseWall } from '../store/fense-wall';
 import { width, height } from '../config/constants';
@@ -14,6 +14,7 @@ import { GameSubmissionForm } from '../../duck-vs-lamma/ui/GameSubmissionForm';
 import ScoreResult from '../../score-result/score-result';
 import Spinner from '@/components/ui/spinner';
 import { posthog } from 'posthog-js';
+import { useQueryClient } from '@tanstack/react-query';
 export interface IRefPhaserGame {
   game: Game | null;
   scene: Scene | null;
@@ -31,11 +32,15 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
   const { gameId } = useParams();
 
   const game = useRef<Game | null>(null);
+  const queryClient = useQueryClient();
   const [count, setCount] = useState(0);
   const [health, setHealth] = useState({ health: 100, maxHealth: 100 });
   const [score, setScore] = useState({ score: 0, highScore: 0 });
   const [isGameReady, setIsGameReady] = useState(false);
-  const [state, formAction] = useFormState(endGameAction, null);
+  const [state, formAction, isPending] = useActionState(endGameAction, null);
+  const error = state?.error || null;
+  const success = state?.status === 'success';
+
   const gameEndRef = useRef<HTMLFormElement>(null);
 
   const router = useRouter();
@@ -104,6 +109,18 @@ const FenseWallScene = forwardRef<IRefPhaserGame, IProps>(function FenseWallScen
       }
     }
   }, [score.highScore, game.current, health.health]);
+
+  useEffect(() => {
+    if (success) {
+      queryClient.invalidateQueries({ queryKey: ['deviation'] });
+      queryClient.invalidateQueries({ queryKey: ['ranking', gameId] });
+      router.push(`/result/${gameId}`);
+    }
+  }, [success, queryClient, gameId, router]);
+
+  if (error) {
+    throw new Error(error);
+  }
 
   return (
     <div className="flex flex-col items-center justify-center gap-8">

@@ -15,9 +15,9 @@ export const playedToday = async (gameId: number): Promise<BaseResponseDto<boole
 
   if (!user) {
     return {
-      status: 'error',
-      data: null,
-      error: 'User not found',
+      status: 'success',
+      data: false,
+      error: null,
     };
   }
 
@@ -31,8 +31,6 @@ export const playedToday = async (gameId: number): Promise<BaseResponseDto<boole
     .gte('end_time', `${today} 00:00:00`)
     .lte('end_time', `${today} 23:59:59`)
     .single();
-
-  console.log(data, error);
 
   return {
     status: 'success',
