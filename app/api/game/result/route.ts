@@ -3,7 +3,7 @@ import { BaseResponseDto } from '@/src/app/model/backend/base-dto';
 import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { RankResponseDto } from '@/src/widgets/leader-board/model/dto/rank.dto';
-import { Rank } from '@/src/widgets/leader-board/model/dto/rank.dto';
+import { RankWithUsers } from '@/src/widgets/leader-board/model/dto/rank.dto';
 import { todayString } from '@/src/shared/config/today-string';
 import { getSupabaseUser } from '@/src/app/config/get-supabase-user';
 
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     }
 
     const response: RankResponseDto = {
-      rankList: data as unknown as Rank[],
+      rankList: data as unknown as RankWithUsers[],
     };
 
     return NextResponse.json<BaseResponseDto<RankResponseDto>>(

@@ -27,6 +27,8 @@ const LeaderBoard = ({
   const today = new Date();
   const formattedDate = formatDate(today);
 
+  console.log(rankList);
+
   useEffect(() => {
     if (isInView) {
       fetchNextPage();
@@ -67,7 +69,7 @@ const LeaderBoard = ({
                 )}
               </div>
               <div className="truncate">{item.name}</div>
-              <div className="text-muted-foreground">{scoreFormatter(item.score)}</div>
+              <div className="text-muted-foreground">{scoreFormatter(item.score ?? 0)}</div>
             </div>
           ))}
           <div ref={ref as React.RefObject<HTMLDivElement>} />

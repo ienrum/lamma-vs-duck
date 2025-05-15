@@ -1,16 +1,7 @@
+import { Database } from '@/types/database.types';
+
 export type RankResponseDto = {
-  rankList: Rank[];
+  rankList: RankWithUsers[];
 };
 
-export interface Rank {
-  id: number;
-  game_id: number;
-  user_id: string;
-  score: number;
-  rank: number;
-  start_date: string;
-  end_date: string;
-  name: string;
-  avatar_url: string;
-  email: string;
-}
+export type RankWithUsers = Database['public']['Views']['rank_with_users']['Row'];

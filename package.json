@@ -12,7 +12,8 @@
     "test:coverage": "vitest --coverage",
     "test:ui": "vitest --ui",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "update-types": "npx supabase gen types typescript --project-id \"mfejnjzkyyocdfsyefiv\" > types/database.types.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
