@@ -10,13 +10,21 @@ import { DuckLammaAnimation } from '@/src/shared/ui/game-animations/DuckLammaAni
 import { GreedyBeeAnimation } from '@/src/shared/ui/game-animations/GreedyBeeAnimation';
 import OneTapComponent from '@/src/shared/ui/google-one-tap';
 import ProductHuntButton from '@/src/shared/ui/product-hunt-button';
+import { usePlayedToday } from '@/src/entities/game/hooks';
 
 const HomePage = () => {
   const router = useRouter();
   const { data: gameList } = useGetGameList();
+  const response = usePlayedToday([1, 2]);
+
+  const playedTodayByGameId = response.filter((item) => item.data.isPlayed).map((item) => item.data.gameId);
 
   const handleStartGame = (gameId: number) => {
-    router.push(`/game/${gameId}`);
+    if (playedTodayByGameId.includes(gameId)) {
+      router.push(`/result/${gameId}`);
+    } else {
+      router.push(`/game/${gameId}`);
+    }
   };
 
   const getGameAnimation = (gameId: number) => {
@@ -46,12 +54,19 @@ const HomePage = () => {
               <CardContent className="space-y-6">
                 <p className="text-muted-foreground">{game.ruleTitle}</p>
                 <div className="flex items-center gap-4">
-                  <Button
-                    onClick={() => handleStartGame(game.id)}
-                    className="pearl-hover bg-primary flex-1 rounded-xl font-semibold"
-                  >
-                    PLAY NOW
-                  </Button>
+                  <div className="flex items-center justify-center">
+                    <div>
+                      <Button
+                        onClick={() => handleStartGame(game.id)}
+                        className="pearl-hover bg-primary flex-1 rounded-xl font-semibold"
+                      >
+                        {playedTodayByGameId.includes(game.id) ? 'VIEW RESULT' : 'PLAY NOW'}
+                      </Button>
+                      {playedTodayByGameId.includes(game.id) && (
+                        <p className="text-muted-foreground pt-2 text-xs">You have already played today</p>
+                      )}
+                    </div>
+                  </div>
                   <div className="flex gap-2">
                     <HelpButton
                       gameRuleTitle={game.ruleTitle}

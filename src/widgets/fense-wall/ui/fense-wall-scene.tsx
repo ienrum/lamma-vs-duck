@@ -4,7 +4,6 @@ import { forwardRef, useEffect, useRef, useState } from 'react';
 import { Game, Scene, AUTO, Types } from 'phaser';
 import { FenseWall } from '../store/fense-wall';
 import { width, height } from '../config/constants';
-import { useCrossPadStore } from '@/src/entities/cross-pad/model/store';
 import HealthBar from '@/src/features/health-bar/health-bar';
 import ScoreBoard from '@/src/features/score-board/score-board';
 import { cn } from '@/lib/utils';

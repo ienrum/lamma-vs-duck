@@ -6,13 +6,18 @@ import { cookies } from 'next/headers';
 import { todayString } from '@/src/shared/config/today-string';
 import { redirect } from 'next/navigation';
 import { getQueryClient } from '@/src/app/utils/get-query-client';
+import { BaseResponseDto } from '@/src/shared/types/base-response.dto';
 
-export async function endGameAction(prevState: any, formData: FormData) {
+export async function endGameAction(prevState: any, formData: FormData): Promise<BaseResponseDto<undefined>> {
   const gameId = formData.get('gameId')?.toString();
   const score = formData.get('score')?.toString();
 
   if (!gameId || !score) {
-    return { error: 'Invalid form data' };
+    return {
+      status: 'error',
+      data: null,
+      error: 'Invalid form data',
+    };
   }
 
   const cookieStore = await cookies();
@@ -23,7 +28,11 @@ export async function endGameAction(prevState: any, formData: FormData) {
   } = await getSupabaseUser(supabase);
 
   if (!user) {
-    return { error: 'User not found' };
+    return {
+      status: 'error',
+      data: null,
+      error: 'User not found',
+    };
   }
 
   const today = todayString();
@@ -38,41 +47,33 @@ export async function endGameAction(prevState: any, formData: FormData) {
     .eq('game_id', gameId)
     .single();
 
-  let compareScore = false;
-  if (gameId === '1') {
-    compareScore = Number(score) < Number(rankData?.score);
-  } else if (gameId === '2') {
-    compareScore = Number(score) > Number(rankData?.score);
-  }
-
+  // 당일 플레이시 return 에러
   if (rankData) {
-    if (compareScore) {
-      const { error } = await supabase
-        .from('rank')
-        .update({
-          end_time: endTime,
-          score,
-        })
-        .eq('id', rankData.id);
-
-      if (error) {
-        return { error: 'Rank update failed' };
-      }
-    }
-  } else {
-    const { error } = await supabase.from('rank').insert({
-      game_id: gameId,
-      user_id: user.id,
-      end_time: endTime,
-      score,
-    });
-
-    if (error) {
-      return { error: 'Rank insert failed' };
-    }
+    return {
+      status: 'error',
+      data: null,
+      error: 'You have already played today',
+    };
   }
 
-  getQueryClient().invalidateQueries({ queryKey: ['deviation'] });
+  const { error } = await supabase.from('rank').insert({
+    game_id: gameId,
+    user_id: user.id,
+    end_time: endTime,
+    score,
+  });
 
-  redirect(`/result/${gameId}`);
+  if (error) {
+    return {
+      status: 'error',
+      data: null,
+      error: 'Rank insert failed',
+    };
+  }
+
+  return {
+    status: 'success',
+    data: undefined,
+    error: null,
+  };
 }

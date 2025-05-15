@@ -27,8 +27,6 @@ const LeaderBoard = ({
   const today = new Date();
   const formattedDate = formatDate(today);
 
-  console.log(rankList);
-
   useEffect(() => {
     if (isInView) {
       fetchNextPage();

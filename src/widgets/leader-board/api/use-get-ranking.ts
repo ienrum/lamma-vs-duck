@@ -10,7 +10,10 @@ const PAGE_COUNT = 10;
 
 const getRanking = (gameId: string, pageParam: number, order: 'asc' | 'desc') => {
   return customFetchJson<BaseResponseDto<RankResponseDto>>(
-    `${BASE_URL}/api/game/result?gameId=${gameId}&from=${pageParam}&to=${pageParam + PAGE_COUNT}&order=${order}`
+    `${BASE_URL}/api/game/result?gameId=${gameId}&from=${pageParam}&to=${pageParam + PAGE_COUNT}&order=${order}`,
+    {
+      cache: 'no-store',
+    }
   );
 };
 
@@ -33,6 +36,7 @@ const useGetRanking = (gameId: string, order: 'asc' | 'desc') => {
       // 안전한 변환을 위해 옵셔널 체이닝과 기본값 사용
       return data.pages.flatMap((page) => page.data?.rankList || []);
     },
+    staleTime: 0,
   });
 
   return {
