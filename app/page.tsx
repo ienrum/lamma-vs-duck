@@ -148,7 +148,7 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-                <div className="bg-background relative w-96 overflow-hidden rounded-xl p-2 shadow-lg sm:h-56 sm:p-4 md:h-128">
+                <div className="bg-background relative h-128 w-full overflow-hidden rounded-xl p-2 shadow-lg sm:p-4 md:w-84">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Image src="/lamma.gif" alt="Game Play" fill className="object-cover" />
                   </div>
