@@ -32,6 +32,8 @@ export const GET = async (req: Request) => {
     .from('rank')
     .select('score')
     .eq('game_id', gameId)
+    .lte('end_time', `${today} 23:59:59`)
+    .gte('end_time', `${today} 00:00:00`)
     .order('score', { ascending: false });
   const { data: myScore, error: myScoreError } = await supabase
     .from('rank')
