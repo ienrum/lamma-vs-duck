@@ -34,12 +34,12 @@ export default function Page() {
                   Create the ultimate gaming experience with exciting puzzles
                 </p>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
-                  <Link href="/home">
+                  <Link href="/game/1">
                     <Button
                       size="default"
                       className="pearl-hover rounded-full px-4 py-2 text-sm font-medium sm:px-8 sm:py-7 sm:text-lg"
                       onClick={() => {
-                        posthog.capture('go_home');
+                        posthog.capture('game_1_play');
                       }}
                     >
                       Get Started <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
