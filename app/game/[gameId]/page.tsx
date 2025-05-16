@@ -8,7 +8,6 @@ const Page = async ({ params }: { params: Promise<{ gameId: string }> }) => {
 
   const playedTodayResponse = await playedToday(Number(gameId));
 
-  console.log(playedTodayResponse);
   if (playedTodayResponse.status === 'success' && playedTodayResponse.data) {
     redirect(`/result/${gameId}`);
   } else if (playedTodayResponse.status === 'error') {
