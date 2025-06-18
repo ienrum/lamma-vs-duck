@@ -1,6 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { TopBar } from '../TopBar';
 import { expect, describe, it } from 'vitest';
+import { GAME_RULE_SCRIPT, GAME_RULE_TITLE } from '@/src/app/config/game-rule';
+import { HelpButton } from '../HelpButton';
+import { StatsLink } from '../StatsLink';
 
 describe('TopBar', () => {
   it('기본 레이아웃이 올바르게 렌더링되어야 합니다', () => {
@@ -41,7 +44,7 @@ describe('TopBar', () => {
   it('HelpButton이 렌더링되어야 합니다', () => {
     render(
       <TopBar>
-        <TopBar.HelpButton />
+        <HelpButton gameRuleTitle={GAME_RULE_TITLE} gameRuleScript={GAME_RULE_SCRIPT} />
       </TopBar>
     );
 
@@ -52,11 +55,11 @@ describe('TopBar', () => {
   it('StatsLink가 렌더링되어야 합니다', () => {
     render(
       <TopBar>
-        <TopBar.StatsLink />
+        <StatsLink gameId="1" />
       </TopBar>
     );
 
     const statsLink = screen.getAllByRole('link')[0];
     expect(statsLink).toBeDefined();
   });
-}); 
+});
