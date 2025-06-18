@@ -1,289 +1,317 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   public: {
     Tables: {
       game: {
         Row: {
-          created_at: string
-          id: number
-          ruleScript: string | null
-          ruleTitle: string | null
-          title: string | null
-        }
+          created_at: string;
+          id: number;
+          ruleScript: string | null;
+          ruleTitle: string | null;
+          title: string | null;
+        };
         Insert: {
-          created_at?: string
-          id?: number
-          ruleScript?: string | null
-          ruleTitle?: string | null
-          title?: string | null
-        }
+          created_at?: string;
+          id?: number;
+          ruleScript?: string | null;
+          ruleTitle?: string | null;
+          title?: string | null;
+        };
         Update: {
-          created_at?: string
-          id?: number
-          ruleScript?: string | null
-          ruleTitle?: string | null
-          title?: string | null
-        }
-        Relationships: []
-      }
+          created_at?: string;
+          id?: number;
+          ruleScript?: string | null;
+          ruleTitle?: string | null;
+          title?: string | null;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
-          avatar_url: string | null
-          created_at: string
-          full_name: string | null
-          id: string
-          updated_at: string
-        }
+          avatar_url: string | null;
+          created_at: string;
+          full_name: string | null;
+          id: string;
+          updated_at: string;
+        };
         Insert: {
-          avatar_url?: string | null
-          created_at?: string
-          full_name?: string | null
-          id: string
-          updated_at?: string
-        }
+          avatar_url?: string | null;
+          created_at?: string;
+          full_name?: string | null;
+          id: string;
+          updated_at?: string;
+        };
         Update: {
-          avatar_url?: string | null
-          created_at?: string
-          full_name?: string | null
-          id?: string
-          updated_at?: string
-        }
+          avatar_url?: string | null;
+          created_at?: string;
+          full_name?: string | null;
+          id?: string;
+          updated_at?: string;
+        };
         Relationships: [
           {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "members"
-            referencedColumns: ["id"]
+            foreignKeyName: 'profiles_id_fkey';
+            columns: ['id'];
+            isOneToOne: true;
+            referencedRelation: 'members';
+            referencedColumns: ['id'];
           },
-        ]
-      }
+        ];
+      };
+      daily_games: {
+        Row: {
+          id: number;
+          game_date: string;
+          game_id: number;
+          difficulty: number;
+          board_data: Json;
+          reserved_animal_maps: Json;
+          who_is_win: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: number;
+          game_date: string;
+          game_id: number;
+          difficulty?: number;
+          board_data: Json;
+          reserved_animal_maps: Json;
+          who_is_win: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: number;
+          game_date?: string;
+          game_id?: number;
+          difficulty?: number;
+          board_data?: Json;
+          reserved_animal_maps?: Json;
+          who_is_win?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'daily_games_game_id_fkey';
+            columns: ['game_id'];
+            isOneToOne: false;
+            referencedRelation: 'game';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       rank: {
         Row: {
-          created_at: string
-          end_time: string | null
-          game_id: number | null
-          id: string
-          score: number | null
-          updated_at: string | null
-          user_id: string | null
-        }
+          created_at: string;
+          end_time: string | null;
+          game_id: number | null;
+          id: string;
+          score: number | null;
+          updated_at: string | null;
+          user_id: string | null;
+        };
         Insert: {
-          created_at?: string
-          end_time?: string | null
-          game_id?: number | null
-          id?: string
-          score?: number | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
+          created_at?: string;
+          end_time?: string | null;
+          game_id?: number | null;
+          id?: string;
+          score?: number | null;
+          updated_at?: string | null;
+          user_id?: string | null;
+        };
         Update: {
-          created_at?: string
-          end_time?: string | null
-          game_id?: number | null
-          id?: string
-          score?: number | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
+          created_at?: string;
+          end_time?: string | null;
+          game_id?: number | null;
+          id?: string;
+          score?: number | null;
+          updated_at?: string | null;
+          user_id?: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "rank_game_id_fkey"
-            columns: ["game_id"]
-            isOneToOne: false
-            referencedRelation: "game"
-            referencedColumns: ["id"]
+            foreignKeyName: 'rank_game_id_fkey';
+            columns: ['game_id'];
+            isOneToOne: false;
+            referencedRelation: 'game';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "rank_user_id_fkey1"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            foreignKeyName: 'rank_user_id_fkey1';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
           },
-        ]
-      }
-    }
+        ];
+      };
+    };
     Views: {
       members: {
         Row: {
-          avatar_url: string | null
-          created_at: string | null
-          email: string | null
-          id: string | null
-          name: string | null
-        }
+          avatar_url: string | null;
+          created_at: string | null;
+          email: string | null;
+          id: string | null;
+          name: string | null;
+        };
         Insert: {
-          avatar_url?: never
-          created_at?: string | null
-          email?: never
-          id?: string | null
-          name?: never
-        }
+          avatar_url?: never;
+          created_at?: string | null;
+          email?: never;
+          id?: string | null;
+          name?: never;
+        };
         Update: {
-          avatar_url?: never
-          created_at?: string | null
-          email?: never
-          id?: string | null
-          name?: never
-        }
-        Relationships: []
-      }
+          avatar_url?: never;
+          created_at?: string | null;
+          email?: never;
+          id?: string | null;
+          name?: never;
+        };
+        Relationships: [];
+      };
       rank_with_users: {
         Row: {
-          avatar_url: string | null
-          email: string | null
-          end_time: string | null
-          game_id: number | null
-          id: string | null
-          name: string | null
-          score: number | null
-          user_id: string | null
-        }
+          avatar_url: string | null;
+          email: string | null;
+          end_time: string | null;
+          game_id: number | null;
+          id: string | null;
+          name: string | null;
+          score: number | null;
+          user_id: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "rank_game_id_fkey"
-            columns: ["game_id"]
-            isOneToOne: false
-            referencedRelation: "game"
-            referencedColumns: ["id"]
+            foreignKeyName: 'rank_game_id_fkey';
+            columns: ['game_id'];
+            isOneToOne: false;
+            referencedRelation: 'game';
+            referencedColumns: ['id'];
           },
           {
-            foreignKeyName: "rank_user_id_fkey1"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
+            foreignKeyName: 'rank_user_id_fkey1';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
           },
-        ]
-      }
-    }
+        ];
+      };
+    };
     Functions: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type DefaultSchema = Database[Extract<keyof Database, "public">]
+type DefaultSchema = Database[Extract<keyof Database, 'public'>];
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
     | { schema: keyof Database },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof Database;
   }
-    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+        Database[DefaultSchemaTableNameOrOptions['schema']]['Views'])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+  ? (Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+      Database[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+      Row: infer R;
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
       }
       ? R
       : never
-    : never
+    : never;
 
 export type TablesInsert<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables'] | { schema: keyof Database },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof Database;
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof Database[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+  ? Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Insert: infer I;
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I;
       }
       ? I
       : never
-    : never
+    : never;
 
 export type TablesUpdate<
-  DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables'] | { schema: keyof Database },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof Database;
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof Database[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+  ? Database[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Update: infer U;
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U;
       }
       ? U
       : never
-    : never
+    : never;
 
 export type Enums<
-  DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof Database },
+  DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums'] | { schema: keyof Database },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof Database;
   }
-    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof Database[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
-    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
+  ? Database[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
+    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+    : never;
 
 export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof Database },
+  PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes'] | { schema: keyof Database },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof Database;
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+  ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
+    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+    : never;
 
 export const Constants = {
   public: {
     Enums: {},
   },
-} as const
+} as const;
