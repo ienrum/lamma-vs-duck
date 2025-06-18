@@ -25,7 +25,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="from-background to-secondary/30 min-h-screen bg-gradient-to-b py-12">
+    <div className="from-background to-secondary/30 min-h-screen py-12">
       <div className="pearl-container max-w-2xl">
         <Card className="glass-effect pearl-shadow overflow-hidden rounded-2xl border-none">
           <CardHeader className="bg-primary/5 space-y-2 border-b px-6 py-8">

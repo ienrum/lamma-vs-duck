@@ -25,7 +25,7 @@ const ProfileButton = ({ className }: ProfileButtonProps) => {
   if (!user) {
     return (
       <Button
-        variant="ghost"
+        variant="outline"
         size="icon"
         className={cn('hover:bg-gray-100', className)}
         onClick={() => router.push('/signin')}
@@ -50,7 +50,7 @@ const ProfileButton = ({ className }: ProfileButtonProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className={cn('hover:bg-gray-100', className)} aria-label="Profile menu">
+        <Button variant="outline" size="icon" className={cn('hover:bg-gray-100', className)} aria-label="Profile menu">
           <img src={user.avatar_url} alt="Profile" width={32} height={32} className="rounded-full" />
         </Button>
       </DropdownMenuTrigger>

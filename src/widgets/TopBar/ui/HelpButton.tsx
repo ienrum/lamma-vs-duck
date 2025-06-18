@@ -24,7 +24,7 @@ export const HelpButton = ({
             trigger={
               <Button
                 data-testid="dialog-trigger"
-                variant="ghost"
+                variant="link"
                 size="icon"
                 className={cn('hover:bg-gray-100', className)}
               >

@@ -39,7 +39,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="from-background to-secondary/30 min-h-screen bg-gradient-to-b py-12">
+    <div className="from-background to-secondary/30 min-h-screen py-12">
       <div className="pearl-container">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <OneTapComponent />

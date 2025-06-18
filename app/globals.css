@@ -44,36 +44,36 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 1rem;
 
-  /* Light mode colors */
-  --background: oklch(0.98 0.005 240);
-  --foreground: oklch(0.2 0.02 240);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.02 240);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.02 240);
-  --primary: oklch(0.5 0.2 240);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.02 240);
-  --secondary-foreground: oklch(0.2 0.02 240);
-  --muted: oklch(0.95 0.02 240);
-  --muted-foreground: oklch(0.6 0.02 240);
-  --accent: oklch(0.95 0.02 240);
-  --accent-foreground: oklch(0.2 0.02 240);
-  --destructive: oklch(0.7 0.3 30);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0.02 240);
-  --input: oklch(0.9 0.02 240);
-  --ring: oklch(0.5 0.2 240);
+  /* Comic Style Colors - Bright and Vibrant */
+  --background: #fff8dc; /* Comic cream background */
+  --foreground: #000000; /* Black text */
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #2eaaea; /* Comic blue */
+  --primary-foreground: #ffffff;
+  --secondary: #ffd700; /* Comic yellow */
+  --secondary-foreground: #000000;
+  --muted: #f5f5f5;
+  --muted-foreground: #333333;
+  --accent: #ff6b35; /* Comic orange */
+  --accent-foreground: #ffffff;
+  --destructive: #ff4757; /* Comic red */
+  --destructive-foreground: #ffffff;
+  --border: #000000; /* Black borders for comic style */
+  --input: #ffffff;
+  --ring: #2eaaea;
 
   /* Animation settings */
   --animation-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
   --animation-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 기본 테마를 다크모드로 설정 */
-:root {
+/* Dark mode - keeping original */
+.dark {
   color-scheme: dark;
 
   /* Dark mode colors */
@@ -135,25 +135,26 @@
 .light {
   color-scheme: light;
 
-  --background: oklch(0.98 0.005 240);
-  --foreground: oklch(0.2 0.02 240);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.02 240);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.02 240);
-  --primary: oklch(0.5 0.2 240);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.02 240);
-  --secondary-foreground: oklch(0.2 0.02 240);
-  --muted: oklch(0.95 0.02 240);
-  --muted-foreground: oklch(0.6 0.02 240);
-  --accent: oklch(0.95 0.02 240);
-  --accent-foreground: oklch(0.2 0.02 240);
-  --destructive: oklch(0.7 0.3 30);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0.02 240);
-  --input: oklch(0.9 0.02 240);
-  --ring: oklch(0.5 0.2 240);
+  /* Comic Style Colors */
+  --background: #fff8dc; /* Comic cream background */
+  --foreground: #000000; /* Black text */
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #2eaaea; /* Comic blue */
+  --primary-foreground: #ffffff;
+  --secondary: #ffd700; /* Comic yellow */
+  --secondary-foreground: #000000;
+  --muted: #f5f5f5;
+  --muted-foreground: #333333;
+  --accent: #ff6b35; /* Comic orange */
+  --accent-foreground: #ffffff;
+  --destructive: #ff4757; /* Comic red */
+  --destructive-foreground: #ffffff;
+  --border: #000000; /* Black borders for comic style */
+  --input: #ffffff;
+  --ring: #2eaaea;
 }
 
 @layer base {
@@ -168,38 +169,85 @@
   }
 }
 
-@layer utilities {
-  .pearl-container {
-    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
-  }
+/* Comic Style CSS Classes */
+.comic-outline {
+  border: 4px solid #000000;
+}
 
-  .pearl-gradient {
-    @apply from-primary to-primary/80 bg-gradient-to-r;
-  }
+.comic-shadow {
+  box-shadow: 6px 6px 0px #000000;
+}
 
-  .pearl-shadow {
-    @apply shadow-primary/10 shadow-lg;
-  }
+.comic-shadow-lg {
+  box-shadow: 8px 8px 0px #000000;
+}
 
-  .pearl-shadow-lg {
-    @apply shadow-primary/20 shadow-xl;
-  }
+.comic-shadow-hover {
+  transition: all 0.2s ease-in-out;
+}
 
-  .pearl-transition {
-    @apply transition-all duration-300 ease-in-out;
-  }
+.comic-shadow-hover:hover {
+  box-shadow: 4px 4px 0px #000000;
+  transform: translate(2px, 2px);
+}
 
-  .pearl-hover {
-    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg;
-  }
+.comic-shadow-active:active {
+  box-shadow: 2px 2px 0px #000000;
+  transform: translate(4px, 4px);
+}
 
-  .pearl-active {
-    @apply transition-all duration-200 active:scale-95;
-  }
+.comic-button {
+  border: 4px solid #000000;
+  box-shadow: 6px 6px 0px #000000;
+  border-radius: 1rem;
+  font-weight: bold;
+  font-size: 1.125rem;
+  transition: all 0.2s ease-in-out;
+}
 
-  .glass-effect {
-    @apply bg-white/5 backdrop-blur-md dark:bg-black/5;
-  }
+.comic-button:hover {
+  box-shadow: 4px 4px 0px #000000;
+  transform: translate(2px, 2px);
+}
+
+.comic-button:active {
+  box-shadow: 2px 2px 0px #000000;
+  transform: translate(4px, 4px);
+}
+
+.comic-card {
+  border: 4px solid #000000;
+  box-shadow: 6px 6px 0px #000000;
+  border-radius: 1.5rem;
+  background-color: #ffffff;
+}
+
+.comic-blue {
+  background-color: #2eaaea;
+}
+
+.comic-yellow {
+  background-color: #ffd700;
+}
+
+.comic-red {
+  background-color: #ff4757;
+}
+
+.comic-green {
+  background-color: #2ecc71;
+}
+
+.comic-orange {
+  background-color: #ff6b35;
+}
+
+.comic-purple {
+  background-color: #9b59b6;
+}
+
+.comic-pink {
+  background-color: #ff69b4;
 }
 
 @keyframes slide-left {

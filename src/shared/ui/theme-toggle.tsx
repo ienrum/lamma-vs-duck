@@ -9,7 +9,7 @@ export function ThemeToggle() {
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size="icon"
       className="pearl-hover rounded-full"
       onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}

@@ -4,27 +4,25 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-full font-medium transition-all duration-200 ease-in-out focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-2xl font-bold transition-all duration-200 ease-in-out focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border-4 border-black',
   {
     variants: {
       variant: {
-        default:
-          'bg-primary text-primary-foreground hover:opacity-90 hover:shadow-lg transform hover:-translate-y-0.5 [&>svg]:hover:scale-110 [&>svg]:transition-transform',
-        destructive:
-          'bg-destructive text-destructive-foreground hover:opacity-90 hover:shadow-lg [&>svg]:hover:scale-110 [&>svg]:transition-transform',
+        default: 'comic-blue text-white hover:brightness-110 comic-shadow comic-shadow-hover comic-shadow-active',
+        destructive: 'comic-red text-white hover:brightness-110 comic-shadow comic-shadow-hover comic-shadow-active',
         outline:
-          'border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground [&>svg]:hover:text-primary [&>svg]:hover:scale-110 [&>svg]:transition-all',
-        secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-md [&>svg]:hover:scale-110 [&>svg]:transition-transform',
-        ghost:
-          'hover:bg-accent hover:text-accent-foreground [&>svg]:hover:text-primary [&>svg]:hover:scale-110 [&>svg]:transition-all',
-        link: 'text-primary underline-offset-4 hover:underline [&>svg]:hover:scale-110 [&>svg]:transition-transform',
+          'bg-white text-black hover:bg-blue-500 hover:text-white comic-shadow comic-shadow-hover comic-shadow-active',
+        secondary: 'comic-yellow text-black hover:brightness-110 comic-shadow comic-shadow-hover comic-shadow-active',
+        ghost: 'bg-white text-black hover:bg-blue-500 hover:text-white border-2 border-black',
+        link: 'text-black underline-offset-4 hover:underline border-none shadow-none',
+        success: 'comic-green text-white hover:brightness-110 comic-shadow comic-shadow-hover comic-shadow-active',
+        warning: 'comic-orange text-white hover:brightness-110 comic-shadow comic-shadow-hover comic-shadow-active',
       },
       size: {
-        default: 'h-11 px-6 text-base',
-        sm: 'h-9 px-4 text-sm',
-        lg: 'h-14 px-8 text-lg',
-        icon: 'h-10 w-10 [&>svg]:h-5 [&>svg]:w-5 hover:[&>svg]:h-[22px] hover:[&>svg]:w-[22px] [&>svg]:transition-all',
+        default: 'h-12 px-6 text-lg',
+        sm: 'h-10 px-4 text-base',
+        lg: 'h-16 px-8 text-xl',
+        icon: 'h-12 w-12 [&>svg]:h-6 [&>svg]:w-6',
       },
     },
     defaultVariants: {

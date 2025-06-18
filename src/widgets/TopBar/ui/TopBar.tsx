@@ -19,7 +19,7 @@ export const TopBar = ({ children, className, showBackButton = false, backButton
   return (
     <header
       className={cn(
-        'glass-effect sticky top-0 z-50 h-16 w-full border-b',
+        'comic-shadow sticky top-0 z-50 h-20 w-full rounded-b-2xl border-b-4 border-black bg-white',
         'grid grid-cols-3 items-center gap-4 px-6',
         className
       )}
@@ -48,7 +48,7 @@ const Center = ({ children, className }: TopBarProps) => {
 };
 
 const Title = ({ className, text }: TopBarProps & { text: string }) => {
-  return <h1 className={cn('text-xl font-bold tracking-tight', className)}>{text}</h1>;
+  return <h1 className={cn('text-2xl font-bold tracking-tight text-black', className)}>{text}</h1>;
 };
 
 const BackButton = ({ className, path }: TopBarChildProps & { path?: string }) => {
