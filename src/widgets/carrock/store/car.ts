@@ -1,0 +1,189 @@
+import { Scene, GameObjects, Physics } from 'phaser';
+import { CARROCK_CONSTANTS } from './constants';
+import { TireTrail } from './tire-trail';
+import { DustParticleSystem } from './dust-particle';
+
+export class Car {
+  private car!: GameObjects.Text;
+  private tireTrailUp!: TireTrail;
+  private tireTrailDown!: TireTrail;
+  private dustSystem!: DustParticleSystem;
+  private scene: Scene;
+  private direction: 'up' | 'down' = 'down';
+  private targetAngle: number = 0;
+  private isInvincible: boolean = false;
+  private invincibleTween: any = null;
+  private lastDustSpawn: number = 0;
+
+  constructor(scene: Scene) {
+    this.scene = scene;
+    this.tireTrailUp = new TireTrail(scene);
+    this.tireTrailDown = new TireTrail(scene);
+    this.dustSystem = new DustParticleSystem(scene);
+    this.setupTouchEvents();
+  }
+
+  private setupTouchEvents() {
+    this.scene.input.on('pointerdown', () => {
+      this.direction = this.direction === 'up' ? 'down' : 'up';
+      this.handleDirectionChange(this.direction);
+    });
+  }
+
+  private handleDirectionChange(direction: 'up' | 'down') {
+    if (direction === 'up') {
+      this.targetAngle = -25; // 왼쪽으로 45도
+    } else {
+      this.targetAngle = 25; // 오른쪽으로 45도
+    }
+  }
+
+  public create() {
+    // 자동차 생성 (화면 중앙)
+    this.car = this.scene.add.text(
+      this.scene.cameras.main.width / 2,
+      this.scene.cameras.main.height / 2,
+      CARROCK_CONSTANTS.CAR_EMOJI.SYMBOL,
+      {
+        fontSize: CARROCK_CONSTANTS.CAR_EMOJI.SIZE,
+      }
+    );
+    this.car.setOrigin(0.5);
+    this.car.setDepth(3);
+
+    // 물리 엔진 적용
+    this.scene.physics.world.enable(this.car);
+    const carBody = this.car.body as Physics.Arcade.Body;
+    carBody.setCollideWorldBounds(true);
+    carBody.setMaxVelocity(300);
+
+    // 타이어 자국 시스템 초기화
+    this.tireTrailUp.create();
+    this.tireTrailDown.create();
+
+    // 먼지 파티클 시스템 초기화
+    this.dustSystem.create();
+  }
+
+  public update() {
+    if (!this.car.body) return;
+
+    // 부드러운 회전
+    const angleDiff = Phaser.Math.Angle.ShortestBetween(this.car.angle, this.targetAngle);
+    if (Math.abs(angleDiff) > 1) {
+      this.car.angle += Math.sign(angleDiff) * CARROCK_CONSTANTS.CAR_ROTATION_SPEED;
+    }
+
+    // 진동
+    const shakeIntensity = 0.1;
+    this.car.x += Phaser.Math.Between(-shakeIntensity, shakeIntensity);
+    this.car.y += Phaser.Math.Between(-shakeIntensity, shakeIntensity);
+
+    // 타이어 자국 추가 (자동차 하단에서 나오도록)
+    const tireOffsetY = 0; // 자동차 중심에서 아래로 10px
+    const tireOffsetX = -10; // 자동차 중심에서 오른쪽으로 10px
+    this.tireTrailUp.addPoint(this.car.x + tireOffsetX, this.car.y + tireOffsetY);
+    this.tireTrailUp.update();
+
+    this.tireTrailDown.addPoint(this.car.x + tireOffsetX, this.car.y + tireOffsetY + 5);
+    this.tireTrailDown.update();
+
+    // 먼지 효과 생성 (뒤쪽에서)
+    const now = this.scene.time.now;
+    if (now - this.lastDustSpawn > 100) {
+      // 100ms마다 먼지 생성
+      const dustOffsetX = 10; // 차 뒤쪽
+      const dustOffsetY = Phaser.Math.Between(-3, 3); // 약간의 랜덤
+      this.dustSystem.spawnDust(this.car.x + dustOffsetX, this.car.y + dustOffsetY, 0.8);
+      this.lastDustSpawn = now;
+    }
+
+    // 먼지 파티클 시스템 업데이트
+    this.dustSystem.update({ x: 1, y: 0 });
+
+    // 화면 왼쪽 경계에서 나가면 게임 오버
+    if (this.car.x < -50) {
+      // 게임 오버 처리는 CarrockScene에서 처리
+    }
+
+    // velocity를 사용한 물리 기반 움직임
+    const carBody = this.car.body as Physics.Arcade.Body;
+    const radians = Phaser.Math.DegToRad(this.car.angle);
+
+    // 각도에 따른 Y축 velocity 설정
+    const maxVerticalSpeed = 150; // 최대 수직 속도
+    const velocityY = -Math.sin(radians) * maxVerticalSpeed; // 각도에 따른 수직 속도
+
+    carBody.setVelocityY(velocityY);
+
+    // 화면 경계에서 반탄성 충돌 처리
+    const margin = 20;
+    if (this.car.y < margin) {
+      this.car.y = margin;
+      carBody.setVelocityY(Math.abs(carBody.velocity.y) * 0.3); // 약간의 반탄성
+    } else if (this.car.y > this.scene.cameras.main.height - margin) {
+      this.car.y = this.scene.cameras.main.height - margin;
+      carBody.setVelocityY(-Math.abs(carBody.velocity.y) * 0.3); // 약간의 반탄성
+    }
+  }
+
+  public getCar() {
+    return this.car;
+  }
+
+  public getPosition() {
+    return { x: this.car.x, y: this.car.y };
+  }
+
+  public makeInvincible(duration: number = CARROCK_CONSTANTS.COLLISION_COOLDOWN) {
+    if (this.isInvincible) return;
+
+    this.isInvincible = true;
+
+    // 깜빡임 효과
+    this.invincibleTween = this.scene.tweens.add({
+      targets: this.car,
+      alpha: 0.5,
+      duration: 100,
+      yoyo: true,
+      repeat: Math.floor(duration / 200),
+      onComplete: () => {
+        this.car.setAlpha(1);
+        this.isInvincible = false;
+        this.invincibleTween = null;
+      },
+    });
+  }
+
+  public isCarInvincible(): boolean {
+    return this.isInvincible;
+  }
+
+  public reset() {
+    // 초기 위치로 리셋
+    this.car.setPosition(this.scene.cameras.main.width / 2, this.scene.cameras.main.height / 2);
+    this.car.setAngle(0);
+    this.targetAngle = 0;
+    this.tireTrailUp.clear();
+    this.tireTrailDown.clear();
+    this.dustSystem.clear();
+    this.lastDustSpawn = 0;
+
+    if (this.invincibleTween) {
+      this.invincibleTween.stop();
+      this.invincibleTween = null;
+    }
+    this.car.setAlpha(1);
+    this.isInvincible = false;
+  }
+
+  public destroy() {
+    if (this.invincibleTween) {
+      this.invincibleTween.stop();
+    }
+    this.tireTrailUp.destroy();
+    this.tireTrailDown.destroy();
+    this.dustSystem.destroy();
+    this.car.destroy();
+  }
+}

@@ -42,7 +42,31 @@ export default function Page() {
                         posthog.capture('game_1_play');
                       }}
                     >
-                      Get Started <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                      Play Duck vs Lamma <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                    </Button>
+                  </Link>
+                  <Link href="/game/2">
+                    <Button
+                      variant="outline"
+                      size="default"
+                      className="pearl-hover rounded-full px-4 py-2 text-sm font-medium sm:px-8 sm:py-7 sm:text-lg"
+                      onClick={() => {
+                        posthog.capture('game_2_play');
+                      }}
+                    >
+                      Play Greedy Bee <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                    </Button>
+                  </Link>
+                  <Link href="/game/3">
+                    <Button
+                      variant="outline"
+                      size="default"
+                      className="pearl-hover rounded-full px-4 py-2 text-sm font-medium sm:px-8 sm:py-7 sm:text-lg"
+                      onClick={() => {
+                        posthog.capture('game_3_play');
+                      }}
+                    >
+                      🚕 Play Carrock <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                     </Button>
                   </Link>
                 </div>
@@ -81,7 +105,7 @@ export default function Page() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground text-sm sm:text-base">
-                    Move rows and columns with arrow keys - intuitive controls make it easy for anyone to play.
+                    Touch to change direction, use arrow keys to move rows - intuitive controls for all game types.
                   </p>
                 </CardContent>
               </Card>
@@ -109,7 +133,7 @@ export default function Page() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground text-sm sm:text-base">
-                    Complete challenges with time limits and score points.
+                    Experience different game modes - from puzzle solving to racing and survival challenges.
                   </p>
                 </CardContent>
               </Card>
