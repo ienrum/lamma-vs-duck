@@ -14,6 +14,9 @@ export class Car {
   private isInvincible: boolean = false;
   private invincibleTween: any = null;
   private lastDustSpawn: number = 0;
+  private isPoweredUp: boolean = false;
+  private powerUpEndTime: number = 0;
+  private powerUpTween: any = null;
 
   constructor(scene: Scene) {
     this.scene = scene;
@@ -50,6 +53,7 @@ export class Car {
     );
     this.car.setOrigin(0.5);
     this.car.setDepth(3);
+    this.car.setScale(1); // 기본 크기
 
     // 물리 엔진 적용
     this.scene.physics.world.enable(this.car);
@@ -88,13 +92,26 @@ export class Car {
     this.tireTrailDown.addPoint(this.car.x + tireOffsetX, this.car.y + tireOffsetY + 5);
     this.tireTrailDown.update();
 
-    // 먼지 효과 생성 (뒤쪽에서)
+    // 파워업 상태 확인 및 해제
     const now = this.scene.time.now;
-    if (now - this.lastDustSpawn > 100) {
-      // 100ms마다 먼지 생성
+    if (this.isPoweredUp && now > this.powerUpEndTime) {
+      this.deactivatePowerUp();
+    }
+
+    // 먼지 효과 생성 (뒤쪽에서)
+    const dustInterval = this.isPoweredUp ? 50 : 100; // 파워업 시 더 자주 생성
+    const dustIntensity = this.isPoweredUp ? 1.5 : 0.8; // 파워업 시 더 강한 먼지
+    
+    if (now - this.lastDustSpawn > dustInterval) {
       const dustOffsetX = 10; // 차 뒤쪽
       const dustOffsetY = Phaser.Math.Between(-3, 3); // 약간의 랜덤
-      this.dustSystem.spawnDust(this.car.x + dustOffsetX, this.car.y + dustOffsetY, 0.8);
+      this.dustSystem.spawnDust(this.car.x + dustOffsetX, this.car.y + dustOffsetY, dustIntensity);
+      
+      // 파워업 상태일 때 추가 먼지 파티클
+      if (this.isPoweredUp) {
+        this.dustSystem.spawnDust(this.car.x + dustOffsetX + 5, this.car.y + dustOffsetY + 3, dustIntensity);
+      }
+      
       this.lastDustSpawn = now;
     }
 
@@ -159,6 +176,54 @@ export class Car {
     return this.isInvincible;
   }
 
+  public activatePowerUp(duration: number = 10000) {
+    this.isPoweredUp = true;
+    this.powerUpEndTime = this.scene.time.now + duration;
+
+    // 차량 크기 증가 애니메이션
+    if (this.powerUpTween) {
+      this.powerUpTween.stop();
+    }
+    
+    this.powerUpTween = this.scene.tweens.add({
+      targets: this.car,
+      scaleX: 1.5,
+      scaleY: 1.5,
+      duration: 300,
+      ease: 'Back.easeOut',
+    });
+
+    // 파워업 효과 (반짝임)
+    this.scene.tweens.add({
+      targets: this.car,
+      alpha: 1.2,
+      duration: 200,
+      yoyo: true,
+      repeat: 2,
+    });
+  }
+
+  private deactivatePowerUp() {
+    this.isPoweredUp = false;
+
+    // 차량 크기 원래대로
+    if (this.powerUpTween) {
+      this.powerUpTween.stop();
+    }
+    
+    this.powerUpTween = this.scene.tweens.add({
+      targets: this.car,
+      scaleX: 1,
+      scaleY: 1,
+      duration: 300,
+      ease: 'Back.easeOut',
+    });
+  }
+
+  public isPoweredUpState(): boolean {
+    return this.isPoweredUp;
+  }
+
   public reset() {
     // 초기 위치로 리셋
     this.car.setPosition(this.scene.cameras.main.width / 2, this.scene.cameras.main.height / 2);
@@ -173,13 +238,24 @@ export class Car {
       this.invincibleTween.stop();
       this.invincibleTween = null;
     }
+    if (this.powerUpTween) {
+      this.powerUpTween.stop();
+      this.powerUpTween = null;
+    }
+    
     this.car.setAlpha(1);
+    this.car.setScale(1);
     this.isInvincible = false;
+    this.isPoweredUp = false;
+    this.powerUpEndTime = 0;
   }
 
   public destroy() {
     if (this.invincibleTween) {
       this.invincibleTween.stop();
+    }
+    if (this.powerUpTween) {
+      this.powerUpTween.stop();
     }
     this.tireTrailUp.destroy();
     this.tireTrailDown.destroy();

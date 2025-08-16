@@ -9,6 +9,7 @@ interface Motorcycle {
   tireTrail: TireTrail;
   dustSystem: DustParticleSystem;
   lastDustSpawn: number;
+  isBouncingAway: boolean;
 }
 
 export class MotorcycleManager {
@@ -90,6 +91,7 @@ export class MotorcycleManager {
       tireTrail: tireTrail,
       dustSystem: dustSystem,
       lastDustSpawn: 0,
+      isBouncingAway: false,
     });
   }
 
@@ -161,15 +163,63 @@ export class MotorcycleManager {
     return this.motorcycles.map((motorcycle) => motorcycle.gameObject);
   }
 
-  public checkCollision(car: GameObjects.Text): boolean {
+  public checkCollision(car: GameObjects.Text, carIsPoweredUp: boolean): { collided: boolean; shouldDamage: boolean } {
     for (const motorcycle of this.motorcycles) {
-      if (this.scene.physics.world.overlap(car, motorcycle.gameObject)) {
-        // 충돌한 오토바이 제거
-        this.removeMotorcycle(motorcycle);
-        return true;
+      if (!motorcycle.isBouncingAway && this.scene.physics.world.overlap(car, motorcycle.gameObject)) {
+        if (carIsPoweredUp) {
+          // 파워업 상태일 때 오토바이를 튕겨냄
+          this.bounceAwayMotorcycle(motorcycle);
+          return { collided: true, shouldDamage: false };
+        } else {
+          // 일반 상태일 때 오토바이 제거하고 데미지
+          this.removeMotorcycle(motorcycle);
+          return { collided: true, shouldDamage: true };
+        }
       }
     }
-    return false;
+    return { collided: false, shouldDamage: false };
+  }
+
+  private bounceAwayMotorcycle(motorcycle: Motorcycle) {
+    motorcycle.isBouncingAway = true;
+    
+    // 랜덤한 방향으로 튕겨냄
+    const bounceAngle = Phaser.Math.Between(-45, 45); // -45도에서 45도 사이
+    const bounceSpeed = Phaser.Math.Between(200, 400);
+    const bounceVelocityX = Math.cos(Phaser.Math.DegToRad(bounceAngle)) * bounceSpeed;
+    const bounceVelocityY = Math.sin(Phaser.Math.DegToRad(bounceAngle)) * bounceSpeed;
+    
+    motorcycle.body.setVelocity(bounceVelocityX, bounceVelocityY);
+    
+    // 회전 효과
+    this.scene.tweens.add({
+      targets: motorcycle.gameObject,
+      angle: motorcycle.gameObject.angle + Phaser.Math.Between(360, 720), // 1-2바퀴 회전
+      duration: 1000,
+      ease: 'Power2.easeOut'
+    });
+    
+    // 크기 변화 효과 (작아짐)
+    this.scene.tweens.add({
+      targets: motorcycle.gameObject,
+      scaleX: 0.5,
+      scaleY: 0.5,
+      duration: 1000,
+      ease: 'Power2.easeOut'
+    });
+    
+    // 투명도 변화
+    this.scene.tweens.add({
+      targets: motorcycle.gameObject,
+      alpha: 0.3,
+      duration: 1000,
+      ease: 'Power2.easeOut'
+    });
+    
+    // 1초 후에 제거
+    this.scene.time.delayedCall(1000, () => {
+      this.removeMotorcycle(motorcycle);
+    });
   }
 
   private removeMotorcycle(motorcycleToRemove: Motorcycle) {

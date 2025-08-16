@@ -6,6 +6,7 @@ import { Car } from './car';
 import { MotorcycleManager } from './motorcycle-manager';
 import { Background } from './background';
 import { GameState } from './game-state';
+import { MushroomManager } from './mushroom-item';
 import { CARROCK_CONSTANTS } from './constants';
 
 export class CarrockScene extends Scene {
@@ -13,6 +14,7 @@ export class CarrockScene extends Scene {
   private motorcycleManager!: MotorcycleManager;
   private background!: Background;
   private gameState!: GameState;
+  private mushroomManager!: MushroomManager;
   private gameSpeed: number = CARROCK_CONSTANTS.CAR_SPEED.INITIAL;
   private gameStartTime: number = 0;
   private lastCollisionTime: number = 0;
@@ -25,6 +27,7 @@ export class CarrockScene extends Scene {
     this.gameState = new GameState(this);
     this.car = new Car(this);
     this.motorcycleManager = new MotorcycleManager(this);
+    this.mushroomManager = new MushroomManager(this);
     this.background = new Background(this);
     this.gameStartTime = this.time.now;
     this.lastCollisionTime = 0;
@@ -34,6 +37,7 @@ export class CarrockScene extends Scene {
     this.background.create();
     this.car.create();
     this.motorcycleManager.create();
+    this.mushroomManager.create();
 
     this.physics.world.setBounds(0, 0, width, height);
     this.physics.world.gravity.y = 0;
@@ -50,6 +54,7 @@ export class CarrockScene extends Scene {
     // 게임 오브젝트들 업데이트
     this.car.update();
     this.motorcycleManager.update(gameTime);
+    this.mushroomManager.update();
     this.gameState.update();
 
     // 충돌 검사
@@ -71,13 +76,19 @@ export class CarrockScene extends Scene {
   private checkCollisions() {
     const now = this.time.now;
 
+    // 버섯 수집 검사
+    if (this.mushroomManager.checkCollision(this.car.getCar())) {
+      this.car.activatePowerUp(10000); // 10초간 파워업
+    }
+
     // 충돌 쿨다운 체크
     if (this.car.isCarInvincible() || now - this.lastCollisionTime < CARROCK_CONSTANTS.COLLISION_COOLDOWN) {
       return;
     }
 
     // 오토바이와의 충돌 검사
-    if (this.motorcycleManager.checkCollision(this.car.getCar())) {
+    const collisionResult = this.motorcycleManager.checkCollision(this.car.getCar(), this.car.isPoweredUpState());
+    if (collisionResult.collided && collisionResult.shouldDamage) {
       this.handleCollision();
     }
   }
@@ -139,6 +150,7 @@ export class CarrockScene extends Scene {
     this.gameState.reset();
     this.car.reset();
     this.motorcycleManager.reset();
+    this.mushroomManager.reset();
     this.gameSpeed = CARROCK_CONSTANTS.CAR_SPEED.INITIAL;
     this.gameStartTime = this.time.now;
     this.lastCollisionTime = 0;
@@ -147,6 +159,7 @@ export class CarrockScene extends Scene {
   public destroy() {
     this.car.destroy();
     this.motorcycleManager.destroy();
+    this.mushroomManager.destroy();
     this.background.destroy();
     this.gameState.reset();
   }
