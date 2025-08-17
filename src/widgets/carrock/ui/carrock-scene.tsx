@@ -131,7 +131,7 @@ const CarrockSceneComponent = forwardRef<IRefPhaserGame, IProps>(function Carroc
         })}
       >
         <div className="flex flex-col gap-4">
-          <ScoreBoard score={score.score} highScore={score.highScore} />
+          <ScoreBoard scoreEmoji="⏱️" score={score.score} highScore={score.highScore} />
           <HealthBar health={health.health} maxHealth={health.maxHealth} />
         </div>
 
