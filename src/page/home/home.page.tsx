@@ -8,6 +8,7 @@ import { HelpButton } from '@/src/widgets/TopBar/ui/HelpButton';
 import { StatsLink } from '@/src/widgets/TopBar/ui/StatsLink';
 import { DuckLammaAnimation } from '@/src/shared/ui/game-animations/DuckLammaAnimation';
 import { GreedyBeeAnimation } from '@/src/shared/ui/game-animations/GreedyBeeAnimation';
+import { CarrockAnimation } from '@/src/shared/ui/game-animations/CarrockAnimation';
 import OneTapComponent from '@/src/shared/ui/google-one-tap';
 import ProductHuntButton from '@/src/shared/ui/product-hunt-button';
 import { usePlayedToday } from '@/src/entities/game/hooks';
@@ -33,6 +34,8 @@ const HomePage = () => {
         return <DuckLammaAnimation />;
       case 2:
         return <GreedyBeeAnimation />;
+      case 3:
+        return <CarrockAnimation />;
       default:
         return null;
     }
