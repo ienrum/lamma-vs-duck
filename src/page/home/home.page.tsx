@@ -16,7 +16,8 @@ import { usePlayedToday } from '@/src/entities/game/hooks';
 const HomePage = () => {
   const router = useRouter();
   const { data: gameList } = useGetGameList();
-  const response = usePlayedToday([1, 2]);
+  const gameIds = gameList.map((game) => game.id);
+  const response = usePlayedToday(gameIds);
 
   const playedTodayByGameId = response.filter((item) => item.data.isPlayed).map((item) => item.data.gameId);
 
