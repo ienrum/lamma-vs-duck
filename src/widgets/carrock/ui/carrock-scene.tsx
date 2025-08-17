@@ -50,7 +50,7 @@ const CarrockSceneComponent = forwardRef<IRefPhaserGame, IProps>(function Carroc
         width: width,
         height: height,
         parent: 'carrock-game',
-        backgroundColor: '#87CEEB',
+        backgroundColor: '#9e951cff',
         scene: [CarrockScene],
         physics: {
           default: 'arcade',

@@ -7,9 +7,9 @@ import { dehydrate, HydrationBoundary, useQueryClient } from '@tanstack/react-qu
 import { getQueryClient } from '@/src/app/utils/get-query-client';
 import { ShareButton } from '@/src/widgets/share-button/ui/share-button';
 import { useUser } from '@/src/shared/api/use-user';
-import formatTime from '@/src/shared/util/format-time';
 import { useParams } from 'next/navigation';
 import LeaderBoard from '@/src/widgets/leader-board/ui/leader-board';
+import { getGameConfig } from '@/src/entities/game/config';
 
 const LeaderBoardFallback = () => (
   <div className="flex h-[60vh] w-full animate-pulse items-center justify-center rounded-lg bg-gray-100">
@@ -22,9 +22,7 @@ const ResultPage = () => {
   const graphRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
 
-  const gameTitle = gameId === '1' ? 'Lamma vs Duck' : 'Greedy Bee';
-  const scoreFormatter = gameId === '1' ? formatTime : (score: number) => score.toString();
-  const order = gameId === '1' ? 'asc' : 'desc';
+  const { title: gameTitle, scoreFormatter, order } = getGameConfig(gameId);
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4">
