@@ -4,7 +4,6 @@ import { cookies } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { GameListResponseDto } from '@/src/features/game/model/dto/game-list.dto';
 
-
 export async function GET(request: Request) {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
@@ -32,4 +31,4 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

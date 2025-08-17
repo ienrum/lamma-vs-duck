@@ -44,8 +44,5 @@ next-env.d.ts
 .cursor/*
 .env.local
 
-# sql
-sqls/*
-
 # claude
 CLAUDE.md
