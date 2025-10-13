@@ -56,7 +56,7 @@ const HomePage = () => {
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
-                <p className="text-muted-foreground">{game.ruleTitle}</p>
+                <p className="text-muted-foreground">{game.rule_title}</p>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center justify-center">
                     <div>
@@ -73,8 +73,8 @@ const HomePage = () => {
                   </div>
                   <div className="flex gap-2">
                     <HelpButton
-                      gameRuleTitle={game.ruleTitle}
-                      gameRuleScript={game.ruleScript}
+                      gameRuleTitle={game.rule_title}
+                      gameRuleScript={game.rule_script}
                       className="rounded-xl"
                     />
                     <StatsLink gameId={game.id.toString()} className="rounded-xl" />
